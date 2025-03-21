@@ -1,8 +1,37 @@
-import React from "react";
+import React, { useState }from "react";
 import "../main.css";
+import axios from '../axiosConfig';
+
  
 
 const Login = () => {
+  const [nome_usuario, setNome_usuario] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // Função que é chamada quando o formulário é enviado
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Envia o e-mail e senha para o backend
+      const response = await axios.post('api/cadastrologin', {
+        nome_usuario,
+        password,
+      });
+      console.log(response.data);
+      alert('Login realizado com sucesso!');
+      // Aqui você pode adicionar a lógica para redirecionar o usuário para outra página
+    } catch (err) {
+      // Se ocorrer um erro (usuário não encontrado ou senha incorreta)
+      console.error(err);
+      setError('Erro ao fazer login: ' + err.response?.data || 'Tente novamente mais tarde.');
+    } finally {
+      setLoading(false); // Finaliza o carregamento
+    }
+  };
+
   return (
       <div
         className="container-login100"
@@ -64,6 +93,8 @@ const Login = () => {
                 name="username"
                 placeholder="Digite seu e-mail"
                 style={{ flex: 1, border: "none", outline: "none", backgroundColor: "#fff", paddingLeft: "10px" }}
+                value={nome_usuario}
+                onChange={(e) => setNome_usuario(e.target.value )} required // Captura do valor de e-mail
               />
             </div>
 
@@ -80,7 +111,10 @@ const Login = () => {
               >
                 <img src="./public/images/cadeado.png" alt="cadeado" style={{ height: "100%", width: "auto" }} />
               </div>
-              <input className="input100" type="password" name="pass" placeholder="Digite sua senha" style={{ flex: 1, border: "none" }} />
+              <input className="input100" type="password" name="pass" placeholder="Digite sua senha" style={{ flex: 1, border: "none" }} 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)} required // Captura do valor de senha
+              />
             </div>
 
             <div>
@@ -91,7 +125,8 @@ const Login = () => {
             </div>
 
             <div className="container-login100-form-btn m-t-17">
-              <button className="login100-form-btn">login</button>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+              <button type="submit" disabled={loading} onClick={handleSubmit} className="login100-form-btn"> {loading ? 'Carregando...' : 'login' } </button>
             </div>
 
             <div className="w-full text-center p-t-55">
