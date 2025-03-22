@@ -1,12 +1,11 @@
 const express = require('express');
 const mysql = require('mysql2');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const app = express();
+const bodyParser = require('body-parser');
 const cors = require('cors');
 
-// Configurações de CORS
+const app = express();
 app.use(cors());
+app.use(bodyParser.json());
 
 // Middleware para analisar JSON
 app.use(express.json());
@@ -14,9 +13,10 @@ app.use(express.json());
 // Conexão com o banco de dados
 const db = mysql.createConnection({
   host: 'localhost',
-  user: 'root', // Substitua com seu usuário do MySQL
-  password: '', // Substitua com sua senha do MySQL
-  database: 'rabiscadoo', // Substitua com seu banco de dados
+  user: 'root', 
+  password: '', 
+  database: 'rabiscadoo', 
+  decimalNumbers: true
 });
 
 db.connect((err) => {
@@ -27,45 +27,37 @@ db.connect((err) => {
   }
 });
 
-// Rota de login
-app.post('api/cadastrologin', (req, res) => {
-  const { nome_usuario, password } = req.body;
 
-  db.query('SELECT * FROM cadastrologin WHERE nome_usuario = ?', [nome_usuario], (err, results) => {
+// Rota de login
+app.post('/api/login', (req, res) => {
+  console.log("CHamou api");
+  const { nome_usuario, senha } = req.body;
+  const query = 'SELECT * FROM cadastrologin WHERE nome_usuario = ?';
+  //console.log(nome_usuario, senha);
+  db.query(query, [nome_usuario], async (err, results) => {
     if (err) {
-      console.error('Erro na consulta ao banco de dados:', err.message);
-      return res.status(500).send('Erro no servidor');
+      return res.status(500).send({ error: 'Erro no servidor' });
+      console.log("MIAU");
     }
 
     if (results.length === 0) {
-      return res.status(400).send('Usuário não encontrado');
+      return res.status(401).send({ error: 'Usuário não encontrado' });
+      console.log("USUARIO NAO ENCONTRADO");
     }
 
     const user = results[0];
+    console.log(user);
 
-    // Comparar a senha fornecida com a senha armazenada (criptografada)
-    bcrypt.compare(password, user.password, (err, isMatch) => {
-      if (err) {
-        console.error('Erro ao comparar senhas:', err.message);
-        return res.status(500).send('Erro no servidor');
-      }
-
-      if (!isMatch) {
-        return res.status(400).send('Senha incorreta');
-      }
-
-      // Gerar um token JWT
-      const token = jwt.sign({ id: user.id, email: user.email }, 'seu-segredo', {
-        expiresIn: '1h', // O token expira em 1 hora
-      });
-
-      return res.json({ message: 'Login bem-sucedido', token });
-    });
+    if (senha == user.senha) {
+      res.status(200).send({ message: 'Login bem-sucedido', user });
+    } else {
+      res.status(401).send({ error: 'Senha incorreta' });
+    }
   });
 });
 
 // Inicializar o servidor
-const port = 3306;
+const port = 3301;
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
