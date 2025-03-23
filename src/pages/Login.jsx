@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "../main.css";
 import axios from '../axiosConfig';
-import Nav from "../components/Nav";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -49,8 +48,6 @@ const Login = () => {
 
   return (
     <div className="container-login100" style={{ backgroundImage: "url('./public/images/BACKGROUND_LOGIN.png')" }}>
-      <Nav />
-
       <div className="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33">
         <form className="login100-form validate-form flex-sb flex-w">
           <span className="login100-form-title p-b-53">Faça seu login</span>
