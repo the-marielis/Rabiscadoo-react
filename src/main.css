@@ -471,3 +471,91 @@ h1 {
   margin-left:45%;
   margin-top:15%;
 }
+/*---------------------------------------------------------*/
+//ESTILO DA HOME//
+.container-home {
+  background-color: var(--cor0);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider {
+  margin: 5% auto;
+  width: 1000px;
+  height: 400px;
+  overflow: hidden;
+  border: 5px solid var(--cor2);
+  box-shadow: -15px 15px 1px #9831b8;
+}
+
+.slick-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slick-dots {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.slick-dots li button {
+  border: 2px solid var(--cor2);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: transparent;
+  transition: background 0.3s ease;
+}
+
+.slick-dots li.slick-active button {
+  background-color: var(--cor5);
+}
+
+.img-fundo {
+  position: fixed;
+  right: -25%;
+  bottom: 0;
+  width: 60%;
+  z-index: -1;
+}
+
+.img-fundo img {
+  width: 60%;
+  height: auto;
+  object-fit: cover;
+}
+
+.entrar button {
+  background-color: var(--cor7);
+  border-radius: 30%;
+  border: none;
+  padding: 10%;
+  margin-right: 5vw;
+}
+
+.entrar a {
+  text-decoration: none;
+  color: var(--cor2);
+  background-color: var(--cor7);
+}
+
+@media (max-width: 768px) {
+  .slider {
+      max-width: 90%;
+      height: auto;
+  }
+
+  .slick-slide img {
+      height: auto;
+  }
+}
