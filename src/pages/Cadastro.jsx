@@ -19,14 +19,14 @@ const CadastroForm = () => {
   return (
     <div className="form-container">
       <div className="form-image">
-        <img src="../cadastro_tatu/images/mancha2.png" alt="mancha" id="img-direita" />
+        <img src="../../public/images/mancha1.png" alt="mancha" id="img-direita" />
       </div>
       <div className="container">
         <div className="form">
           <form action="#">
             <div className="form-header">
               <div className="title">
-                <h1><b>Cadastre-se já</b></h1>
+                <h1>Cadastre-se já</h1>
               </div>
               <div className="login-button">
                 <button style={{ marginRight: '50px' }}>
