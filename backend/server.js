@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 // Middleware para analisar JSON
 app.use(express.json());
 
-// Conexão com o banco de dados
+//*************CONEXÃO COM O BANCO DE DADOS****************/
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root', 
@@ -28,7 +28,7 @@ db.connect((err) => {
 });
 
 
-// Rota de login
+//********************ROTA DE LOGIN**********************/
 app.post('/api/login', (req, res) => {
   console.log("CHamou api");
   const { nome_usuario, senha } = req.body;
@@ -37,12 +37,10 @@ app.post('/api/login', (req, res) => {
   db.query(query, [nome_usuario], async (err, results) => {
     if (err) {
       return res.status(500).send({ error: 'Erro no servidor' });
-      console.log("MIAU");
     }
 
     if (results.length === 0) {
       return res.status(401).send({ error: 'Usuário não encontrado' });
-      console.log("USUARIO NAO ENCONTRADO");
     }
 
     const user = results[0];
@@ -56,6 +54,24 @@ app.post('/api/login', (req, res) => {
   });
 });
 
+//*******************ROTA DE CADASTRO**********************/
+app.post('/api/cadastro', (req, res) => {
+  const { nome, nome_usuario, senha, CPF, RG, nascimento, telefone, telefone2, email, CEP, cidade, endereco } = req.body;
+
+  if (!nome || !nome_usuario || !senha || !CPF || !telefone || !email || !CEP || !cidade || !endereco) {
+    return res.status(400).send({ error: 'Todos os campos obrigatórios devem ser preenchidos' });
+  }
+
+  const query = 'INSERT INTO cadastrologin (nome, nome_usuario, senha, CPF, RG, nascimento, telefone, email, CEP, cidade, endereco) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+  db.query(query, [nome, nome_usuario, senha, CPF, RG, nascimento, telefone, telefone2, email, CEP, cidade, endereco], (err, results) => {
+    if (err) {
+      console.error('Erro ao cadastrar usuário:', err);
+      return res.status(500).send({ error: 'Erro ao cadastrar usuário' });    
+    }
+
+    res.status(201).send({ message: 'Usuário cadastrado com sucesso' });
+  });
+})
 
 // Inicializar o servidor
 const port = 3301;

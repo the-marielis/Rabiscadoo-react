@@ -1,7 +1,44 @@
 import React from 'react';
-import '../cadastro.css'; // Importe o arquivo CSS correspondente
+import axios from 'axios';
+import '../cadastro.css'; 
+import { useState } from 'react';
 
 const CadastroForm = () => {
+  const [formData, setFormData] = useState({
+    nome: '',
+    nascimento: '',
+    CPF: '',
+    RG: '',
+    cidade: '',
+    CEP: '',
+    endereco: '',
+    telefone1: '',
+    telefone2: '',
+    email: '',
+    user: '',
+    password: '',
+    tipoCadastro: '',
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    console.log(formData);
+
+    try {
+      const response = await axios.post('http://localhost:3301/api/cadastro', formData);
+      console.log(response.data);
+      alert('Cadastro realizado com sucesso!');
+    } catch (error) {
+      console.error('Erro no cadastro:', error);
+      alert('Erro ao cadastrar. Tente novamente.');
+    }
+  };
+
   const handleDateFocus = (e) => {
     e.target.type = 'date';
   };
@@ -19,11 +56,11 @@ const CadastroForm = () => {
   return (
     <div className="form-container">
       <div className="form-image">
-        <img src="../../public/images/mancha1.png" alt="mancha" id="img-direita" />
+        <img src="/images/mancha1.png" alt="mancha" id="img-direita" />
       </div>
       <div className="container">
         <div className="form">
-          <form action="#">
+          <form onSubmit={handleSubmit}>
             <div className="form-header">
               <div className="title">
                 <h1>Cadastre-se já</h1>
@@ -36,7 +73,7 @@ const CadastroForm = () => {
             </div>
             <div className="input-group">
               <div className="line1">
-                <input type="text" id="nome" name="nome" placeholder="Nome Completo" required maxLength="900" />
+                <input type="text" id="nome" name="nome" placeholder="Nome Completo" required maxLength="900" onChange={handleChange} />
               </div>
               <div className="line2">
                 <input
@@ -46,7 +83,7 @@ const CadastroForm = () => {
                   placeholder="Nascimento"
                   onFocus={handleDateFocus}
                   onBlur={handleDateBlur}
-                  required
+                  onChange={handleChange}
                 />
                 <input
                   type="text"
@@ -57,20 +94,21 @@ const CadastroForm = () => {
                   onInput={handleInput}
                   maxLength="9"
                   style={{ marginLeft: '1%' }}
+                  onChange={handleChange}
                 />
                 <input
                   type="text"
                   id="RG"
                   name="RG"
                   placeholder="RG"
-                  required
                   onInput={handleInput}
                   maxLength="9"
                   style={{ marginLeft: '1%' }}
+                  onChange={handleChange}
                 />
               </div>
               <div className="line3">
-                <input type="text" id="cidade" name="cidade" placeholder="Qual sua cidade?" required />
+                <input type="text" id="cidade" name="cidade" placeholder="Qual sua cidade?" required  onChange={handleChange}/>
               </div>
               <div className="line4">
                 <input
@@ -81,31 +119,35 @@ const CadastroForm = () => {
                   required
                   onInput={handleInput}
                   maxLength="8"
+                  onChange={handleChange}
                 />
-                <input type="text" id="endereco" name="endereco" placeholder="Endereço completo" required />
+                <input type="text" id="endereco" name="endereco" placeholder="Endereço completo" required onChange={handleChange} />
+
               </div>
               <div className="line5">
                 <input
                   type="text"
-                  id="telefone"
-                  name="telefone"
+                  id="telefone1"
+                  name="telefone1"
                   placeholder="Telefone principal"
                   required
                   onInput={handleInput}
                   maxLength="11"
+                  onChange={handleChange}
                 />
                 <input
                   type="tel"
-                  id="telefone"
-                  name="telefone"
+                  id="telefone2"
+                  name="telefone2"
                   placeholder="Telefone para recado"
                   onInput={handleInput}
                   maxLength="11"
                   style={{ marginLeft: '1%' }}
+                  onChange={handleChange}
                 />
               </div>
               <div className="line6">
-                <input type="email" id="email" name="email" placeholder="Digite seu e-mail" />
+                <input type="email" id="email" name="email" placeholder="Digite seu e-mail"  required onChange={handleChange}/>
                 <input
                   type="text"
                   id="user"
@@ -113,10 +155,11 @@ const CadastroForm = () => {
                   placeholder="Nome de usuário"
                   required
                   style={{ marginLeft: '1%' }}
+                  onChange={handleChange}
                 />
               </div>
               <div className="line7">
-                <input type="password" id="password" name="password" placeholder="Digite sua senha" required />
+                <input type="password" id="password" name="password" placeholder="Digite sua senha" required onChange={handleChange}/>
                 <input
                   type="password"
                   id="confirme-senha"
@@ -124,6 +167,7 @@ const CadastroForm = () => {
                   placeholder="Confirme sua senha"
                   required
                   style={{ marginLeft: '1%' }}
+                  onChange={handleChange}
                 />
               </div>
               <div className="tp-cadastro">
@@ -131,23 +175,24 @@ const CadastroForm = () => {
                   <label htmlFor="tp-cadastro"><b>Você é:</b></label>
                 </div>
                 <div className="option">
-                  <input type="radio" id="tp-rabiscadoo" name="tp-cadastro" />{' '}
+                  <input type="radio" id="tp-rabiscadoo" 
+                  name="tp-cadastro" value="Rabiscadoo" 
+                  onChange={handleChange} />{' '}
                   <label htmlFor="tp-rabiscadoo">Rabiscadoo</label>
                   <br />
-                  <input type="radio" id="tp-tatu" name="tp-cadastro" />{' '}
+
+                  <input type="radio"
+                  id="tp-tatu" name="tp-cadastro" 
+                  value="Tatuador" 
+                  onChange={handleChange} />{' '}
                   <label htmlFor="tp-tatu">Tatuador</label>
                 </div>
               </div>
             </div>
             <div className="continue-button">
-              <button>
-                <a href="#">bora lá!</a>
-              </button>
+              <button type="submit">bora lá!</button>
             </div>
           </form>
-        </div>
-        <div className="form-image2">
-          <img src="../cadastro_tatu/images/mancha3.png" alt="mancha" id="img-esquerda" className="imagem-sobreposta" />
         </div>
       </div>
     </div>
