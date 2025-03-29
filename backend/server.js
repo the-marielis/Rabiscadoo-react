@@ -30,7 +30,6 @@ db.connect((err) => {
 
 //********************ROTA DE LOGIN**********************/
 app.post('/api/login', (req, res) => {
-  console.log("CHamou api");
   const { nome_usuario, senha } = req.body;
   const query = 'SELECT * FROM cadastrologin WHERE nome_usuario = ?';
   //console.log(nome_usuario, senha);
@@ -56,17 +55,18 @@ app.post('/api/login', (req, res) => {
 
 //*******************ROTA DE CADASTRO**********************/
 app.post('/api/cadastro', (req, res) => {
+  console.log(req.body);
   const { nome, nome_usuario, senha, CPF, RG, nascimento, telefone, telefone2, email, CEP, cidade, endereco } = req.body;
 
   if (!nome || !nome_usuario || !senha || !CPF || !telefone || !email || !CEP || !cidade || !endereco) {
     return res.status(400).send({ error: 'Todos os campos obrigatórios devem ser preenchidos' });
   }
 
-  const query = 'INSERT INTO cadastrologin (nome, nome_usuario, senha, CPF, RG, nascimento, telefone, email, CEP, cidade, endereco) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO cadastrologin (nome, nome_usuario, senha, CPF, RG, nascimento, telefone, telefone2, email, CEP, cidade, endereco) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
   db.query(query, [nome, nome_usuario, senha, CPF, RG, nascimento, telefone, telefone2, email, CEP, cidade, endereco], (err, results) => {
     if (err) {
       console.error('Erro ao cadastrar usuário:', err);
-      return res.status(500).send({ error: 'Erro ao cadastrar usuário' });    
+      return res.status(500).send({ error: 'Erro ao cadastrar usuário', details: err.message });    
     }
 
     res.status(201).send({ message: 'Usuário cadastrado com sucesso' });
