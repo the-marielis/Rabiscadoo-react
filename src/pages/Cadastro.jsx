@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../cadastro.css'; 
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const CadastroForm = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,8 @@ const CadastroForm = () => {
     senha: '',
     tp_cadastro: '',
   });
+
+  const Navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -34,6 +37,7 @@ const CadastroForm = () => {
       const response = await axios.post('http://localhost:3301/api/cadastro', formData);
       console.log(response.data);
       alert('Cadastro realizado com sucesso!');
+      return Navigate("/login")
     } catch (error) {
       console.error('Erro no cadastro:', error);
       alert('Erro ao cadastrar. Tente novamente.');

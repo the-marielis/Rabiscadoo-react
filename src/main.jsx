@@ -12,6 +12,8 @@ import Agenda from './pages/Agenda.jsx'
 import Profissionais from './pages/Profissionais.jsx'
 import HomeLogado from './pages/HomeLogado.jsx'
 import ErrorPage from './pages/ErrorPage.jsx'
+import PainelTatuador from './pages/PainelTatuador.jsx'
+import Agendamento from './pages/Agendamento.jsx'
 
 const router = createBrowserRouter([
   {
@@ -50,6 +52,14 @@ const router = createBrowserRouter([
       {
         path: "/homelogado",
         element: <HomeLogado />,
+      },
+      {
+        path: "/paineltatuador",
+        element: <PainelTatuador />,
+      },
+      {
+        path: "/agendamento",
+        element: <Agendamento />,
       }
 
     ]

@@ -27,22 +27,24 @@ const Login = () => {
       });
       console.log(nome_usuario, senha);
 
-      if(response.status === 200){
-       
-          console.log(response.data);
-          alert('Login realizado com sucesso!');
-          return Navigate("/homelogado")
-        } else{
-          alert('Login ou senha incorretos!');
+      if (response.status === 200) {
+        const { tp_cadastro } = response.data;
+  
+        if (tp_cadastro === 1) {
+          Navigate("/homelogado"); // Cliente normal
+        } else if (tp_cadastro === 2) {
+          Navigate("/paineltatuador"); // Painel do tatuador
+        } else {
+          setError('Tipo de usuário desconhecido');
         }
-     
+      } else {
+        alert('Login ou senha incorretos!');
+      }
     } catch (err) {
-      // Se ocorrer um erro (usuário não encontrado ou senha incorreta)
       console.error(err);
       setError('Erro ao fazer login: ' + (err.response?.data?.error || 'Tente novamente mais tarde.'));
-      alert('Erro ao fazer login: ' + (err.response?.data?.error || 'Tente novamente mais tarde.'));
     } finally {
-      setLoading(false); // Finaliza o carregamento
+      setLoading(false);
     }
   };
 

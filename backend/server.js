@@ -30,9 +30,9 @@ db.connect((err) => {
 
 //********************ROTA DE LOGIN**********************/
 app.post('/api/login', (req, res) => {
-  const { nome_usuario, senha } = req.body;
+  const { nome_usuario, senha, tp_cadastro } = req.body;
   const query = 'SELECT * FROM cadastrologin WHERE nome_usuario = ?';
-  //console.log(nome_usuario, senha);
+  console.log(nome_usuario, senha, tp_cadastro);
   db.query(query, [nome_usuario], async (err, results) => {
     if (err) {
       return res.status(500).send({ error: 'Erro no servidor' });
@@ -43,12 +43,18 @@ app.post('/api/login', (req, res) => {
     }
 
     const user = results[0];
-    console.log(user);
+    console.log("Usuário encontrado:", user);
 
     if (senha == user.senha) {
-      res.status(200).send({ message: 'Login bem-sucedido', user });
+      if (user.tp_cadastro === 1) {
+        return res.status(200).send({ message: 'Login bem-sucedido', tipo: 'rabiscadoo', user });
+      } else if (user.tp_cadastro === 2) {
+        return res.status(200).send({ message: 'Login bem-sucedido', tipo: 'tatuador', user });
+      } else {
+        return res.status(400).send({ error: 'Tipo de usuário desconhecido' });
+      }
     } else {
-      res.status(401).send({ error: 'Senha incorreta' });
+      return res.status(401).send({ error: 'Senha incorreta' });
     }
   });
 });
