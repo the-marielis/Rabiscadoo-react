@@ -10,29 +10,30 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Função que é chamada quando o formulário é enviado
-
   const Navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+
     try {
     
       // Envia o nome de usuário e senha para o backend
       const response = await axios.post('/api/login', {
-        nome_usuario,
-        senha,
+        nome_usuario: nome_usuario.trim(),
+        senha: senha.trim(),
+        tp_cadastro: 'rabiscadoo' 
         
       });
       console.log(nome_usuario, senha);
+      console.log(response.data);
 
       if (response.status === 200) {
         const { tp_cadastro } = response.data;
   
-        if (tp_cadastro === 1) {
+        if (tp_cadastro === "rabiscadoo") {
           Navigate("/homelogado"); // Cliente normal
-        } else if (tp_cadastro === 2) {
+        } else if (tp_cadastro === "tatuador") {
           Navigate("/paineltatuador"); // Painel do tatuador
         } else {
           setError('Tipo de usuário desconhecido');
@@ -51,7 +52,7 @@ const Login = () => {
   return (
     <div className="container-login100" style={{ backgroundImage: "url('./public/images/BACKGROUND_LOGIN.png')" }}>
       <div className="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33">
-        <form className="login100-form validate-form flex-sb flex-w">
+        <form onSubmit={handleSubmit} className="login100-form validate-form flex-sb flex-w">
           <span className="login100-form-title p-b-53">Faça seu login</span>
 
           <div className="container-btn">
@@ -139,7 +140,6 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              onClick={handleSubmit}
               className="login100-form-btn"
             >
               {loading ? 'Carregando...' : 'Login'}

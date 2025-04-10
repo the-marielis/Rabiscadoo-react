@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
@@ -46,10 +48,10 @@ app.post('/api/login', (req, res) => {
     console.log("Usuário encontrado:", user);
 
     if (senha == user.senha) {
-      if (user.tp_cadastro === 1) {
-        return res.status(200).send({ message: 'Login bem-sucedido', tipo: 'rabiscadoo', user });
-      } else if (user.tp_cadastro === 2) {
-        return res.status(200).send({ message: 'Login bem-sucedido', tipo: 'tatuador', user });
+      if (user.tp_cadastro === "rabiscadoo") {
+        return res.status(200).send({ message: 'Login bem-sucedido', tp_cadastro: 'rabiscadoo', user });
+      } else if (user.tp_cadastro === "tatuador") {
+        return res.status(200).send({ message: 'Login bem-sucedido', tp_cadastro: 'tatuador', user });
       } else {
         return res.status(400).send({ error: 'Tipo de usuário desconhecido' });
       }
