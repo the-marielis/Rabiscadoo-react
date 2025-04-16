@@ -30,6 +30,10 @@ const CadastroForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    console.log("Atualizando:", name, value);
+    console.log("formData agora:", { ...formData, [name]: value });
 
     console.log(formData);
 
@@ -197,14 +201,14 @@ const CadastroForm = () => {
                 </div>
                 <div className="option">
                   <input type="radio" id="tp-rabiscadoo" 
-                  name="tp_cadastro" value="Rabiscadoo" 
+                  name="tp_cadastro" value="rabiscadoo" 
                   onChange={handleChange} />{' '}
                   <label htmlFor="tp-rabiscadoo">Rabiscadoo</label>
                   <br />
 
                   <input type="radio"
                   id="tp-tatu" name="tp_cadastro" 
-                  value="Tatuador" 
+                  value="tatuador" 
                   onChange={handleChange} />{' '}
                   <label htmlFor="tp-tatu">Tatuador</label>
                 </div>

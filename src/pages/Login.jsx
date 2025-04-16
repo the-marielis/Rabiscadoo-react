@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../main.css";
 import axios from '../axiosConfig';
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -9,6 +10,8 @@ const Login = () => {
   const [senha, setSenha] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const { login } = useAuth();
 
   const Navigate = useNavigate();
   const handleSubmit = async (e) => {
@@ -23,13 +26,15 @@ const Login = () => {
         nome_usuario: nome_usuario.trim(),
         senha: senha.trim(),
         tp_cadastro: 'rabiscadoo' 
-        
       });
+
       console.log(nome_usuario, senha);
       console.log(response.data);
 
       if (response.status === 200) {
         const { tp_cadastro } = response.data;
+
+        login(response.data);
   
         if (tp_cadastro === "rabiscadoo") {
           Navigate("/homelogado"); // Cliente normal
