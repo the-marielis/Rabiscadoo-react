@@ -1,5 +1,6 @@
 import React from "react";
 import "../main.css";
+import { Link } from "react-router-dom";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -25,6 +26,11 @@ const Home = () => {
 
   return (
     <div className="container-home">
+      <div className="txt-home">
+        <h2>Já pensou se existisse um site <br />
+        para agendar sua nova tattoo?</h2>
+      </div>
+      
       <div className="slider">
       <Slider {...settings}>
               <div><img src={tattoo1} alt="Tattoo 1" /></div>
@@ -39,13 +45,10 @@ const Home = () => {
       <div className="img-fundo">
         <img src={manchaImg} alt="mancha" />
       </div>
-      <div className="entrar">
-        <button>
-          <a href="#">VENHA <br /> CONHECER</a>
-        </button>
-      </div>
-    </div>
+      <Link to="/login" className="btn-entrar"> VENHA <br /> CONHECER</Link>
+    </div> 
   );
 };
+
 
 export default Home;

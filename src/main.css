@@ -49,6 +49,7 @@
 }
 
 body, html {
+  width: 100%;
 	height: 100%;
 	font-family: var(--fonte-padrao);
 	background-color: var(--cor0);
@@ -91,21 +92,22 @@ border: none;
   margin-top: 0.2%;
 }
 
-#entrar::after {
+.ativo::after {
   content: '';
   display: block;
-  width: 60%; 
-  height: 0.3rem; /* Altura do risquinho */
-  background-color: var(--cor7); /* Cor do risquinho */
+  width: 60%;
+  height: 0.3rem;
+  background-color: var(--cor7);
   margin-top: 1%;
-  margin-left: auto; 
+  margin-left: auto;
   margin-right: auto;
-  transition: 2s;
+  transition: 0.4s ease;
 }
 
-#entrar:hover::after {
-  width: 100%; /* Mantém o efeito ao passar o mouse */
+.ativo:hover::after {
+  width: 100%;
 }
+
 
 /*---------------------------------------------*/
 h1,h2,h3,h4,h5,h6 {
@@ -477,20 +479,31 @@ h1 {
   background-color: var(--cor0);
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100vh;
+  height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.txt-home h2 {
+ padding-top: 7%;
+ font-family: var(--fonte-padrao);
+ font-size: 65px;
+ margin-left: 15%;
+ letter-spacing: 3px;
+ font-weight: 100;
 }
 
 .slider {
-  margin: 10% auto;
-  width: 75%;
-  height: 70vh;
+  margin: 2% auto;
+  width: 70%;
+  height: 60vh;
   overflow: hidden;
   border: 5px solid var(--cor2);
   box-shadow: -15px 15px 1px #9831b8;
+  position: relative; /* garante que o z-index funcione */
+  z-index: 2; /* mais alto que o fundo */
 }
 
 .slick-slide img {
@@ -527,31 +540,43 @@ h1 {
 }
 
 .img-fundo {
-  position: fixed;
+  position: absolute;
   right: -25%;
   bottom: 0;
+  top: 20%;
   width: 60%;
-  z-index: -1;
+  z-index: 0;
+  overflow: hidden;
+  
 }
 
 .img-fundo img {
-  width: 60%;
+  width: 100%;
   height: auto;
   object-fit: cover;
+  opacity: 0.9;
 }
-
-.entrar button {
+.btn-entrar {
+  position: absolute;
+  bottom: 15%;
+  left: 80%;
+  transform: translateX(-50%);
+  z-index: 10;
   background-color: var(--cor7);
-  border-radius: 30%;
-  border: none;
-  padding: 10%;
-  margin-right: 5vw;
-}
-
-.entrar a {
-  text-decoration: none;
   color: var(--cor2);
-  background-color: var(--cor7);
+  font-family: var(--fonte-padrao);
+  padding: 16px 32px;
+  border: none;
+  border-radius: 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
+}
+
+.btn-entrar:hover {
+  background-color: var(--cor6); /* ou algo mais escuro se quiser efeito hover */
 }
 
 @media (max-width: 768px) {

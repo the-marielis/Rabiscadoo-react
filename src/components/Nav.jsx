@@ -2,8 +2,11 @@ import React from 'react';
 import '../main.css';
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
 const Nav = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;  
   const { usuario, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -14,17 +17,17 @@ const Nav = () => {
 
   return ( 
     <nav>
-      <Link to="/">HOME</Link>
-      <Link to="/profissionais">PROFISSIONAIS</Link>
-      <Link to="/agenda">AGENDE JÁ</Link>
-      <Link to="/sobre">
+      <Link to="/" className={currentPath === "/" ? "ativo" : ""}>HOME</Link>
+      <Link to="/profissionais" className={currentPath === "/profissionais" ? "ativo" : ""}>PROFISSIONAIS</Link>
+      <Link to="/agenda" className={currentPath === "/agenda" ? "ativo" : ""}>AGENDE JÁ</Link>
+      <Link to="/sobre" className={currentPath === "/sobre" ? "ativo" : ""}>
         QUEM SOMOS
         <img src="/images/seta.png" alt="seta" style={{ width: "auto", height: "15px", marginLeft: "5%" }} />
       </Link>
 
       {usuario ? (
         <>
-          <Link to="/perfil" id="perfil">
+          <Link to="/perfil" id="perfil" className={currentPath === "/perfil" ? "ativo" : ""}>
             <img src="/images/profile2.png" alt="profile" style={{ width: "auto", height: "19px", marginRight: "7%" }} />
             MEU PERFIL
           </Link>
@@ -45,7 +48,7 @@ const Nav = () => {
           </button>
         </>
       ) : (
-        <Link to="/login" id="entrar">
+        <Link to="/login" id="entrar" className={currentPath === "/login" ? "ativo" : ""}>
           <img src="/images/profile2.png" alt="profile" style={{ width: "auto", height: "19px", marginRight: "7%" }} />
           ENTRAR
         </Link>
