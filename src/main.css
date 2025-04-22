@@ -578,6 +578,76 @@ h1 {
 .btn-entrar:hover {
   background-color: var(--cor6); /* ou algo mais escuro se quiser efeito hover */
 }
+/*-------------------------------------------------------------------------------*/
+//ABOUT
+.sobre {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--cor1);
+  color: white;
+  padding: 3rem;
+  position: relative;
+}
+
+.sobre-texto {
+  max-width: 50%;
+  z-index: 2;
+}
+
+.sobre h2 {
+  font-size: 3rem;
+  font-weight: 100;
+  margin: 25% 15% 0% 15%;
+  font-family: var(--fonte-padrao);
+  font-weight: 200; 
+}
+
+.sobre h1 {
+  font-family: var(--fonte-destaque); /* exemplo, use a sua fonte aqui */
+  font-size: 7rem;
+  font-weight: 100;
+  margin-bottom: 1rem;
+  margin-top: -3%; 
+  margin-left: 10%;
+}
+
+.sobre p {
+  font-family: var(--fonte-padrao);
+  font-size: 1.5rem;
+  padding-left: 5%; 
+  padding-bottom: 10%;
+  font-weight: 100;
+  letter-spacing: 3px;
+  line-height: 1.5;
+}
+
+#mancha-about {
+  position: absolute;
+  right: 0;
+  top: 5rem;
+  width: 50%;
+  z-index: 0;
+}
+
+#about {
+  position: absolute;
+  right: 5rem;
+  top: 7rem;
+  width: 25%;
+  z-index: 1;
+}
+
+.footer {
+  background-color: var(--cor4);
+  width: 100%;
+  padding: 3rem;
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  color: white;
+}
+
 
 @media (max-width: 768px) {
   .slider {

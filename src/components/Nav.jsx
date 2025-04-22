@@ -22,7 +22,7 @@ const Nav = () => {
       <Link to="/agenda" className={currentPath === "/agenda" ? "ativo" : ""}>AGENDE JÁ</Link>
       <Link to="/sobre" className={currentPath === "/sobre" ? "ativo" : ""}>
         QUEM SOMOS
-        <img src="/images/seta.png" alt="seta" style={{ width: "auto", height: "15px", marginLeft: "5%" }} />
+       
       </Link>
 
       {usuario ? (
