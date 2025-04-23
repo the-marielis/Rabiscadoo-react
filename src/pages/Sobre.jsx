@@ -3,18 +3,21 @@ import "../main.css";
 
 const Sobre = () => {
   return (
-    <div className="sobre">
-      <div className="sobre-texto">
-        <h2>quem é a</h2>
-        <h1>Rabiscadoo?</h1>
-        <p>
-          A Rabiscadoo é uma plataforma inovadora de agendamento de tatuagem, projetada para atender jovens e adultos que buscam a facilidade de se encher de rabiscos. Com uma extensa cartela de profissionais talentosos, oferecemos aos usuários a liberdade de escolher o tatuador e o estilo que melhor se adequa ao seu gosto, simplificando o processo de agendamento. Vale destacar que nossa responsabilidade se limita ao agendamento, garantindo uma experiência prática e sem complicações para os amantes da arte corporal.
-        </p>
+    <>
+      <div className="sobre">
+        <div className="sobre-texto">
+          <h2>quem é a</h2>
+          <h1>Rabiscadoo?</h1>
+          <p>
+            A Rabiscadoo é uma plataforma inovadora de agendamento de tatuagem, projetada para atender jovens e adultos que buscam a facilidade de se encher de rabiscos. Com uma extensa cartela de profissionais talentosos, oferecemos aos usuários a liberdade de escolher o tatuador e o estilo que melhor se adequa ao seu gosto, simplificando o processo de agendamento. Vale destacar que nossa responsabilidade se limita ao agendamento, garantindo uma experiência prática e sem complicações para os amantes da arte corporal.
+          </p>
+        </div>
+
+        <img src="/images/mancha3.png" alt="mancha4" id="mancha-about" />
+        <img src="/images/about.png" alt="about" id="about" />
       </div>
 
-      <img src="/images/mancha3.png" alt="mancha4" id="mancha-about" />
-      <img src="/images/about.png" alt="about" id="about" />
-
+      {/* Footer fora da div.sobre */}
       <div className="footer">
         <div>
           <h2>Contato</h2>
@@ -26,14 +29,15 @@ const Sobre = () => {
           <h2>Nos acompanhe nas redes</h2>
           <p>Instagram: @Rabiscadoo.tattoo</p>
           <p>Facebook: Rabiscandoo</p>
-          <p>Threads: Rabiscandoo</p>
+          <p> Rabiscandoo</p>
         </div>
         <div>
-          <img src="/images/complete-logo.png" alt="logo" style={{ width: "200px" }} />
+          <img src="/images/complete-logo.png" alt="logo" style={{ width: "10rem" }} />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
 export default Sobre;
+
