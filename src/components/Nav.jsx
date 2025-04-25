@@ -1,5 +1,5 @@
 import React from 'react';
-import '../main.css';
+import '../css/main.css';
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';

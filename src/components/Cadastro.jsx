@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import '../cadastro.css'; 
+import '../css/cadastro.css'; 
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -65,7 +65,10 @@ const CadastroForm = () => {
   return (
     <div className="form-container">
       <div className="form-image">
-        <img src="/images/mancha1.png" alt="mancha" id="img-direita" />
+        <img src="/images/mancha2.png" alt="mancha" id="img-direita" />
+      </div>
+      <div className="form-image2">
+        <img src="/images/mancha3.png" alt="mancha" id="img-esquerda" />
       </div>
       <div className="container">
         <div className="form">

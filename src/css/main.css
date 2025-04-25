@@ -597,7 +597,7 @@ h1 {
 .sobre h2 {
   font-size: 3rem;
   font-weight: 200;
-  margin: 5rem 0 -1.2rem 5.9rem;
+  margin: 7rem 0 -1.2rem 6rem;
   font-family: var(--fonte-padrao); 
 }
 
@@ -610,8 +610,8 @@ h1 {
 
 .sobre p {
   font-family: var(--fonte-padrao);
-  font-size: 1.2rem;
-  padding: 0 1rem 3rem 3rem;
+  font-size: 1.5rem;
+  padding: 0 1rem 0 3rem;
   font-weight: 100;
   letter-spacing: 1px;
   line-height: 1.5;
@@ -621,16 +621,16 @@ h1 {
 #mancha-about {
   position: absolute;
   right: -5rem;
-  top: 3rem;
-  width: 60%;
+  top: 7rem;
+  width: 50%;
   z-index: 0;
 }
 
 #about {
   position: absolute;
-  right: 13rem;
-  top: 11rem;
-  width: 25%;
+  right: 15rem;
+  top: 15rem;
+  width: 27%;
   z-index: 1;
 }
 
@@ -638,7 +638,7 @@ h1 {
   background-color: var(--cor4);
   width: 100%;
   padding: 3rem;
-  margin-top: auto;
+  margin-top: 15vh;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -651,6 +651,7 @@ h1 {
   font-size: 1.5rem;
   font-weight: 800;
   margin-top: 0;
+  margin-bottom: 1rem;
   letter-spacing: 0.1rem;
   font-family: var(--fonte-padrao);
 }
@@ -660,7 +661,14 @@ h1 {
   font-family: var(--fonte-padrao);
   letter-spacing: 0.1rem;
   padding: 0.1rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
+}
+
+.copyright p {
+  color: var(--cor3);
+  font-weight: 100;
+  margin: 50% 50% 0 0;
+  
 }
 
 /*------------------------------------------------------------------------------*///RESPONSIVIDADE

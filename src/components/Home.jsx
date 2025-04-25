@@ -1,5 +1,6 @@
 import React from "react";
-import "../main.css";
+import '../css/main.css';
+import { Link } from "react-router-dom";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -11,41 +12,43 @@ import tattoo4 from "../../public/images/tatuagem4.jpg";
 import tattoo5 from "../../public/images/tatuagem5.jpg";
 import tattoo6 from "../../public/images/tatuagem6.jpg";
 import manchaImg from "../../public/images/mancha1.png";
-const HomeLogado = () => {
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 3000,
-      };
-    
-      return (
-        <div className="container-home">
-          <div className="slider">
-            <Slider {...settings}>
+
+const Home = () => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  };
+
+  return (
+    <div className="container-home">
+      <div className="txt-home">
+        <h2>Já pensou se existisse um site <br />
+        para agendar sua nova tattoo?</h2>
+      </div>
+      
+      <div className="slider">
+      <Slider {...settings}>
               <div><img src={tattoo1} alt="Tattoo 1" /></div>
               <div><img src={tattoo2} alt="Tattoo 2" /></div>
               <div><img src={tattoo3} alt="Tattoo 3" /></div>
               <div className="tattoo4"><img src={tattoo4} alt="Tattoo 4" /></div>
               <div><img src={tattoo5} alt="Tattoo 5" /></div>
-              <div><img src={tattoo5} alt="Tattoo 5" /></div>
               <div><img src={tattoo6} alt="Tattoo 6" /></div>
             </Slider>
-          </div>
-    
-          <div className="img-fundo">
-            <img src={manchaImg} alt="mancha" />
-          </div>
-          <div className="entrar">
-            <button>
-              <a href="#">VENHA <br /> CONHECER</a>
-            </button>
-          </div>
-        </div>
-      );
+      </div>
+
+      <div className="img-fundo">
+        <img src={manchaImg} alt="mancha" />
+      </div>
+      <Link to="/login" className="btn-entrar"> VENHA <br /> CONHECER</Link>
+    </div> 
+  );
 };
 
-export default HomeLogado;
+
+export default Home;

@@ -62,7 +62,7 @@ body {
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .title {
-  letter-spacing: 1px;
+  letter-spacing: 3px;
   font-family: var(--fonte-cabeçalho);
   font-size: 150%;
   margin: 0 25%;
@@ -274,48 +274,50 @@ body {
   margin-top: 10% ;
   margin-left: 0%;
   display: flex;
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .option {
   margin-top: -5%;
   margin-left: 10%;
-  width: 33%;
-  margin-bottom: 1%;
 }
 
-.tp-tatu .tp-rabiscadoo label {
-  margin-left: 50%; 
+.option label {
+  margin-top: -2.5%;
+  margin-left: 10%;
+  font-size: 20px;
+  font-family: var(--fonte-padrao);
 }
+
+#tp-tatu, #tp-rabiscadoo {
+  margin-left: 5% ; 
+}
+
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .continue-button  {
   width: 50%;
   margin-left: 30vh;
-  margin-top: -7vh;
+  margin-top: -10vh;
 }
 
 .continue-button button {
-  padding: 5px 20px;
+  padding: 7px 20px;
   background-color: var(--cor0);
   border-radius: 10px;
-  margin-left: 100%;
+  margin-left: 95%;
   width: 35%;
   box-shadow: -3px 2px 1px #9831b8 ;
   border: none;
   z-index: 1;
   position: relative;
-  font-weight: 1000;  font-size: 17px;
+  font-weight: 1000;
   transition: all 250ms;
   overflow: hidden;
-}
-
-.continue-button a {
-  padding: 5px;
   text-decoration: none;
-  color: var(--cor4);
   font-family: var(--fonte-padrao);
-  font-size: 20px;
-  letter-spacing: 1px;
+  color: var(--cor1);
+  font-size: 125%;
+  letter-spacing: 2px;
 }
 
 .continue-button button::before {
@@ -348,25 +350,27 @@ body {
   right: 0;
   width: 30%; 
   z-index: 1; /* Garante que ela fique sobre o formulário */
-  margin-right: -7vh;
+  margin-right: -6vh;
 
 }
 
 .form-image img {
-  max-width: 100%;
+  width: 150%;
   height: auto;
 }
 
 .form-image2 {
   position: fixed;
-  left: 0;
-  bottom: 0; /* Para alinhar até o final da página */
-  width: 60%; 
-  z-index: -1; /* Fica por trás da div principal */
+  top: 0;
+  bottom: 0;
+  z-index: 0;
+  overflow: hidden;
 }
 
 .form-image2 img {
-  width: 60%;
-  height: auto;
-  object-fit: cover; /* Ajusta a imagem para cobrir o contêiner sem distorção */
+  margin-left: -5%;
+  margin-top: 20%;
+  height: 100vh;
+  object-fit: contain; /* mostra tudo da imagem, sem cortar */
+  object-position: left center; /* posiciona mais à esquerda */
 }

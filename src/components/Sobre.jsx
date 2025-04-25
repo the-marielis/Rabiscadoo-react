@@ -1,5 +1,5 @@
 import React from "react";
-import "../main.css";
+import '../css/main.css';
 
 const Sobre = () => {
   return (
@@ -30,6 +30,9 @@ const Sobre = () => {
           <p>Instagram: @Rabiscadoo.tattoo</p>
           <p>Facebook: Rabiscandoo</p>
           <p> Rabiscandoo</p>
+        </div>
+        <div className="copyright">
+          <p>© 2024 RABISCADOO. All rights reserved</p>
         </div>
         <div>
           <img src="/images/complete-logo.png" alt="logo" style={{ width: "10rem" }} />

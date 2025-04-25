@@ -1,19 +1,19 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import './main.css';
+import '././css/main.css';
 import App from './App.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Login from './pages/Login.jsx';
-import Cadastro from './pages/Cadastro.jsx';
-import Home from './pages/Home.jsx';
-import Sobre from './pages/Sobre.jsx';
-import Perfil from './pages/Perfil.jsx';
-import Agenda from './pages/Agenda.jsx';
-import Profissionais from './pages/Profissionais.jsx';
-import HomeLogado from './pages/HomeLogado.jsx';
-import ErrorPage from './pages/ErrorPage.jsx';
-import PainelTatuador from './pages/PainelTatuador.jsx';
-import Agendamento from './pages/Agendamento.jsx';
+import Login from './components/Login.jsx';
+import Cadastro from './components/Cadastro.jsx';
+import Home from './components/Home.jsx';
+import Sobre from './components/Sobre.jsx';
+import Perfil from './components/Perfil.jsx';
+import Agenda from './components/Agenda.jsx';
+import Profissionais from './components/Profissionais.jsx';
+import HomeLogado from './components/HomeLogado.jsx';
+import ErrorPage from './components/ErrorPage.jsx';
+import PainelTatuador from './components/PainelTatuador.jsx';
+import Agendamento from './components/Agendamento.jsx';
 
 import { AuthProvider } from './context/AuthContext.jsx'; // importa o context novo
 
