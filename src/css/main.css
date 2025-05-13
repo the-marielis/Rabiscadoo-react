@@ -637,20 +637,26 @@ h1 {
 .footer {
   background-color: var(--cor4);
   width: 100%;
-  padding: 3rem;
+  padding: 2rem 8rem;
   margin-top: 15vh;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   flex-wrap: wrap;
-  z-index:10; 
   position: relative;
+  z-index: 10;
+}
+
+.footer > div {
+  flex: 1;
+  min-width: 200px;
+  margin-bottom: 1rem;
 }
 
 .footer h2 {
-  color: var(--cor7) ;
-  font-size: 1.5rem;
+  color: var(--cor7);
+  font-size: 1.8rem;
   font-weight: 800;
-  margin-top: 0;
   margin-bottom: 1rem;
   letter-spacing: 0.1rem;
   font-family: var(--fonte-padrao);
@@ -659,17 +665,46 @@ h1 {
 .footer p {
   color: var(--cor7);
   font-family: var(--fonte-padrao);
-  letter-spacing: 0.1rem;
-  padding: 0.1rem;
   font-size: 1.2rem;
+  letter-spacing: 0.05rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.footer p img {
+  width: 1.5rem;
+  margin-right: 0.8rem;
+}
+
+.footer-logo {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.footer-logo img {
+  width: 10rem;
+}
+
+
+.copyright {
+  background-color: var(--cor4); 
+  width: 100%;
+  text-align: center;
+  padding: 1.5rem 0;
+  margin-top: -1rem; 
+  z-index: 10;
+
 }
 
 .copyright p {
   color: var(--cor3);
-  font-weight: 100;
-  margin: 50% 50% 0 0;
-  
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin: 0;
 }
+
 
 /*------------------------------------------------------------------------------*///RESPONSIVIDADE
 @media (max-width: 768px) {

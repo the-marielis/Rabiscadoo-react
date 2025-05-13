@@ -1,0 +1,185 @@
+/*//////////////////////////////////////////////////////////////////
+[ FONT ]*/
+
+@font-face {
+    font-family: 'Lakes_neue';
+    src: url(./fonts/tt_lakes_neue/TT\ Lakes\ Neue\ Trial\ Compressed\ Bold.ttf); 
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Prosto_sans';
+    src: url(./fonts/tt_prosto_sans/TT%20Prosto%20Sans%20Trial%20Condensed%20Thin.otf);
+    font-weight: 100;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Prosto_sans';
+    src: url(./fonts/tt_prosto_sans/TT\ Prosto\ Sans\ Trial\ Condensed\ Light.otf);
+    font-weight: 300;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Prosto_sans';
+    src: url(./fonts/tt_prosto_sans/TT\ Prosto\ Sans\ Trial\ Condensed\ Regular.otf);
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Prosto_sans';
+    src: url(./fonts/tt_prosto_sans/TT\ Prosto\ Sans\ Trial\ Condensed\ Bold.otf);
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+    @font-face {
+      font-family: 'Avallon';
+      src: url(./fonts/avallon/Avallon.ttf); 
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    
+  
+  /* Definição de variáveis de cor e fonte */
+  :root {
+  
+    --cor0: #310352;
+    --cor1: #8A2BE2; 
+    --cor2: #FFFFFF;
+    --cor3: #696969;
+    --cor4: #E0E0E0;
+    --cor5: #4b0082;
+    --cor7: #9831b8;
+  
+    --fonte-padrao: 'Prosto_sans', sans-serif;
+    --fonte-destaque: 'Avallon', serif;
+    --fonte-cabeçalho: 'Lakes_neue'; 
+  }
+  /*//////////////////////////////////////////////////////////////////
+  [ RESTYLE TAG ]*/
+  
+  * {
+      margin: 0px; 
+      padding: 0px; 
+      box-sizing: border-box;
+  }
+  
+  body, html {
+    width: 100%;
+    height: 100%;
+    font-family: var(--fonte-padrao);
+    background-color: var(--cor0);
+  }
+  
+  
+  
+  /*---------------------------------------------*/
+  .secao-profissionais {
+    background: linear-gradient(to bottom right,var(--cor0), var(--cor5));
+    min-height: 100vh;
+    padding: 3rem 1rem;
+    color: var(--cor2);
+    font-family: var(--fonte-padrao);
+  }
+  
+  .titulo-profissionais {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 100;
+  }
+  
+  .container-carrossel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .botao-navegacao {
+    position: absolute;
+    background-color: var(--cor3);
+    border: none;
+    border-radius: 50%;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    z-index: 10;
+  }
+  
+  .botao-navegacao:hover {
+    background-color: var(--cor3);
+  }
+  
+  .esquerdo {
+    left: 0;
+  }
+  
+  .direito {
+    right: 0;
+  }
+  
+  .icone-navegacao {
+    color: white;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .lista-profissionais {
+    display: flex;
+    overflow: hidden;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+  .card-profissional {
+    background-color:var(--cor0);
+    border: 2px solid var(--cor2);
+    border-radius: 1rem;
+    padding: 1rem;
+    width: 15rem;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  
+  .foto-profissional {
+    width: 12rem;
+    height: 12rem;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+  }
+  
+  .nome-profissional {
+    font-size: 1.5rem;
+    letter-spacing: 0.1rem;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-bottom: 0.25rem;
+  }
+  
+  .info-profissional {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+  }
+  
+  .botao-detalhes {
+    margin-top: 1rem;
+    background-color: var(--cor1);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .botao-detalhes:hover {
+    background-color:var(--cor1);
+  }
