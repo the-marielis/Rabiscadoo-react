@@ -29,6 +29,11 @@ db.connect((err) => {
   }
 });
 
+//********************RODANDO O SERVIDOR*********************/
+const port = 3301;
+app.listen(port, () => {
+  console.log(`Servidor rodando na porta ${port}`);
+});
 
 //********************ROTA DE LOGIN**********************/
 app.post('/api/login', (req, res) => {
@@ -70,20 +75,112 @@ app.post('/api/cadastro', (req, res) => {
     return res.status(400).send({ error: 'Todos os campos obrigatórios devem ser preenchidos' });
   }
 
-  const query = 'INSERT INTO cadastrologin (nome, nome_usuario, senha, CPF, RG, nascimento, telefone, telefone2, email, CEP, cidade, endereco, tp_cadastro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-  db.query(query, [nome, nome_usuario, senha, CPF, RG, nascimento, telefone, telefone2, email, CEP, cidade, endereco, tp_cadastro], 
-    (err, results) => {
+  // Verifica se nome de usuário já existe
+  db.query('SELECT * FROM cadastrologin WHERE nome_usuario = ?', [nome_usuario], (err, userResults) => {
     if (err) {
-      console.error('Erro ao cadastrar usuário:', err);
-      return res.status(500).send({ error: 'Erro ao cadastrar usuário', details: err.message });    
+      console.error('Erro ao verificar nome de usuário:', err);
+      return res.status(500).send({ error: 'Erro ao verificar nome de usuário' });
     }
 
-    res.status(201).send({ message: 'Usuário cadastrado com sucesso' });
-  });
-})
+    if (userResults.length > 0) {
+      return res.status(409).send({ error: 'Nome de usuário já está em uso' });
+    }
 
-// Inicializar o servidor
-const port = 3301;
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
+    // Verifica se e-mail já existe
+    db.query('SELECT * FROM cadastrologin WHERE email = ?', [email], (err, emailResults) => {
+      if (err) {
+        console.error('Erro ao verificar e-mail:', err);
+        return res.status(500).send({ error: 'Erro ao verificar e-mail' });
+      }
+
+      if (emailResults.length > 0) {
+        return res.status(409).send({ error: 'E-mail já está em uso' });
+      }
+
+      // Verifica se CPF já existe
+      db.query('SELECT * FROM cadastrologin WHERE CPF = ?', [CPF], (err, cpfResults) => {
+        if (err) {
+          console.error('Erro ao verificar CPF:', err);
+          return res.status(500).send({ error: 'Erro ao verificar CPF' });
+        }
+
+        if (cpfResults.length > 0) {
+          return res.status(409).send({ error: 'CPF já está cadastrado' });
+        }
+
+        // Depois de validar, pode inserir
+        const insertQuery = `
+          INSERT INTO cadastrologin 
+          (nome, nome_usuario, senha, CPF, RG, nascimento, telefone, telefone2, email, CEP, cidade, endereco, tp_cadastro) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+        db.query(insertQuery, [nome, nome_usuario, senha, CPF, RG, nascimento, telefone, telefone2, email, CEP, cidade, endereco, tp_cadastro], 
+          (err, results) => {
+            if (err) {
+              console.error('Erro ao cadastrar usuário:', err);
+              return res.status(500).send({ error: 'Erro ao cadastrar usuário', details: err.message });
+            }
+
+            res.status(201).send({ message: 'Usuário cadastrado com sucesso' });
+          }
+        );
+      });
+    });
+  });
+});
+
+//*******************ATUALIZAR CADASTRO**********************/
+app.put('/api/cadastro/:idusuario', (req, res) => {
+  const idusuario = req.params.idusuario;
+  const {
+    nome, nome_usuario, senha, CPF, RG, nascimento,
+    telefone, telefone2, email, CEP, cidade, endereco, tp_cadastro
+  } = req.body;
+
+  if (!nome || !nome_usuario || !senha || !CPF || !telefone || !email || !CEP || !cidade || !endereco) {
+    return res.status(400).send({ error: 'Todos os campos obrigatórios devem ser preenchidos' });
+  }
+
+  const updateQuery = `
+    UPDATE cadastrologin SET 
+      nome = ?, nome_usuario = ?, senha = ?, CPF = ?, RG = ?, nascimento = ?, 
+      telefone = ?, telefone2 = ?, email = ?, CEP = ?, cidade = ?, endereco = ?, tp_cadastro = ?
+    WHERE idusuario = ?
+  `;
+
+  db.query(updateQuery, [
+    nome, nome_usuario, senha, CPF, RG, nascimento,
+    telefone, telefone2, email, CEP, cidade, endereco, tp_cadastro, idusuario
+  ], (err, result) => {
+    if (err) {
+      console.error('Erro ao atualizar usuário:', err);
+      return res.status(500).send({ error: 'Erro ao atualizar usuário' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).send({ error: 'Usuário não encontrado' });
+    }
+
+    res.status(200).send({ message: 'Usuário atualizado com sucesso' });
+  });
+});
+
+//*******************EXCLUIR CADASTRO**********************/
+app.delete('/api/cadastro/:idusuario', (req, res) => {
+  const idusuario = req.params.idusuario;
+
+  const deleteQuery = 'DELETE FROM cadastrologin WHERE idusuario = ?';
+
+  db.query(deleteQuery, [idusuario], (err, result) => {
+    if (err) {
+      console.error('Erro ao excluir usuário:', err);
+      return res.status(500).send({ error: 'Erro ao excluir usuário' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).send({ error: 'Usuário não encontrado' });
+    }
+
+    res.status(200).send({ message: 'Usuário excluído com sucesso' });
+  });
 });

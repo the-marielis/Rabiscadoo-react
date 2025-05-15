@@ -28,25 +28,27 @@ const CadastroForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    console.log("Atualizando:", name, value);
-    console.log("formData agora:", { ...formData, [name]: value });
+const [mensagemErro, setMensagemErro] = useState('');
 
-    console.log(formData);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setMensagemErro('');
 
-    try {
-      const response = await axios.post('http://localhost:3301/api/cadastro', formData);
-      console.log(response.data);
-      alert('Cadastro realizado com sucesso!');
-      return Navigate("/login")
-    } catch (error) {
-      console.error('Erro no cadastro:', error);
-      alert('Erro ao cadastrar. Tente novamente.');
+  try {
+    const response = await axios.post('http://localhost:3301/api/cadastro', formData);
+    console.log(response.data);
+    alert('Cadastro realizado com sucesso!');
+    return Navigate("/login");
+  } catch (error) {
+    console.error('Erro no cadastro:', error);
+    if (error.response && error.response.data && error.response.data.error) {
+      setMensagemErro(error.response.data.error); // mensagem vinda do backend
+    } else {
+      setMensagemErro('Erro ao cadastrar. Tente novamente.');
     }
-  };
+  }
+};
+
 
   const handleDateFocus = (e) => {
     e.target.type = 'date';
@@ -218,6 +220,9 @@ const CadastroForm = () => {
               </div>
             </div>
             <div className="continue-button">
+              {mensagemErro && (
+              <p style={{ color: 'red', marginBottom: '10px' }}>{mensagemErro}</p>
+              )}
               <button type="submit">bora lá!</button>
             </div>
           </form>
