@@ -63,7 +63,7 @@ export default function CatalogoProfissionais() {
   const visible = profissionais.slice(startIndex, startIndex + 5);
 
   return (
-    <section className="secao-profissionais">
+    <section className="secao-profissionais" >
       <h2 className="titulo-profissionais">Conheça os brabos</h2>
       <div className="container-carrossel">
         <button
@@ -101,14 +101,13 @@ export default function CatalogoProfissionais() {
             </div>
           ))}
         </div>
-
+        </div>
         <button
           className="botao-navegacao direito"
           onClick={handleNext}
         >
           <ChevronRight className="icone-navegacao" />
         </button>
-      </div>
     </section>
   );
 }

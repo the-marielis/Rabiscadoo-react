@@ -80,17 +80,26 @@
   
   /*---------------------------------------------*/
   .secao-profissionais {
-    background: linear-gradient(to bottom right,var(--cor0), var(--cor5));
     min-height: 100vh;
     padding: 3rem 1rem;
     color: var(--cor2);
     font-family: var(--fonte-padrao);
+    background-image: url('../public/images/BACKGROUND_LOGIN.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .secao-profissionais h2 { 
+    margin-top: 5%; 
+    font-family: var(--fonte-padrao);
+    font-size: 3.5rem;
+    font-weight: 500;
   }
   
   .titulo-profissionais {
     font-size: 2.5rem;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     font-weight: 100;
   }
   
@@ -101,51 +110,74 @@
     justify-content: center;
   }
   
-  .botao-navegacao {
-    position: absolute;
-    background-color: var(--cor3);
-    border: none;
-    border-radius: 50%;
-    padding: 0.5rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    z-index: 10;
-  }
+.botao-navegacao {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3rem;
+  height: 3rem;
+  background-color: var(--cor1);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.botao-navegacao:hover {
+  background-color: var(--cor7);
+}
+
+.esquerdo {
+  left: 10%;
+}
+
+.direito {
+  right: 10%;
+}
+
+.icone-navegacao {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: white;
+}
+
   
-  .botao-navegacao:hover {
-    background-color: var(--cor3);
-  }
-  
-  .esquerdo {
-    left: 0;
-  }
-  
-  .direito {
-    right: 0;
-  }
-  
-  .icone-navegacao {
-    color: white;
-    width: 24px;
-    height: 24px;
-  }
-  
-  .lista-profissionais {
-    display: flex;
-    overflow: hidden;
-    gap: 1rem;
-    justify-content: center;
-  }
-  
-  .card-profissional {
-    background-color:var(--cor0);
-    border: 2px solid var(--cor2);
-    border-radius: 1rem;
-    padding: 1rem;
-    width: 15rem;
-    text-align: center;
-    flex-shrink: 0;
-  }
+.lista-profissionais {
+  display: flex;
+  overflow: hidden;
+  gap: 2rem;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.card-profissional {
+  background-color: var(--cor0);
+  border: 2px solid var(--cor2);
+  border-radius: 1.5rem;
+  padding: 2rem 1.5rem;
+  width: 18rem;
+  text-align: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.card-profissional:hover {
+  transform: scale(1.03);
+}
+
+.container-carrossel {
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
   
   .foto-profissional {
     width: 12rem;
@@ -161,6 +193,7 @@
     font-weight: bold;
     text-decoration: underline;
     margin-bottom: 0.25rem;
+    font-family: var(--fonte-padrao);
   }
   
   .info-profissional {
