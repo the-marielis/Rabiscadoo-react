@@ -61,13 +61,14 @@ body, html {
 
 nav {	
   display: flex;
-  justify-content: center; /* Centraliza os itens no eixo horizontal */
-  align-items: center; /* Centraliza os itens no eixo vertical */
-  gap: 10%; /* Adiciona espaçamento entre os itens */
-  padding: 10px 0; /* Pequeno padding para evitar que fique muito colado */
+  justify-content: center; 
+  align-items: center; 
+  gap: 10%; 
+  padding: 10px 0; 
   position: fixed;
   top: 0;
-  width: 100%; /* Garante que o nav ocupe toda a largura */
+  width: 100%; 
+  z-index: 2;
 }
 
 nav a {

@@ -14,6 +14,8 @@ import HomeLogado from './components/HomeLogado.jsx';
 import ErrorPage from './components/ErrorPage.jsx';
 import PainelTatuador from './components/PainelTatuador.jsx';
 import Agendamento from './components/Agendamento.jsx';
+import PerfilProfissional from './components/PerfilProfissional.jsx';
+import CatalogoProfissionais from './components/Profissionais.jsx';
 
 import { AuthProvider } from './context/AuthContext.jsx'; // importa o context novo
 
@@ -32,7 +34,9 @@ const router = createBrowserRouter([
       { path: "/profissionais", element: <Profissionais /> },
       { path: "/homelogado", element: <HomeLogado /> },
       { path: "/paineltatuador", element: <PainelTatuador /> },
-      { path: "/agendamento", element: <Agendamento /> }
+      { path: "/agendamento", element: <Agendamento /> },
+      { path: "/profissional/:id", element: <PerfilProfissional /> },
+
     ]
   }
 ]);

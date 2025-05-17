@@ -184,3 +184,38 @@ app.delete('/api/cadastro/:idusuario', (req, res) => {
     res.status(200).send({ message: 'Usuário excluído com sucesso' });
   });
 });
+
+//***********************ROTA PARA PERFIL PROFISSIONAL********************** */
+app.get("/api/profissionais/:idusuario", (req, res) => {
+  const idusuario = req.params.idusuario;
+  console.log("ID recebido na rota:", id);
+
+  const query = `
+    SELECT 
+      c.nome,
+      c.cidade,
+      c.nascimento,
+      c.telefone,
+      p.estilo,
+      p.descricao,
+      p.imagem,
+      p.instagram,
+      p.portifolio_url
+    FROM cadastrologin c
+    JOIN perfil_tatuador p 
+    ON c.idusuario = p.idusuario
+    WHERE c.idusuario = ?
+  `;
+
+  db.query(query, [idusuario], (err, result) => {
+    if (err) {
+      console.error("Erro na consulta:", err);
+      return res.status(500).json({ error: "Erro na consulta ao banco de dados" });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ error: "Profissional não encontrado" });
+    }
+
+    res.json(result[0]);
+  });
+});
