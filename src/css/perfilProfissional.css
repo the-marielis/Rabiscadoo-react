@@ -87,15 +87,17 @@
   color: #fff;
   background-color: transparent;
   min-height: 100vh;
+  margin-top: 8%;
 }
 
 .background-overlay {
   position: absolute;
-  top: 0;
+  margin-top: -5%;
+  top: -10%;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('/images/img-fundo.png'); /* sem ../public */
+  width: 110%;
+  height: 110%;
+  background-image: url('/images/img-fundo.png'); 
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -104,55 +106,104 @@
   pointer-events: none;
 }
 
-
 .perfil-topo {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   gap: 30px;
   max-width: 1000px;
+  margin-left: 20%;
   flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 40px;
 }
 
 .perfil-topo img {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
+  width: 25%;
+  height: 25%;
   object-fit: cover;
-  border: 4px solid #ffffff;
 }
 
-.info-perfil {
+.bloco-info {
+  display: flex;
+  flex-direction: column;
   max-width: 600px;
-  font-size: 1.1rem;
-  line-height: 1.6;
 }
 
 .info-perfil h2 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  color: #c086f4;
+  color: var(--cor4);
   margin-bottom: 10px;
+  font-family: var(--fonte-padrao);
 }
 
+.dados-basicos {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
 
+.dados-basicos p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--cor2);
+  font-weight: 300;
+}
+
+.descricao p {
+  font-size: 1rem;
+  text-align: justify;
+  color: var(--cor2);
+  margin-top: 10px;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+/*---------------------------------BOTÃO STYLE-------------------------------------------------------*/
 .botao-agenda {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: linear-gradient(to right, #9d4edd, #7b2cbf);
+  padding: 0.70% 3%;
+  background-color: var(--cor0);
+  border-radius: 10px;
+  margin-left: 72%;
+  margin-top: -30%;
+  box-shadow: -3px 2px 1px #9831b8;
   border: none;
-  border-radius: 12px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform 0.2s ease;
+  z-index: 1;
+  position: relative;
+  transition: all 250ms;
+  overflow: hidden;
+  text-decoration: none;
+  font-family: var(--fonte-padrao);
+  color: var(--cor2);
+  font-size: 100%;
+  letter-spacing: 2px;
+}
+
+.botao-agenda::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  border-radius: 10px;
+  border: none;
+  background-color: #212121;
+  z-index: -1;
+  -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+  transition: all 250ms;
 }
 
 .botao-agenda:hover {
-  transform: scale(1.05);
+  color: #e8e8e8;
 }
+
+.botao-agenda:hover::before {
+  width: 100%;
+}
+
+/*----------------------------------------------------------------------------------------*/
 
 .portfolio-carousel {
   display: flex;

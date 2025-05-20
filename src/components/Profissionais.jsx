@@ -10,7 +10,7 @@ const profissionais = [
     cidade: "Cascavel-PR",
     idade: 25,
     imagem: "/images/fulana.png",
-    id: 1,
+    idusuario: 1,
   },
   {
     nome: "Fulano Matos",
@@ -18,7 +18,7 @@ const profissionais = [
     cidade: "Cascavel-PR",
     idade: 30,
     imagem: "/images/fulano.png",
-    id: 2,
+    idusuario: 2,
   },
   {
     nome: "Joaquina Pão",
@@ -26,7 +26,7 @@ const profissionais = [
     cidade: "Cascavel-PR",
     idade: 28,
     imagem: "/images/joaquina.png",
-    id: 3,
+    idusuario: 3,
   },
   {
     nome: "José Zé",
@@ -34,7 +34,7 @@ const profissionais = [
     cidade: "Cascavel-PR",
     idade: 33,
     imagem: "/images/jose.png",
-    id: 4,
+    idusuario: 4,
   },
   {
     nome: "Francisquinho",
@@ -42,7 +42,7 @@ const profissionais = [
     cidade: "Cascavel-PR",
     idade: 36,
     imagem: "/images/francisquinho.png",
-    id: 5,
+    idusuario: 5,
   },
 ];
 
@@ -76,7 +76,7 @@ export default function CatalogoProfissionais() {
         <div className="lista-profissionais">
           {visible.map((prof) => (
             <div
-              key={prof.id}
+              key={prof.idusuario}
               className="card-profissional"
             >
               <img
@@ -93,7 +93,7 @@ export default function CatalogoProfissionais() {
                 {prof.idade} anos.
               </p>
               <button
-                onClick={() => navigate(`/profissional/${prof.id}`)}
+                onClick={() => navigate(`/profissional/${prof.idusuario}`)}
                 className="botao-detalhes"
               >
                 CONHEÇA MAIS

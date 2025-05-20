@@ -188,23 +188,24 @@ app.delete('/api/cadastro/:idusuario', (req, res) => {
 //***********************ROTA PARA PERFIL PROFISSIONAL********************** */
 app.get("/api/profissionais/:idusuario", (req, res) => {
   const idusuario = req.params.idusuario;
-  console.log("ID recebido na rota:", id);
+  console.log("ID recebido na rota:", idusuario);
 
-  const query = `
-    SELECT 
-      c.nome,
-      c.cidade,
-      c.nascimento,
-      c.telefone,
-      p.estilo,
-      p.descricao,
-      p.imagem,
-      p.instagram,
-      p.portifolio_url
-    FROM cadastrologin c
-    JOIN perfil_tatuador p 
-    ON c.idusuario = p.idusuario
-    WHERE c.idusuario = ?
+const query = `
+SELECT 
+  c.nome,
+  c.cidade,
+  c.nascimento,
+  TIMESTAMPDIFF(YEAR, c.nascimento, CURDATE()) AS idade,
+  c.telefone,
+  p.estilo,
+  p.descricao,
+  p.imagem,
+  p.instagram,
+  p.portifolio_url
+  FROM cadastrologin c
+  JOIN perfil_tatuador p 
+  ON c.idusuario = p.idusuario
+  WHERE c.idusuario = ?
   `;
 
   db.query(query, [idusuario], (err, result) => {

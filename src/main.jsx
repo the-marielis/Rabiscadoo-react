@@ -35,7 +35,7 @@ const router = createBrowserRouter([
       { path: "/homelogado", element: <HomeLogado /> },
       { path: "/paineltatuador", element: <PainelTatuador /> },
       { path: "/agendamento", element: <Agendamento /> },
-      { path: "/profissional/:id", element: <PerfilProfissional /> },
+      { path: "/profissional/:idusuario", element: <PerfilProfissional /> },
 
     ]
   }
