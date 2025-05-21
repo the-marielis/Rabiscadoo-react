@@ -11,7 +11,7 @@ import tattoo3 from "../../public/images/tatuagem3.jpg";
 import tattoo4 from "../../public/images/tatuagem4.jpg";
 import tattoo5 from "../../public/images/tatuagem5.jpg";
 import tattoo6 from "../../public/images/tatuagem6.jpg";
-import manchaImg from "../../public/images/mancha1.png";
+import manchaImg from "../../public/images/mancha3.png";
 
 const Home = () => {
   const settings = {

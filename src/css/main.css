@@ -75,7 +75,7 @@ nav a {
   color: var(--cor2);
   text-decoration: none;
   font-family: var(--fonte-cabeçalho);
-  font-size: 20px;
+  font-size: 1rem;
   letter-spacing: 3px;
   white-space: nowrap; /* Impede que o texto quebre em duas linhas */
   transition: all 0.3s ease;
@@ -488,18 +488,18 @@ h1 {
   z-index: 1;
 }
 .txt-home h2 {
- padding-top: 7%;
+ padding-top: 5%;
  font-family: var(--fonte-padrao);
- font-size: 65px;
- margin-left: 15%;
+ font-size: 2.5rem;
+ margin-left: 25%;
  letter-spacing: 3px;
  font-weight: 100;
 }
 
 .slider {
-  margin: 2% auto;
+  margin: 1% auto;
   width: 70%;
-  height: 60vh;
+  height: 70vh;
   overflow: hidden;
   border: 5px solid var(--cor2);
   box-shadow: -15px 15px 1px #9831b8;
@@ -542,9 +542,9 @@ h1 {
 
 .img-fundo {
   position: absolute;
-  right: -25%;
+  right: -15%;
   bottom: 0;
-  top: 20%;
+  top: 15%;
   width: 60%;
   z-index: 0;
   overflow: hidden;
@@ -559,25 +559,26 @@ h1 {
 }
 .btn-entrar {
   position: absolute;
-  bottom: 15%;
-  left: 80%;
+  bottom: 3%;
+  left: 92%;
   transform: translateX(-50%);
   z-index: 10;
   background-color: var(--cor7);
   color: var(--cor2);
   font-family: var(--fonte-padrao);
-  padding: 16px 32px;
+  padding: 1% 2%;
   border: none;
   border-radius: 20px;
   text-align: center;
   text-decoration: none;
-  font-size: 20px;
+  font-size: 1rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   transition: background-color 0.3s ease;
 }
 
 .btn-entrar:hover {
   background-color: var(--cor6); /* ou algo mais escuro se quiser efeito hover */
+  color: var(--cor0);
 }
 /*-------------------------------------------------------------------------------*/
 //ABOUT
