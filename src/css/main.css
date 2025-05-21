@@ -587,7 +587,6 @@ h1 {
   flex-direction: column;
   background-color: var(--cor1);
   color: white;
-  padding: 1rem;
   position: relative;
 }
 
@@ -597,9 +596,9 @@ h1 {
 }
 
 .sobre h2 {
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 200;
-  margin: 7rem 0 -1.2rem 6rem;
+  margin: 5rem 0 -1.5rem 10rem;
   font-family: var(--fonte-padrao); 
 }
 
@@ -612,7 +611,7 @@ h1 {
 
 .sobre p {
   font-family: var(--fonte-padrao);
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   padding: 0 1rem 0 3rem;
   font-weight: 100;
   letter-spacing: 1px;
@@ -622,25 +621,26 @@ h1 {
 
 #mancha-about {
   position: absolute;
-  right: -5rem;
-  top: 7rem;
-  width: 50%;
+  right: -7rem;
+  top: 5rem;
+  width: 55%;
   z-index: 0;
 }
 
 #about {
   position: absolute;
-  right: 15rem;
-  top: 15rem;
+  right: 10rem;
+  top: 10rem;
   width: 27%;
   z-index: 1;
 }
 
 .footer {
   background-color: var(--cor4);
-  width: 100%;
-  padding: 2rem 8rem;
-  margin-top: 15vh;
+  width: 100%;;
+  padding: 1.2rem 8rem;
+  padding-bottom: 100%;
+  margin-top: 10vh;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -652,13 +652,12 @@ h1 {
 .footer > div {
   flex: 1;
   min-width: 200px;
-  margin-bottom: 1rem;
 }
 
 .footer h2 {
   color: var(--cor7);
-  font-size: 1.8rem;
-  font-weight: 800;
+  font-size: 1.5rem;
+  font-weight: 650;
   margin-bottom: 1rem;
   letter-spacing: 0.1rem;
   font-family: var(--fonte-padrao);
@@ -667,11 +666,11 @@ h1 {
 .footer p {
   color: var(--cor7);
   font-family: var(--fonte-padrao);
-  font-size: 1.2rem;
+  font-size: 1rem;
   letter-spacing: 0.05rem;
   display: flex;
   align-items: center;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.3rem;
 }
 
 .footer p img {
@@ -689,23 +688,6 @@ h1 {
   width: 10rem;
 }
 
-
-.copyright {
-  background-color: var(--cor4); 
-  width: 100%;
-  text-align: center;
-  padding: 1.5rem 0;
-  margin-top: -1rem; 
-  z-index: 10;
-
-}
-
-.copyright p {
-  color: var(--cor3);
-  font-size: 1.2rem;
-  font-weight: 400;
-  margin: 0;
-}
 
 
 /*------------------------------------------------------------------------------*///RESPONSIVIDADE

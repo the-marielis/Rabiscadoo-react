@@ -57,9 +57,6 @@ const Sobre = () => {
           <img src="/images/complete-logo.png" alt="logo" />
         </div>
       </div>
-      <div className="copyright">
-        <p>© 2024 RABISCADOO. All rights reserved</p>
-      </div>
     </>
   );
 };
