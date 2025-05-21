@@ -10,6 +10,7 @@ function PerfilProfissional() {
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
+    console.log("ID do usuário:", idusuario);
     const buscarProfissional = async () => {
       try {
         const resposta = await axios.get(`http://localhost:3301/api/profissionais/${idusuario}`);
@@ -50,9 +51,21 @@ function PerfilProfissional() {
     <button className="botao-agenda">agenda aqui</button>
   </div>
 
-  <div className="portfolio-carousel">
-    {/* imagens do portfólio aqui */}
-  </div>
+ <div className="portfolio-carousel">
+  {profissional.portfolio && profissional.portfolio.length > 0 ? (
+    profissional.portfolio.map((item, index) => (
+      <img
+        key={index}
+        src={item.imagem}
+        alt={`Imagem do portfólio ${index + 1}`}
+        className="img-portfolio"
+      />
+    ))
+  ) : (
+    <p>Esse profissional ainda não adicionou imagens ao portfólio.</p>
+  )}
+</div>
+ 
 
   <div className="background-overlay"></div>
 </section>

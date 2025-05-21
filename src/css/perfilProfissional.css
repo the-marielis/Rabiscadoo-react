@@ -203,10 +203,13 @@
   width: 100%;
 }
 
-/*----------------------------------------------------------------------------------------*/
+
+/*-------------------------PORTFOLIO--------------------------------------*/
+
 
 .portfolio-carousel {
   display: flex;
+  margin-top: 2%;
   align-items: center;
   justify-content: center;
   gap: 20px;
@@ -214,10 +217,10 @@
 }
 
 .portfolio-carousel img {
-  width: 140px;
-  height: 140px;
+  width: 170px;
+  height: 200px;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 2px;
   background: #ddd;
+  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
 }
-

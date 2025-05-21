@@ -184,39 +184,63 @@ app.delete('/api/cadastro/:idusuario', (req, res) => {
     res.status(200).send({ message: 'Usuário excluído com sucesso' });
   });
 });
-
-//***********************ROTA PARA PERFIL PROFISSIONAL********************** */
+//*******************ROTA PARA PERFIL + PORTFÓLIO**********************/
 app.get("/api/profissionais/:idusuario", (req, res) => {
   const idusuario = req.params.idusuario;
   console.log("ID recebido na rota:", idusuario);
 
-const query = `
-SELECT 
-  c.nome,
-  c.cidade,
-  c.nascimento,
-  TIMESTAMPDIFF(YEAR, c.nascimento, CURDATE()) AS idade,
-  c.telefone,
-  p.estilo,
-  p.descricao,
-  p.imagem,
-  p.instagram,
-  p.portifolio_url
-  FROM cadastrologin c
-  JOIN perfil_tatuador p 
-  ON c.idusuario = p.idusuario
-  WHERE c.idusuario = ?
+  const queryPerfilCompleto = `
+    SELECT 
+      c.nome,
+      c.cidade,
+      c.nascimento,
+      TIMESTAMPDIFF(YEAR, c.nascimento, CURDATE()) AS idade,
+      c.telefone,
+      p.id as idtatuador,
+      p.estilo,
+      p.descricao,
+      p.imagem,
+      p.instagram,
+      p.portifolio_url
+    FROM cadastrologin c
+    JOIN perfil_tatuador p 
+    ON c.idusuario = p.idusuario
+    WHERE c.idusuario = ?
   `;
 
-  db.query(query, [idusuario], (err, result) => {
+  db.query(queryPerfilCompleto, [idusuario], (err, result) => {
     if (err) {
-      console.error("Erro na consulta:", err);
-      return res.status(500).json({ error: "Erro na consulta ao banco de dados" });
+      console.error("Erro na consulta do perfil:", err);
+      return res.status(500).json({ error: "Erro ao buscar perfil" });
     }
     if (result.length === 0) {
       return res.status(404).json({ error: "Profissional não encontrado" });
     }
 
-    res.json(result[0]);
+    const perfil = result[0];
+    const idtatuador = perfil.idtatuador;
+
+    const queryPortfolio = `
+      SELECT id, descricao, imagem FROM portfolio WHERE idtatuador = ?
+    `;
+
+    db.query(queryPortfolio, [idtatuador], (err2, resultadoPortfolio) => {
+  if (err2) {
+    console.error("Erro ao buscar portfólio:", err2);
+    return res.status(500).json({ erro: "Erro ao buscar portfólio" });
+  }
+
+  // Converter o BLOB para base64
+  const portfolioConvertido = resultadoPortfolio.map((item) => {
+    return {
+      ...item,
+      imagem: item.imagem ? `data:image/jpeg;base64,${item.imagem.toString('base64')}` : null
+    };
   });
+
+  perfil.portfolio = portfolioConvertido;
+  res.json(perfil);
 });
+});
+});
+
