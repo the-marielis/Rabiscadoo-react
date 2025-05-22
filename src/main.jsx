@@ -5,6 +5,7 @@ import App from './App.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Login from './components/Login.jsx';
 import Cadastro from './components/Cadastro.jsx';
+import CadastroForm from './components/CamposCadastro.jsx';
 import Home from './components/Home.jsx';
 import Sobre from './components/Sobre.jsx';
 import Perfil from './components/Perfil.jsx';
