@@ -78,7 +78,7 @@
   
   
   
-/*---------------------------------------------*/
+/*
 .secao-agenda {
   position: relative;
   min-height: 100vh;
@@ -100,7 +100,7 @@
   opacity: 0.2;
   z-index: -1;
 }
-/*
+
 .form-container {
   background-color: var(--cor5);
   padding: 2.5rem 5rem;
@@ -118,7 +118,7 @@
   letter-spacing: 0.07rem;
   text-align: center;
 }
-*/
+
 .linha {
   display: flex;
   flex-wrap: wrap;
@@ -162,4 +162,4 @@ button {
 
 button:hover {
   transform: scale(1.05);
-}
+}*/
