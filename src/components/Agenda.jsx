@@ -1,20 +1,21 @@
 import React from "react";
 import '../css/agenda.css';
+import BotaoContinuar from './BotaoContinuar';
 
 const Agenda = () => {
   return (
     <section className="secao-agenda">
-      <div className="form-container">
+      <div className="container-agenda">
         <h2>Fala mais do seu projeto pra nós</h2>
 
         <form>
-          <div className="linha">
-            <label>
+          <div className="linha-agenda">
+            <label className="label-agenda">
               Profissional:
-              <input type="text" value="Fulana da Silva" disabled />
+              <input className="input-agenda" type="text" value="Fulana da Silva" disabled />
             </label>
 
-            <label>
+            <label className="label-agenda">
               Estilo da tattoo:
               <select>
                 <option value="">selecione</option>
@@ -23,8 +24,8 @@ const Agenda = () => {
             </label>
           </div>
 
-          <div className="linha">
-            <label>
+          <div className="linha-agenda">
+            <label className="label-agenda">
               Tamanho:
               <input type="text" placeholder="cm" />
             </label>
@@ -34,7 +35,7 @@ const Agenda = () => {
               <input type="text" placeholder="escreve aqui" />
             </label>
 
-            <label>
+            <label className="label-agenda">
               Tattoo colorida?
               <select>
                 <option value="">selecione</option>
@@ -47,11 +48,11 @@ const Agenda = () => {
             <textarea placeholder="Descreva sua ideia aqui..."></textarea>
           </label>
 
-          <div className="linha">
+          <div className="linha-agenda">
             <input type="file" />
           </div>
-
-          <button type="submit">confirmar</button>
+          <br />
+          <BotaoContinuar texto="confirmar" largura="35%" />
         </form>
       </div>
     </section>

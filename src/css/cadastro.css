@@ -148,7 +148,7 @@ body {
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .input-group {
-  padding: 0px 10%;
+  padding: 0px 7%;
 }
 
 .input-group input {
@@ -162,89 +162,8 @@ body {
   margin: 0;
 }
 
-.line1  input, .line3 input  {
-  padding-top: 2%;
-  padding-bottom: 1%;
-  font-size: 13px;
-  width: 99.5%;
-}
-
-.line1 input {
-  padding-top: 2.5%;
-  font-size: 13px;
-  padding-right: 5rem;
-}
-
-.line2 {
-  padding-top: 1%;
-  padding-bottom: 1%;
-}
-
-.line2 input {
-  width: 32.5%;
-}
-
-#CPF, #RG {
-  font-size: 13px;
-  padding-right: 3.1rem; 
-
-}
-
-#nascimento, #CEP {
-  font-size: 13px;
-  padding-right: 4rem;
-}
-
-
-.line4 {
-  padding-top: 1%;
-  padding-bottom: 1%;
-  font-size: 13px;
-}
-
-.line4 input {
-  padding-top: 2.5%;
-  padding-bottom: 1%;
-  font-size: 13px;
-  padding-right: 5rem;
-  width: 32.3%;
-}
-
-
-#endereco {
-  padding-right: 10%;
-  margin-left: 1%;
-  font-size: 13px;
-  width: 66%;
-  font-size: 13px;
-
-}
-
-.line5 input {
-  padding-top: 2.5%;
-  padding-bottom: 1%;
-  width: 49%;
-  font-size: 13px;
-  padding-right: 5rem;
-  margin-bottom: 1%;
-}
-
-.line6 input {
-  padding-top: 2.5%;
-  padding-bottom: 1%;
-  width: 49%;
-  font-size: 13px;
-  padding-right: 5rem;
-}
-
-.line7 input {
-  padding-top: 2.5%;
-  padding-bottom: 1%;
-  width: 49%;
-  font-size: 13px;
-  padding-right: 5rem;
-  margin-bottom: 1%;
-  margin-top: 1%;
+.line2, .line4, .line6 {
+  padding:1% 0;
 }
 
 /*mudando a cor do texto na placeholder*/
@@ -294,56 +213,6 @@ body {
   margin-left: 5% ; 
 }
 
-/*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-.continue-button  {
-  width: 50%;
-  margin-left: 30vh;
-  margin-top: -10vh;
-}
-
-.continue-button button {
-  padding: 7px 20px;
-  background-color: var(--cor0);
-  border-radius: 10px;
-  margin-left: 95%;
-  width: 35%;
-  box-shadow: -3px 2px 1px #9831b8 ;
-  border: none;
-  z-index: 1;
-  position: relative;
-  font-weight: 1000;
-  transition: all 250ms;
-  overflow: hidden;
-  text-decoration: none;
-  font-family: var(--fonte-padrao);
-  color: var(--cor1);
-  font-size: 125%;
-  letter-spacing: 2px;
-}
-
-.continue-button button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 0;
-  border-radius: 10px;
-  border: none;
-  background-color: #212121;
-  z-index: -1;
-  -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  transition: all 250ms
- }
- 
- .continue-button button:hover {
-  color: #e8e8e8;
- }
- 
- .continue-button button:hover::before {
-  width: 100%;
- }
  /*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 .form-image {
   position: absolute;

@@ -1,27 +1,28 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import '../css/cadastro.css';
-import { Link, useNavigate } from 'react-router-dom';
-import BotaoContinuar from './BotaoContinuar';
+import React, { useState } from "react";
+import axios from "axios";
+import "../css/cadastro.css";
+import { Link, useNavigate } from "react-router-dom";
+import BotaoContinuar from "./BotaoContinuar";
+import InputCustomizado from "./InputCustomizado";
 
 const Cadastro = () => {
   const [formData, setFormData] = useState({
-    nome: '',
-    nascimento: '',
-    CPF: '',
-    RG: '',
-    cidade: '',
-    CEP: '',
-    endereco: '',
-    telefone: '',
-    telefone2: '',
-    email: '',
-    nome_usuario: '',
-    senha: '',
-    tp_cadastro: '',
+    nome: "",
+    nascimento: "",
+    CPF: "",
+    RG: "",
+    cidade: "",
+    CEP: "",
+    endereco: "",
+    telefone: "",
+    telefone2: "",
+    email: "",
+    nome_usuario: "",
+    senha: "",
+    tp_cadastro: "",
   });
 
-  const [mensagemErro, setMensagemErro] = useState('');
+  const [mensagemErro, setMensagemErro] = useState("");
   const Navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -30,39 +31,32 @@ const Cadastro = () => {
   };
 
   const handleInput = (e) => {
-    e.target.value = e.target.value.replace(/\D/g, '');
-  };
-
-  const handleDateFocus = (e) => {
-    e.target.type = 'date';
-  };
-
-  const handleDateBlur = (e) => {
-    if (!e.target.value) {
-      e.target.type = 'text';
-    }
+    e.target.value = e.target.value.replace(/\D/g, "");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMensagemErro('');
+    setMensagemErro("");
 
     try {
-      const response = await axios.post('http://localhost:3301/api/cadastro', formData);
+      const response = await axios.post(
+        "http://localhost:3301/api/cadastro",
+        formData
+      );
       console.log(response.data);
-      alert('Cadastro realizado com sucesso!');
+      alert("Cadastro realizado com sucesso!");
       return Navigate("/login");
     } catch (error) {
-      console.error('Erro no cadastro:', error);
+      console.error("Erro no cadastro:", error);
       if (error.response && error.response.data && error.response.data.error) {
         setMensagemErro(error.response.data.error);
       } else {
-        setMensagemErro('Erro ao cadastrar. Tente novamente.');
+        setMensagemErro("Erro ao cadastrar. Tente novamente.");
       }
     }
   };
 
-return (
+  return (
     <div className="form-container">
       <div className="form-image">
         <img src="/images/mancha2.png" alt="mancha" id="img-direita" />
@@ -78,146 +72,178 @@ return (
                 <h1>Cadastre-se já</h1>
               </div>
               <div className="login-button">
-                <button style={{ marginRight: '50px' }}>
+                <button style={{ marginRight: "50px" }}>
                   <Link to="/login"> Entrar</Link>
                 </button>
               </div>
             </div>
+
+            {/* INPUTS */}
             <div className="input-group">
-              <div className="line1">
-                <input type="text" 
-                id="nome" 
-                name="nome" 
-                placeholder="Nome Completo" 
-                required 
-                maxLength="900" 
-                onChange={handleChange} />
-              </div>
+              <InputCustomizado
+                tipo="text"
+                nome="nome"
+                placeholder="Nome completo"
+                valor={formData.nome}
+                aoMudar={handleChange}
+                obrigatorio={true}
+                tamanho="100%"
+              />
               <div className="line2">
-                <input
-                  type="text"
-                  id="nascimento"
-                  name="nascimento"
-                  placeholder="Nascimento"
-                  onFocus={handleDateFocus}
-                  onBlur={handleDateBlur}
-                  onChange={handleChange}
+                <InputCustomizado
+                  tipo="date"
+                  nome="nascimento"
+                  placeholder="Data de Nascimento"
+                  valor={formData.nascimento}
+                  aoMudar={handleChange}
+                  // aoInput={handleInput}
+                  obrigatorio={true}
+                  tamanho="33%"
                 />
-                <input
-                  type="text"
-                  id="CPF"
-                  name="CPF"
+                <InputCustomizado
+                  tipo="text"
+                  nome="CPF"
                   placeholder="CPF"
-                  required
-                  onInput={handleInput}
-                  maxLength="9"
-                  style={{ marginLeft: '1%' }}
-                  onChange={handleChange}
+                  valor={formData.CPF}
+                  aoMudar={handleChange}
+                  aoInput={handleInput}
+                  obrigatorio={true}
+                  maxLength={11}
+                  tamanho="33%"
                 />
-                <input
-                  type="text"
-                  id="RG"
-                  name="RG"
+                <InputCustomizado
+                  tipo="text"
+                  nome="RG"
                   placeholder="RG"
-                  onInput={handleInput}
-                  maxLength="9"
-                  style={{ marginLeft: '1%' }}
-                  onChange={handleChange}
+                  valor={formData.RG}
+                  aoMudar={handleChange}
+                  aoInput={handleInput}
+                  obrigatorio={true}
+                  maxLength={11}
+                  tamanho="33%"
                 />
               </div>
               <div className="line3">
-                <input type="text" 
-                id="cidade" 
-                name="cidade" 
-                placeholder="Qual sua cidade?" 
-                required  
-                onChange={handleChange}/>
-              </div>
-              <div className="line4">
-                <input
-                  type="text"
-                  id="CEP"
-                  name="CEP"
-                  placeholder="CEP"
-                  required
-                  onInput={handleInput}
-                  maxLength="8"
-                  onChange={handleChange}
+                <InputCustomizado
+                  tipo="text"
+                  nome="cidade"
+                  placeholder="Qual sua cidade?"
+                  valor={formData.cidade}
+                  aoMudar={handleChange}
+                  obrigatorio={true}
+                  tamanho="100%"
                 />
-                <input type="text" 
-                id="endereco" 
-                name="endereco" 
-                placeholder="Endereço completo" 
-                required 
-                onChange={handleChange} />
+              </div>
 
+              <div className="line4">
+                <InputCustomizado
+                  tipo="text"
+                  nome="CEP"
+                  placeholder="CEP"
+                  valor={formData.CEP}
+                  aoMudar={handleChange}
+                  obrigatorio={true}
+                  tamanho="50%"
+                />
+                <InputCustomizado
+                  tipo="text"
+                  nome="endereco"
+                  placeholder="Endereço completo"
+                  valor={formData.endereco}
+                  aoMudar={handleChange}
+                  obrigatorio={true}
+                  tamanho="50%"
+                />
               </div>
               <div className="line5">
-                <input
-                  type="text"
-                  id="telefone1"
-                  name="telefone"
+                <InputCustomizado
+                  tipo="tel"
+                  nome="telefone"
                   placeholder="Telefone principal"
-                  required
-                  onInput={handleInput}
-                  maxLength="11"
-                  onChange={handleChange}
+                  valor={formData.telefone}
+                  aoMudar={handleChange}
+                  obrigatorio={true}
+                  tamanho="50%"
                 />
-                <input
-                  type="tel"
-                  id="telefone2"
-                  name="telefone2"
+                <InputCustomizado
+                  tipo="tel"
+                  nome="telefone2"
                   placeholder="Telefone para recado"
-                  onInput={handleInput}
-                  maxLength="11"
-                  style={{ marginLeft: '1%' }}
-                  onChange={handleChange}
+                  valor={formData.telefone2}
+                  aoMudar={handleChange}
+                  obrigatorio={true}
+                  tamanho="50%"
                 />
               </div>
               <div className="line6">
-                <input type="email" id="email" name="email" placeholder="Digite seu e-mail"  required onChange={handleChange}/>
-                <input
-                  type="text"
-                  id="user"
-                  name="nome_usuario"
-                  placeholder="Nome de usuário"
-                  required
-                  style={{ marginLeft: '1%' }}
-                  onChange={handleChange}
+                <InputCustomizado
+                  tipo="email"
+                  nome="email"
+                  placeholder="Digite seu e-mail"
+                  valor={formData.email}
+                  aoMudar={handleChange}
+                  obrigatorio={true}
+                  tamanho="50%"
+                />
+                <InputCustomizado
+                  tipo="text"
+                  nome="nome_usuario"
+                  placeholder="Digite o nome de usuário"
+                  valor={formData.nome_usuario}
+                  aoMudar={handleChange}
+                  obrigatorio={true}
+                  tamanho="50%"
                 />
               </div>
               <div className="line7">
-                <input type="password" id="password" name="senha" placeholder="Digite sua senha" required onChange={handleChange}/>
-                <input
-                  type="password"
-                  id="confirme-senha"
-                  name="confirme-senha"
-                  placeholder="Confirme sua senha"
-                  required
-                  style={{ marginLeft: '1%' }}
-                  onChange={handleChange}
+                <InputCustomizado
+                  tipo="password"
+                  nome="senha"
+                  placeholder="Digite sua senha"
+                  valor={formData.senha}
+                  aoMudar={handleChange}
+                  obrigatorio={true}
+                  tamanho="50%"
                 />
+                <InputCustomizado
+                  tipo="password"
+                  nome="confirme-senha"
+                  placeholder="Confirme sua senha"
+                  
+                  aoMudar={handleChange}
+                  obrigatorio={true}
+                  tamanho="50%"
+                />
+           
               </div>
               <div className="tp-cadastro">
                 <div className="tipo">
-                  <label htmlFor="tp_cadastro"><b>Você é:</b></label>
+                  <label htmlFor="tp_cadastro">
+                    <b>Você é:</b>
+                  </label>
                 </div>
                 <div className="option">
-                  <input type="radio" id="tp-rabiscadoo" 
-                  name="tp_cadastro" value="rabiscadoo" 
-                  onChange={handleChange} />{' '}
+                  <input
+                    type="radio"
+                    id="tp-rabiscadoo"
+                    name="tp_cadastro"
+                    value="rabiscadoo"
+                    onChange={handleChange}
+                  />{" "}
                   <label htmlFor="tp-rabiscadoo">Rabiscadoo</label>
                   <br />
-
-                  <input type="radio"
-                  id="tp-tatu" name="tp_cadastro" 
-                  value="tatuador" 
-                  onChange={handleChange} />{' '}
+                  <input
+                    type="radio"
+                    id="tp-tatu"
+                    name="tp_cadastro"
+                    value="tatuador"
+                    onChange={handleChange}
+                  />{" "}
                   <label htmlFor="tp-tatu">Tatuador</label>
                 </div>
               </div>
 
-<BotaoContinuar mensagemErro={mensagemErro} texto="bora lá!" />
+              <BotaoContinuar mensagemErro={mensagemErro} texto="bora lá!" />
             </div>
           </form>
         </div>

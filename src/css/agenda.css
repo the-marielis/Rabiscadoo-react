@@ -78,7 +78,7 @@
   
   
   
-/*
+
 .secao-agenda {
   position: relative;
   min-height: 100vh;
@@ -101,7 +101,7 @@
   z-index: -1;
 }
 
-.form-container {
+.container-agenda {
   background-color: var(--cor5);
   padding: 2.5rem 5rem;
   border-radius: 2rem;
@@ -113,53 +113,36 @@
   gap: 1rem;
 }
 
-.form-container h2 {
+.container-agenda h2 {
   font-size: 2rem;
   letter-spacing: 0.07rem;
   text-align: center;
 }
 
-.linha {
+.linha-agenda {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.2rem;
 }
 
-form label {
+label-agenda {
   flex: 1;
   display: flex;
   flex-direction: column;
-  font-size: 0.9rem;
 }
 
-input[type="text"],
+input-agenda [type="text"],
 select,
 textarea {
-  padding: 0.6rem;
+  padding: 0.2rem;
   border-radius: 0.5rem;
   border: none;
-  margin-top: 0.3rem;
-}
+  margin-top: 0.2rem;
+} 
 
 textarea {
-  min-height: 120px;
+  min-height: 10rem;
   resize: vertical;
 }
 
-button {
-  background: var(--cor0);
-  color: white;
-  padding: 0.8rem 2rem;
-  border: none;
-  border-radius: 0.7rem;
-  cursor: pointer;
-  font-size: 1rem;
-  align-self: center;
-  margin-top: 1rem;
-  transition: 0.3s ease;
-}
-
-button:hover {
-  transform: scale(1.05);
-}*/
