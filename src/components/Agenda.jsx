@@ -1,6 +1,7 @@
 import React from "react";
-import '../css/agenda.css';
-import BotaoContinuar from './BotaoContinuar';
+import "../css/agenda.css";
+import BotaoContinuar from "./BotaoContinuar";
+import InputCustomizado from "./InputCustomizado";
 
 const Agenda = () => {
   return (
@@ -8,50 +9,72 @@ const Agenda = () => {
       <div className="container-agenda">
         <h2>Fala mais do seu projeto pra nós</h2>
 
-        <form>
-          <div className="linha-agenda">
-            <label className="label-agenda">
+        <form className="form-agenda">
+          <div className="linha1">
+            <label>
               Profissional:
-              <input className="input-agenda" type="text" value="Fulana da Silva" disabled />
+              <InputCustomizado
+                tipo="text"
+                nome="profissional"
+                placeholder="Fulana da Silva"
+                // valor={formData.nome}
+                // aoMudar={handleChange}
+                disabled
+                tamanho="100%"
+              />
             </label>
-
-            <label className="label-agenda">
+            <label>
               Estilo da tattoo:
               <select>
                 <option value="">selecione</option>
-                {/* Adicione mais opções aqui */}
+                <option value="">blackwork</option>
+                <option value="">realista</option>
+                <option value="">old school</option>
+                <option value="">oriental</option>
+                <option value="">geek</option>
               </select>
             </label>
           </div>
-
-          <div className="linha-agenda">
-            <label className="label-agenda">
+          <br />
+          <div className="linha2">
+            <label>
               Tamanho:
-              <input type="text" placeholder="cm" />
+              <InputCustomizado
+                tipo="text"
+                nome="tamanho"
+                placeholder="cm"
+                tamanho="100%"
+              />
             </label>
-
             <label>
               Local do corpo:
-              <input type="text" placeholder="escreve aqui" />
+              <InputCustomizado
+                tipo="text"
+                nome="localCorpo"
+                placeholder="Local do corpo"
+                tamanho="100%"
+              />
             </label>
-
-            <label className="label-agenda">
+            <label>
               Tattoo colorida?
               <select>
                 <option value="">selecione</option>
+                <option value="">sim</option>
+                <option value="">não</option>
               </select>
             </label>
           </div>
-
-          <label>
-            Qual sua ideia para esse projeto?
-            <textarea placeholder="Descreva sua ideia aqui..."></textarea>
-          </label>
-
-          <div className="linha-agenda">
-            <input type="file" />
+          <div className="linha3">
+            <label>
+              Qual sua ideia para esse projeto?
+              <div className="textarea-wrapper">
+                <textarea placeholder="Descreva sua ideia aqui..."></textarea>
+                <input type="file" className="input-img" />
+              </div>
+            </label>
           </div>
           <br />
+          <br /><br />
           <BotaoContinuar texto="confirmar" largura="35%" />
         </form>
       </div>
