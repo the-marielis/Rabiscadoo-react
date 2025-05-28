@@ -35,8 +35,8 @@ const router = createBrowserRouter([
       { path: "/homelogado", element: <HomeLogado /> },
       { path: "/paineltatuador", element: <PainelTatuador /> },
       { path: "/agendamento", element: <Agendamento /> },
-      { path: "/profissional/:idusuario", element: <PerfilProfissional /> },
-
+      { path: "/profissionais/:idusuario", element: <PerfilProfissional /> },
+      { path: "/profissionais/:idusuario/agenda", element: <Agenda /> },
     ]
   }
 ]);

@@ -51,13 +51,13 @@ const StyledButton = styled.button`
   }
 `;
 
-const BotaoContinuar = ({ mensagemErro = "", texto, largura }) => {
+const BotaoContinuar = ({ mensagemErro = "", texto, largura, onClick }) => {
   return (
     <ButtonWrapper>
       {mensagemErro && (
         <p style={{ color: 'red', marginBottom: '10px' }}>{mensagemErro}</p>
       )}
-      <StyledButton type="submit" largura={largura}>{texto}</StyledButton>
+      <StyledButton type="submit" largura={largura} onClick={onClick}>{texto}</StyledButton>
     </ButtonWrapper>
   );
 };

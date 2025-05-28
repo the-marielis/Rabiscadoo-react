@@ -93,7 +93,7 @@ export default function CatalogoProfissionais() {
                 {prof.idade} anos.
               </p>
               <button
-                onClick={() => navigate(`/profissional/${prof.idusuario}`)}
+                onClick={() => navigate(`/profissionais/${prof.idusuario}`)}
                 className="botao-detalhes"
               >
                 CONHEÇA MAIS

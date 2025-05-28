@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import "../css/perfilProfissional.css";
@@ -12,6 +12,13 @@ function PerfilProfissional() {
   const [startIndex, setStartIndex] = useState(0);
 
   const imagensPorPagina = 5;
+
+  const navigate = useNavigate();
+
+const handleAgendar = () => {
+  navigate(`/profissionais/${idusuario}/agenda`);
+};
+
 
   useEffect(() => {
     const buscarProfissional = async () => {
@@ -54,7 +61,7 @@ function PerfilProfissional() {
         <div className="bloco-info">
           <div className="info-perfil">
             <h2>Olá! Sou {profissional.nome}</h2>
-            <BotaoContinuar texto="agende aqui" largura="50%" />
+            <BotaoContinuar texto="agende aqui" largura="50%" onClick={handleAgendar} />
             <div className="dados-basicos">
               <p><strong>Estilo:</strong> {profissional.estilo}</p>
               <p><strong>Idade:</strong> {profissional.idade} anos</p>

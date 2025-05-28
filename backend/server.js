@@ -244,3 +244,19 @@ app.get("/api/profissionais/:idusuario", (req, res) => {
 });
 });
 
+//*******************ROTA PARA TODOS OS PERFIS**********************/
+app.get("/api/todos-profissionais", (req, res) => {
+  const query = `
+    SELECT c.idusuario, c.nome
+    FROM cadastrologin c
+    JOIN perfil_tatuador p ON c.idusuario = p.idusuario
+  `;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar profissionais:", err);
+      return res.status(500).json({ error: "Erro ao buscar profissionais" });
+    }
+    res.json(results);
+  });
+});
