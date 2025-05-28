@@ -6,28 +6,28 @@ import InputCustomizado from "./InputCustomizado";
 import axios from "axios";
 
 const Agenda = () => {
-  const { idusuario  } = useParams(); // pega o id da URL
-  const [profissional, setProfissionais] = useState([]);
+  const { idusuario } = useParams();
+  const [listaProfissionais, setListaProfissionais] = useState([]);
   const [profissionalSelecionado, setProfissionalSelecionado] = useState("");
 
-  useEffect(() => {
-    // Busca todos os profissionais para o select
-    axios.get("http://localhost:3301/api/todos-profissionais").then((res) => {
-      setProfissionais(res.data);
-    });
+useEffect(() => {
+  // Busca todos os profissionais para o select
+  axios.get("http://localhost:3301/api/profissionais").then((res) => {
+    setListaProfissionais(res.data);
+  });
 
-    // Se veio um id na rota, busca o nome do profissional
-    if (idusuario ) {
-      axios
-        .get(`http://localhost:3301/api/profissionais/${idusuario }`)
-        .then((res) => {
-          setProfissionalSelecionado(res.data.nome);
-        })
-        .catch((err) => {
-          console.error("Erro ao buscar profissional:", err);
-        });
-    }
-  }, [idusuario ]);
+  // Busca o nome do profissional se tiver id na URL
+  if (idusuario) {
+    axios
+      .get(`http://localhost:3301/api/profissionais/${idusuario}`)
+      .then((res) => {
+        setProfissionalSelecionado(res.data.nome);
+      })
+      .catch((err) => {
+        console.error("Erro ao buscar profissional:", err);
+      });
+  }
+}, [idusuario]);
   return (
     <section className="secao-agenda">
       <div className="container-agenda">
@@ -36,25 +36,22 @@ const Agenda = () => {
           <div className="linha1">
             <label>
               Profissional:
+              <div className="select-wrapper">
               <select
                 value={profissionalSelecionado}
                 onChange={(e) => setProfissionalSelecionado(e.target.value)}
+                disabled={!!idusuario} // trava o select se tiver ID na URL
+                className={idusuario ? "select-bloqueado" : ""}
               >
                 <option value="">selecione</option>
-                {profissional.map((prof) => (
+                {listaProfissionais.map((prof) => (
                   <option key={prof.idusuario} value={prof.nome}>
-                    {prof.nome}
-                  </option>
+                  {prof.nome}
+                </option>
                 ))}
               </select>
-              {/*<select>
-                <option value="">selecione</option>
-                <option value="">Fulana da Silva</option>    
-                <option value="">Fulano Matos</option> 
-                <option value="">Joaquina Pão</option>
-                <option value="">José Zé</option>
-                <option value="">Francisquinho</option>
-              </select> */}
+              { idusuario && <img src="/images/cadeado2.png" className="cadeado" /> }
+              </div>
             </label>
             <label>
               Estilo da tattoo:

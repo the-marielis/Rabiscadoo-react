@@ -103,7 +103,7 @@
   padding: 2.5rem 3rem;
   border-radius: 2rem;
   max-width: 900px;
-  margin: 5% auto;
+  margin: 3% auto;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -227,6 +227,33 @@ select {
   color: var(--cor0);
   font-family: var(--fonte-padrao);
   font-size: 1rem;
+}
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.select-wrapper select {
+  width: 100%;
+  padding-right: 30px; /* espaço pro cadeado */
+}
+
+.select-bloqueado {
+  background-color: #7b2cbf; 
+  color: #fff;
+  border: none;
+  cursor: not-allowed;
+}
+
+.cadeado {
+  position: absolute;
+  right: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: auto;
+  height: 1.3rem;
+  pointer-events: none;
 }
 
 

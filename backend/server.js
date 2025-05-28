@@ -245,7 +245,7 @@ app.get("/api/profissionais/:idusuario", (req, res) => {
 });
 
 //*******************ROTA PARA TODOS OS PERFIS**********************/
-app.get("/api/todos-profissionais", (req, res) => {
+app.get("/api/profissionais", (req, res) => {
   const query = `
     SELECT c.idusuario, c.nome
     FROM cadastrologin c
