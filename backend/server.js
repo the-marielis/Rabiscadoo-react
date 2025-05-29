@@ -3,6 +3,8 @@
 const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const path = require("path");
 const cors = require('cors');
 
 const app = express();
@@ -11,6 +13,20 @@ app.use(bodyParser.json());
 
 // Middleware para analisar JSON
 app.use(express.json());
+
+// Define onde salvar os arquivos e com que nome
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads'); 
+  },
+  filename: (req, file, cb) => {
+    const nomeArquivo = Date.now() + path.extname(file.originalname);
+    cb(null, nomeArquivo);
+  },
+});
+
+const upload = multer({ storage });
+app.use("/uploads", express.static("uploads"));
 
 //*************CONEXÃO COM O BANCO DE DADOS****************/
 const db = mysql.createConnection({
@@ -259,4 +275,39 @@ app.get("/api/profissionais", (req, res) => {
     }
     res.json(results);
   });
+});
+//********************ROTA PARA AGENDA**************************/ 
+app.post('/api/servicos', upload.single('arquivo'), (req, res) => {
+  console.log("Body recebido:", req.body);
+  console.log("Arquivo recebido:", req.file);
+
+  const {
+    profissional,
+    estilodatattoo,
+    tamanho,
+    local_corpo,
+    comcor,
+    descricao,
+    idPerfil_tatuador,
+  } = req.body;
+  const arquivo = req.file?.filename;
+
+  if (!arquivo) {
+    return res.status(400).json({ erro: 'Arquivo não foi enviado!' });
+  }
+
+  const sql = `INSERT INTO servico 
+    (profissional, estilodatattoo, tamanho, local_corpo, comcor, descricao, idPerfil_tatuador, arquivo) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
+    const values = [profissional, estilodatattoo, tamanho, local_corpo, comcor, descricao, idPerfil_tatuador, arquivo];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error("Erro ao inserir serviço:", err);
+      return res.status(500).json({ erro: "Erro ao inserir serviço" });
+    }
+    res.json({ mensagem: "Serviço salvo com sucesso" });
+    }
+  );
 });
