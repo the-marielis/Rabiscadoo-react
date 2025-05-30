@@ -96,7 +96,6 @@ const Cadastro = () => {
                   placeholder="Data de Nascimento"
                   valor={formData.nascimento}
                   aoMudar={handleChange}
-                  // aoInput={handleInput}
                   obrigatorio={true}
                   tamanho="33%"
                 />

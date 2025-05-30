@@ -203,7 +203,6 @@ app.delete('/api/cadastro/:idusuario', (req, res) => {
 //*******************ROTA PARA PERFIL + PORTFÓLIO**********************/
 app.get("/api/profissionais/:idusuario", (req, res) => {
   const idusuario = req.params.idusuario;
-  console.log("ID recebido na rota:", idusuario);
 
   const queryPerfilCompleto = `
     SELECT 
@@ -278,25 +277,37 @@ app.get("/api/profissionais", (req, res) => {
 });
 //********************ROTA PARA AGENDA**************************/ 
 app.post('/api/servicos', upload.single('arquivo'), (req, res) => {
-  console.log("Body recebido:", req.body);
-  console.log("Arquivo recebido:", req.file);
 
   const {
     profissional,
-    estilodatattoo,
     tamanho,
     local_corpo,
     comcor,
     descricao,
     idPerfil_tatuador,
   } = req.body;
+
   const arquivo = req.file?.filename;
 
   if (!arquivo) {
     return res.status(400).json({ erro: 'Arquivo não foi enviado!' });
   }
 
-  const sql = `INSERT INTO servico 
+  const buscarEstiloQuery = 'SELECT estilo FROM perfil_tatuador WHERE id = ?';
+
+  db.query(buscarEstiloQuery, [idPerfil_tatuador], (err, result) => {
+    if (err) {
+      console.error('Erro ao buscar estilo:', err);
+      return res.status(500).json({ erro: 'Erro ao buscar estilo' });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ erro: 'Estilo do tatuador não encontrado' });
+    }
+
+    const estilo = resultadoEstilo[0].estilo;
+
+    const sql = `INSERT INTO servico 
     (profissional, estilodatattoo, tamanho, local_corpo, comcor, descricao, idPerfil_tatuador, arquivo) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
@@ -308,6 +319,7 @@ app.post('/api/servicos', upload.single('arquivo'), (req, res) => {
       return res.status(500).json({ erro: "Erro ao inserir serviço" });
     }
     res.json({ mensagem: "Serviço salvo com sucesso" });
+      })
     }
   );
 });

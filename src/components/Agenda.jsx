@@ -4,30 +4,35 @@ import "../css/agenda.css";
 import BotaoContinuar from "./BotaoContinuar";
 import InputCustomizado from "./InputCustomizado";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Agenda = () => {
+  const navigate = useNavigate();
   const { idusuario } = useParams();
   const [listaProfissionais, setListaProfissionais] = useState([]);
   const [profissionalSelecionado, setProfissionalSelecionado] = useState("");
+  const [estilo, setEstilo] = useState("");
 
   useEffect(() => {
     axios.get("http://localhost:3301/api/profissionais").then((res) => {
       setListaProfissionais(res.data);
-    });
 
-    if (idusuario) {
+      if (idusuario) {
+        setProfissionalSelecionado(parseInt(idusuario));
+
       axios
         .get(`http://localhost:3301/api/profissionais/${idusuario}`)
         .then((res) => {
-          setProfissionalSelecionado(res.data.nome);
+          const estiloFormatado = res.data.estilo.toLowerCase().trim();
+          setEstilo(estiloFormatado);
         })
         .catch((err) => {
-          console.error("Erro ao buscar profissional:", err);
+          console.error("Erro ao buscar perfil profissional:", err);
         });
-    }
+      }
+    });
   }, [idusuario]);
 
-  const [estilo, setEstilo] = useState("");
   const [tamanho, setTamanho] = useState("");
   const [localCorpo, setLocalCorpo] = useState("");
   const [comCor, setComCor] = useState("");
@@ -38,20 +43,37 @@ const Agenda = () => {
     if (e) e.preventDefault();
     console.log(">>> handleSubmit foi chamado!");
 
+    const nomeProfissional =
+      listaProfissionais.find(
+        (p) => p.idusuario === parseInt(profissionalSelecionado)
+      )?.nome || "";
+
     const formData = new FormData();
-    formData.append("profissional", profissionalSelecionado);
+    formData.append("profissional", nomeProfissional);
     formData.append("estilodatattoo", estilo);
     formData.append("tamanho", tamanho);
     formData.append("local_corpo", localCorpo);
     formData.append("comcor", comCor);
     formData.append("descricao", descricao);
-    formData.append("idPerfil_tatuador", idusuario || "");
-    formData.append('arquivo', arquivo);
+    formData.append("idPerfil_tatuador", idusuario || profissionalSelecionado);
+    formData.append("arquivo", arquivo);
 
     axios
       .post("http://localhost:3301/api/servicos", formData)
       .then(() => {
         alert("Serviço enviado com sucesso!");
+
+      // limpar campos
+        setProfissionalSelecionado("");
+        setEstilo("");
+        setTamanho("");
+        setLocalCorpo("");
+        setComCor("");
+        setDescricao("");
+        setArquivo(null);
+
+        // redirecionar
+        navigate("/agendamento");
       })
       .catch((err) => {
         console.error("Erro ao enviar serviço:", err);
@@ -69,13 +91,15 @@ const Agenda = () => {
               <div className="select-wrapper">
                 <select
                   value={profissionalSelecionado}
-                  onChange={(e) => setProfissionalSelecionado(e.target.value)}
+                  onChange={(e) =>
+                    setProfissionalSelecionado(parseInt(e.target.value))
+                  }
                   disabled={!!idusuario}
                   className={idusuario ? "select-bloqueado" : ""}
                 >
                   <option value="">selecione</option>
                   {listaProfissionais.map((prof) => (
-                    <option key={prof.idusuario} value={prof.nome}>
+                    <option key={prof.idusuario} value={prof.idusuario}>
                       {prof.nome}
                     </option>
                   ))}
@@ -90,13 +114,14 @@ const Agenda = () => {
               <select
                 value={estilo}
                 onChange={(e) => setEstilo(e.target.value)}
+                disabled={!!idusuario}
               >
                 <option value="">selecione</option>
                 <option value="blackwork">blackwork</option>
                 <option value="realista">realista</option>
-                <option value="old school">old school</option>
+                <option value="oldschool">old school</option>
                 <option value="oriental">oriental</option>
-                <option value="geek">geek</option>
+                <option value="anime/geek">anime/geek</option>
               </select>
             </label>
           </div>
@@ -105,23 +130,23 @@ const Agenda = () => {
             <label>
               Tamanho:
               <InputCustomizado
-                onChange={(e) => setTamanho(e.target.value)}
-                value={tamanho}
                 tipo="text"
                 nome="tamanho"
                 placeholder="cm"
+                valor={tamanho}
+                aoMudar={(e) => setTamanho(e.target.value)}
                 tamanho="100%"
               />
             </label>
             <label>
               Local do corpo:
               <InputCustomizado
-                onChange={(e) => setLocalCorpo(e.target.value)}
-                value={localCorpo}
                 tipo="text"
                 nome="localCorpo"
                 placeholder="Local do corpo"
-                tamanho="100%"
+                value={localCorpo}
+                aoMudar={(e) => setLocalCorpo(e.target.value)}
+                tamanho="100%" 
               />
             </label>
             <label>
@@ -141,10 +166,12 @@ const Agenda = () => {
               Qual sua ideia para esse projeto?
               <div className="textarea-wrapper">
                 <textarea
-                  onChange={(e) => setDescricao(e.target.value)}
                   value={descricao}
-                  placeholder="Descreva sua ideia aqui..."
-                ></textarea>
+                  placeholder="Descreva sua ideia aqui..." 
+                  onChange={(e) => setDescricao(e.target.value)}
+                >
+                  {" "}
+                </textarea>
                 <input
                   type="file"
                   onChange={(e) => setArquivo(e.target.files[0])}
