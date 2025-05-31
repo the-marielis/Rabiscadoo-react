@@ -1,10 +1,11 @@
 import React from "react";
-import '../css/main.css';
+import "../css/agendamento.css";
 
 const Agendamento = () => {
     return (
-        <div>
+        <div className="agendamento-container">
             <h1>Agendamento - tatuador</h1>
+
         </div>
     );
 };
