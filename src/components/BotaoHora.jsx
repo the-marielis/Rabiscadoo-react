@@ -1,45 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const horarios = [
-  '09:00',
-  '10:00',
-  '14:00',
-  '16:00',
-  '18:00',
-  '20:00',
-  '21:00',
-  '22:00',
-];
-
-export const SeletorDeHorario = () => {
-  const [horarioSelecionado, setHorarioSelecionado] = useState(null);
-
+export const BotaoHora = ({ hora, ativo, onClick }) => {
   return (
-    <div
+    <button
+      onClick={onClick}
       style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '10px',
-        maxWidth: '600px', // garante espaço suficiente
-        margin: '0 auto',  // centraliza
+        padding: '0.3rem 0.8rem',
+        borderRadius: '8px',
+        border: ativo ? '2px solid #9831b8' : '1px solid #ccc',
+        backgroundColor: ativo ? '#9831b8' : '#e0e0e0',
+        color: ativo ? '#ffffff' : '#310352',
+        cursor: 'pointer',
       }}
     >
-      {horarios.map(horario => (
-        <button
-          key={horario}
-          onClick={() => setHorarioSelecionado(horario)}
-          style={{
-            padding: '10px 20px',
-            borderRadius: '8px',
-            border: '1px solid #ccc',
-            backgroundColor: horarioSelecionado === horario ? '#007bff' : '#fff',
-            color: horarioSelecionado === horario ? '#fff' : '#000',
-            cursor: 'pointer',
-          }}
-        >
-          {horario}
-        </button>
-      ))}
-    </div>
+      {hora}
+    </button>
   );
-}
+};
+
+export default BotaoHora;

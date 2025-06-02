@@ -305,7 +305,7 @@ app.post('/api/servicos', upload.single('arquivo'), (req, res) => {
       return res.status(404).json({ erro: 'Estilo do tatuador não encontrado' });
     }
 
-    const estilo = resultadoEstilo[0].estilo;
+    const estilodatattoo = result[0].estilo;
 
     const sql = `INSERT INTO servico 
     (profissional, estilodatattoo, tamanho, local_corpo, comcor, descricao, idPerfil_tatuador, arquivo) 
@@ -318,8 +318,34 @@ app.post('/api/servicos', upload.single('arquivo'), (req, res) => {
       console.error("Erro ao inserir serviço:", err);
       return res.status(500).json({ erro: "Erro ao inserir serviço" });
     }
-    res.json({ mensagem: "Serviço salvo com sucesso" });
+    res.json({ mensagem: "Serviço salvo com sucesso", idservico: result.insertId });
       })
+    }
+  );
+});
+//********************ROTA PARA AGENDAMENTO**************************/ 
+app.post("/api/agendamento", (req, res) => {
+  const { dataagendamento, horaagendamento, idservico, idusuario, valororcado } = req.body;
+
+  const sql = `
+    INSERT INTO agendamento 
+    (dataagendamento, horaagendamento, idservico, idusuario, valororcado)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  db.query(
+    sql,
+    [dataagendamento, horaagendamento, idservico, idusuario, valororcado],
+    (err, result) => {
+      if (err) {
+        console.error("Erro ao inserir agendamento:", err);
+        return res.status(500).json({ erro: "Erro ao agendar." });
+      }
+
+      res.status(201).json({
+        mensagem: "Agendamento criado com sucesso!",
+        idagendamento: result.insertId
+      });
     }
   );
 });

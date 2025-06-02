@@ -1,0 +1,124 @@
+@font-face {
+  font-family: "Lakes_neue";
+  src: url(../fonts/tt_lakes_neue/TT\ Lakes\ Neue\ Trial\ Compressed\ Bold.ttf);
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Prosto_sans";
+  src: url(../fonts/tt_prosto_sans/TT\ Prosto\ Sans\ Trial\ Condensed\ Regular.otf);
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Avallon";
+  src: url(../fonts/avallon/Avallon.ttf);
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Definição de variáveis de cor e fonte */
+:root {
+  --cor0: #310352;
+  --cor1: #8a2be2;
+  --cor2: #ffffff;
+  --cor3: #696969;
+  --cor4: #e0e0e0;
+  --cor5: #4b0082;
+  --cor7: #9831b8;
+
+  --fonte-padrao: "Prosto_sans", sans-serif;
+  --fonte-destaque: "Avallon", serif;
+  --fonte-cabeçalho: "Lakes_neue";
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ RESET ESTILO ]*/
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+/*---------------------------------------------------------------------*/
+body {
+  font-family: var(--fonte-padrao);
+  background-color: var(--cor0);
+  color: var(--cor4);
+  overflow: hidden;
+}
+
+.agendamento-container {
+  margin-top: -10%;
+}
+
+.titulo-calendario h1::after {
+  content: "";
+  display: block;
+  width: 95%;
+  height: 0.1rem;
+  background-color: var(--cor1);
+  margin: 0.5rem;
+  margin-left: -38%;
+  position: absolute;
+}
+
+.titulo-calendario h1 {
+  letter-spacing: 0.1rem;
+  font-weight: 100;
+  margin-left: 40%;
+}
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+.lista-calendario,
+.lista2-calendario {
+  display: flex;
+  padding: 2rem 2rem;
+  gap: 1rem;
+}
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+.continuar {
+  display: flex;
+  justify-content: flex-end; /* alinha botão à direita */
+  padding: 0.2rem 0;
+  background-color: var(--cor7);
+  width: 10rem;
+  border-radius: 5%;
+  margin-left: 85%;
+  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+  background: linear-gradient(270deg,rgb(73, 1, 124), #9c27b0, #6a0dad);
+  background-size: 600% 600%;
+}
+
+.continuar button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s ease;
+}
+
+.continuar:hover {
+  animation: carregando 3s linear infinite;
+  color: #fff;
+  box-shadow: 1px 1px 80px -10px rgba(225, 143, 242, 0.65);
+}
+
+@keyframes carregando {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
