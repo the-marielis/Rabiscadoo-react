@@ -1,13 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/agendamento.css";
 import Calendario from "./Calendario";
 import { ChevronRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+
+
 
 const Agendamento = () => {
   const navigate = useNavigate();
   const { idservico } = useParams();
   const [horarioSelecionado, setHorarioSelecionado] = useState(null); // ← aqui
+  const [idProfissional, setIdProfissional] = useState(null);
+
+  useEffect(() => {
+  axios.get(`http://localhost:3301/api/servicos/${idservico}`)
+    .then((res) => {
+      const profissional = res.data.idPerfil_tatuador;
+      setIdProfissional(profissional);
+    })
+    .catch((err) => console.error(err));
+}, [idservico]);
+
+  const [horariosOcupados, setHorariosOcupados] = useState([]);
+
+useEffect(() => {
+  if (idProfissional) {
+    axios.get(`http://localhost:3301/api/horarios-ocupados/${idProfissional}`)
+      .then((res) => {
+        setHorariosOcupados(res.data); // salva os horários ocupados
+      })
+      .catch((err) => console.error(err));
+  }
+}, [idProfissional]);
+
 
   const meses = [
     "Janeiro",
@@ -83,6 +109,7 @@ const Agendamento = () => {
             title={formatarData(data)}
             horarioSelecionado={horarioSelecionado}
             setHorarioSelecionado={setHorarioSelecionado}
+            horariosOcupados={horariosOcupados}
           />
         ))}
       </div>
@@ -95,6 +122,7 @@ const Agendamento = () => {
             title={formatarData(data)}
             horarioSelecionado={horarioSelecionado}
             setHorarioSelecionado={setHorarioSelecionado}
+            horariosOcupados={horariosOcupados}
           />
         ))}
       </div>

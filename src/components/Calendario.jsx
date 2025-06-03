@@ -1,17 +1,32 @@
 import React from 'react';
 import { BotaoHora } from "./BotaoHora";
 
-const horarios = [
-  "09:00", "10:30","11:30" , "13:30", "14:30", "15:30", "16:30", "17:30", "18:30"
-];
-
-export const Calendario = ({ title, data, horarioSelecionado, setHorarioSelecionado }) => {
+export const Calendario = ({
+  title,
+  data,
+  horarioSelecionado,
+  setHorarioSelecionado,
+  horariosOcupados = [] // ← adiciona essa prop
+}) => {
   const dataFormatada = data.toISOString().split("T")[0]; // ex: "2025-06-03"
 
   const handleClick = (hora) => {
     const combinado = `${dataFormatada} ${hora}`;
     setHorarioSelecionado(combinado);
   };
+
+  const horarios = [
+    "09:00", "10:30", "11:30", "13:30", "14:30", "15:30", "16:30", "17:30", "18:30"
+  ];
+
+  // ← filtra os horários que já estão agendados
+  const horariosDisponiveis = horarios.filter((hora) => {
+    return !horariosOcupados.some(
+      (item) =>
+        item.dataagendamento === dataFormatada &&
+        item.horaagendamento === hora
+    );
+  });
 
   return (
     <div style={{ 
@@ -41,11 +56,10 @@ export const Calendario = ({ title, data, horarioSelecionado, setHorarioSelecion
         backgroundColor: 'white',
         padding: 25,
         display: 'grid',          
-        gridTemplateColumns: 'repeat(3, 1fr)', // 3 colunas fixas iguais
+        gridTemplateColumns: 'repeat(3, 1fr)',
         gap: '0.5rem',
-        justifyContent: 'center',   // pode deixar ou tirar, opcional
       }}>
-        {horarios.map((hora) => {
+        {horariosDisponiveis.map((hora) => {
           const combinado = `${dataFormatada} ${hora}`;
           const ativo = combinado === horarioSelecionado;
 
@@ -62,5 +76,6 @@ export const Calendario = ({ title, data, horarioSelecionado, setHorarioSelecion
     </div>
   );
 };
+
 
 export default Calendario;

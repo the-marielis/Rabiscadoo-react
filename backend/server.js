@@ -349,3 +349,22 @@ app.post("/api/agendamento", (req, res) => {
     }
   );
 });
+//********************ROTA PARA VER HORÁRIOS OCUPADOS**************************/ 
+app.get("/api/horarios-ocupados/:idprofissional", (req, res) => {
+  const idprofissional = req.params.idprofissional;
+  const sql = `
+    SELECT a.dataagendamento, a.horaagendamento 
+    FROM agendamento a
+    JOIN servico s ON a.idservico = s.idservico
+    WHERE s.idPerfil_tatuador = ?
+  `;
+
+  db.query(sql, [idprofissional], (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar horários ocupados:", err);
+      return res.status(500).json({ error: "Erro interno do servidor" });
+    }
+
+    res.json(results); // retorna [{dataagendamento: "2025-06-03", horaagendamento: "14:00"}, ...]
+  });
+});
