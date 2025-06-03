@@ -26,5 +26,4 @@ const styles = {
     },
 };
 
-
 export default ErrorMessage;
