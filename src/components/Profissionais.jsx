@@ -70,6 +70,7 @@ export default function CatalogoProfissionais() {
     setStartIndex((prev) => (prev + 1) % profissionais.length);
   };
 
+
   const handleNext = () => {
     setStartIndex((prev) =>
         prev === 0 ? profissionais.length - 1 : prev - 1
