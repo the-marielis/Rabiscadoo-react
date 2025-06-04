@@ -56,58 +56,61 @@ export default function CatalogoProfissionais() {
 
   const handlePrev = () => {
     setStartIndex((prev) =>
-      prev === 0 ? profissionais.length - 1 : prev - 1
+        prev === 0 ? profissionais.length - 1 : prev - 1
     );
   };
 
-  const visible = profissionais.slice(startIndex, startIndex + 5);
+  const getVisibleItems = () => {
+    const total = profissionais.length;
+    const items = [];
 
+    for (let i = 0; i < 5; i++) {
+      const index = (startIndex + i) % total;
+      items.push(profissionais[index]);
+    }
+
+    return items;
+  };
+
+  const visible = getVisibleItems();
   return (
-    <section className="secao-profissionais" >
-      <h2 className="titulo-profissionais">Conheça os brabos</h2>
-      <div className="container-carrossel">
-        <button
-          className="botao-navegacao esquerdo"
-          onClick={handlePrev}
-        >
-          <ChevronLeft className="icone-navegacao" />
-        </button>
+      <section className="secao-profissionais">
+        <h2 className="titulo-profissionais">Conheça os brabos</h2>
+        <div className="container-carrossel">
+          <button className="botao-navegacao esquerdo" onClick={handlePrev}>
+            <ChevronLeft className="icone-navegacao" />
+          </button>
 
-        <div className="lista-profissionais">
-          {visible.map((prof) => (
-            <div
-              key={prof.idusuario}
-              className="card-profissional"
-            >
-              <img
-                src={prof.imagem}
-                alt={prof.nome}
-                className="foto-profissional"
-              />
-              <h3 className="nome-profissional">{prof.nome}</h3>
-              <p className="info-profissional">
-                tatuador(a) de estilo {prof.estilo}
-                <br />
-                {prof.cidade}
-                <br />
-                {prof.idade} anos.
-              </p>
-              <button
-                onClick={() => navigate(`/profissionais/${prof.idusuario}`)}
-                className="botao-detalhes"
-              >
-                CONHEÇA MAIS
-              </button>
-            </div>
-          ))}
+          <div className="lista-profissionais">
+            {visible.map((prof) => (
+                <div key={prof.idusuario} className="card-profissional">
+                  <img
+                      src={prof.imagem}
+                      alt={prof.nome}
+                      className="foto-profissional"
+                  />
+                  <h3 className="nome-profissional">{prof.nome}</h3>
+                  <p className="info-profissional">
+                    tatuador(a) de estilo {prof.estilo}
+                    <br />
+                    {prof.cidade}
+                    <br />
+                    {prof.idade} anos.
+                  </p>
+                  <button
+                      onClick={() => navigate(`/profissionais/${prof.idusuario}`)}
+                      className="botao-detalhes"
+                  >
+                    CONHEÇA MAIS
+                  </button>
+                </div>
+            ))}
+          </div>
+
+          <button className="botao-navegacao direito" onClick={handleNext}>
+            <ChevronRight className="icone-navegacao" />
+          </button>
         </div>
-        </div>
-        <button
-          className="botao-navegacao direito"
-          onClick={handleNext}
-        >
-          <ChevronRight className="icone-navegacao" />
-        </button>
-    </section>
+      </section>
   );
 }
