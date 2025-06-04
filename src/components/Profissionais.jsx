@@ -44,17 +44,33 @@ const profissionais = [
     imagem: "/images/francisquinho.png",
     idusuario: 5,
   },
+  {
+    nome: "2",
+    estilo: "anime/geek",
+    cidade: "Cascavel-PR",
+    idade: 36,
+    imagem: "/images/francisquinho.png",
+    idusuario: 6,
+  },
+  {
+    nome: "1",
+    estilo: "anime/geek",
+    cidade: "Cascavel-PR",
+    idade: 36,
+    imagem: "/images/francisquinho.png",
+    idusuario: 7,
+  },
 ];
 
 export default function CatalogoProfissionais() {
   const navigate = useNavigate();
   const [startIndex, setStartIndex] = React.useState(0);
 
-  const handleNext = () => {
+  const  handlePrev = () => {
     setStartIndex((prev) => (prev + 1) % profissionais.length);
   };
 
-  const handlePrev = () => {
+  const handleNext = () => {
     setStartIndex((prev) =>
         prev === 0 ? profissionais.length - 1 : prev - 1
     );
