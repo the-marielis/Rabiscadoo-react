@@ -95,32 +95,24 @@ const Agendamento = () => {
       return;
     }
 
-    const [data, hora] = horarioSelecionado.split(" "); // separa data e hora
+    const [dataagendamento, horaagendamento] = horarioSelecionado.split(" ");
+    const idusuario = localStorage.getItem("idusuario"); // ou pega de onde você estiver salvando
 
-    const dados = {
-      dataagendamento: data,
-      horaagendamento: hora,
-      profissional: idProfissional,
-      idservico: idservico,
-      // adicione outros campos se forem obrigatórios no seu back-end
-    };
-
-    try {
-      const response = await axios.post(
-        "http://localhost:3301/api/agendamentos",
-        dados
-      );
-
-      if (response.status === 200 || response.status === 201) {
-        alert("Agendamento confirmado!");
-        navigate(`/${idservico}/agendamento/orcamento`);
-      } else {
-        alert("Erro ao confirmar agendamento. Tente novamente.");
-      }
-    } catch (error) {
-      console.error("Erro ao enviar agendamento:", error);
-      alert("Erro ao enviar agendamento. Verifique o console.");
-    }
+    axios
+      .post("http://localhost:3301/api/agendamentos", {
+        dataagendamento,
+        horaagendamento,
+        idservico,
+        idusuario,
+      })
+      .then((res) => {
+        const { idagendamento } = res.data;
+        navigate(`/fechar-orcamento/${idagendamento}`);
+      })
+      .catch((err) => {
+        console.error("Erro ao agendar:", err);
+        alert("Erro ao agendar, tente novamente.");
+      });
   };
 
   return (

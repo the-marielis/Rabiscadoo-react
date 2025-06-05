@@ -15,7 +15,7 @@ import ErrorPage from './components/ErrorPage.jsx';
 import PainelTatuador from './components/PainelTatuador.jsx';
 import Agendamento from './components/Agendamento.jsx';
 import PerfilProfissional from './components/PerfilProfissional.jsx';
-import CatalogoProfissionais from './components/Profissionais.jsx';
+import FecharOrcamento from './components/FecharOrcamento.jsx';
 
 import { AuthProvider } from './context/AuthContext.jsx'; // importa o context novo
 
@@ -37,6 +37,7 @@ const router = createBrowserRouter([
       { path: "/agendamento", element: <Agendamento /> },
       { path: "/profissionais/:idusuario", element: <PerfilProfissional /> },
       { path: "/profissionais/:idusuario/agenda", element: <Agenda /> },
+      { path: "/fechar-orcamento/:idagendamento", element: <FecharOrcamento /> },
     ]
   }
 ]);

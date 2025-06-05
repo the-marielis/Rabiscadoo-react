@@ -344,30 +344,36 @@ app.get('/api/servicos', (req, res) => {
 });
 
 //********************ROTA PARA AGENDAMENTO**************************/ 
-app.post("/api/agendamentos", (req, res) => {
-  const { dataagendamento, horaagendamento, idservico, idusuario } = req.body;
+app.get("/api/fechar-orcamento/:idagendamento", (req, res) => {
+  const { idagendamento } = req.params;
 
   const sql = `
-    INSERT INTO agendamento 
-    (dataagendamento, horaagendamento, idservico, idusuario)
-    VALUES (?, ?, ?, ?)
+    SELECT 
+      a.idagendamento,
+      a.dataagendamento,
+      a.horaagendamento,
+      s.descricao AS servico,
+      p.nome AS profissional,
+      u.nome AS cliente
+    FROM agendamento a
+    JOIN servico s ON a.idservico = s.idservico
+    JOIN perfil_tatuador p ON s.idPerfil_tatuador = p.id
+    JOIN usuario u ON a.idusuario = u.idusuario
+    WHERE a.idagendamento = ?
   `;
 
-  db.query(
-    sql,
-    [dataagendamento, horaagendamento, idservico, idusuario],
-    (err, result) => {
-      if (err) {
-        console.error("Erro ao inserir agendamento:", err);
-        return res.status(500).json({ erro: "Erro ao agendar." });
-      }
-
-      res.status(201).json({
-        mensagem: "Agendamento criado com sucesso!",
-        idagendamento: result.insertId
-      });
+  db.query(sql, [idagendamento], (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar agendamento:", err);
+      return res.status(500).json({ erro: "Erro ao buscar agendamento." });
     }
-  );
+
+    if (results.length === 0) {
+      return res.status(404).json({ erro: "Agendamento não encontrado." });
+    }
+
+    res.json(results[0]);
+  });
 });
 //********************ROTA PARA VER HORÁRIOS OCUPADOS**************************/ 
 app.get("/api/horarios-ocupados/:idprofissional", (req, res) => {
