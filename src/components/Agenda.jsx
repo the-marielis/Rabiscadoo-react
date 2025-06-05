@@ -10,64 +10,74 @@ import { useAuth } from "../context/AuthContext";
 const Agenda = () => {
   const navigate = useNavigate();
   const { idusuario } = useParams();
+  const { usuario } = useAuth();
+
+  /* ----------------------------- estados gerais ----------------------------- */
   const [listaProfissionais, setListaProfissionais] = useState([]);
   const [profissionalSelecionado, setProfissionalSelecionado] = useState("");
   const [estilo, setEstilo] = useState("");
-  const [toast, setToast] = useState(null);
-  const { usuario } = useAuth();
-
-  useEffect(() => {
-    axios.get("http://localhost:3301/api/profissionais").then((res) => {
-      setListaProfissionais(res.data);
-
-      if (idusuario) {
-        setProfissionalSelecionado(parseInt(idusuario));
-
-        axios
-          .get(`http://localhost:3301/api/profissionais/${idusuario}`)
-          .then((res) => {
-            const estiloFormatado = res.data.estilo.toLowerCase().trim();
-            setEstilo(estiloFormatado);
-          })
-          .catch((err) => {
-            console.error("Erro ao buscar perfil profissional:", err);
-          });
-      }
-    });
-  }, [usuario, idusuario]);
-
   const [tamanho, setTamanho] = useState("");
   const [localCorpo, setLocalCorpo] = useState("");
   const [comCor, setComCor] = useState("");
   const [descricao, setDescricao] = useState("");
   const [arquivo, setArquivo] = useState(null);
   const [nomeArquivo, setNomeArquivo] = useState("");
+  const [toast, setToast]         = useState(null);
 
-  const showToast = (message, type = "error") => {
-    setToast({ message, type });
+  /* --------------------------- helpers & utilidades -------------------------- */
+  const showToast = (message, type = "error") => setToast({ message, type });
+
+  const resetForm = () => {
+    setProfissionalSelecionado("");
+    setEstilo("");
+    setTamanho("");
+    setLocalCorpo("");
+    setComCor("");
+    setDescricao("");
+    setArquivo(null);
+    setNomeArquivo("");
   };
 
+  /* ------------------------- carregando profissionais ------------------------ */
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:3301/api/profissionais");
+        setListaProfissionais(data);
+
+        if (idusuario) {
+          setProfissionalSelecionado(parseInt(idusuario));
+          const { data: perfil } = await axios.get(
+            `http://localhost:3301/api/profissionais/${idusuario}`
+          );
+          setEstilo(perfil.estilo.toLowerCase().trim());
+        }
+      } catch (err) {
+        console.error("Erro ao buscar profissionais:", err);
+        showToast("Erro ao carregar profissionais. Tente novamente.");
+      }
+    };
+    fetchData();
+  }, [idusuario]);
+
+  /* --------------------------- tratador de arquivo --------------------------- */
   const handleArquivoChange = (e) => {
     const file = e.target.files[0];
-
     if (file) {
       setArquivo(file);
       setNomeArquivo(file.name);
     }
   };
 
-  const handleSubmit = (e) => {
-    if (e) e.preventDefault();
-    console.log(">>> handleSubmit foi chamado!");
+  /* ---------------------------- submissao do form --------------------------- */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    // validações básicas
     if (!usuario) {
       showToast("⚠️ Faça login para agendar um serviço.");
-
-      setTimeout(() => {
-        navigate("/login");
-      }, 2500);
-
-      return; // interrompe o envio do formulário
+      setTimeout(() => navigate("/login"), 2000);
+      return;
     }
 
     if (
@@ -87,10 +97,9 @@ const Agenda = () => {
       return;
     }
 
+    // monta formData
     const nomeProfissional =
-      listaProfissionais.find(
-        (p) => p.idusuario === parseInt(profissionalSelecionado)
-      )?.nome || "";
+      listaProfissionais.find((p) => p.idusuario === parseInt(profissionalSelecionado))?.nome || "";
 
     const formData = new FormData();
     formData.append("profissional", nomeProfissional);
@@ -102,54 +111,45 @@ const Agenda = () => {
     formData.append("idPerfil_tatuador", idusuario || profissionalSelecionado);
     formData.append("arquivo", arquivo);
 
-    axios
-      .post("http://localhost:3301/api/servicos", formData)
-      .then(() => {
-        alert("Serviço enviado com sucesso!");
+    // envio
+    try {
+      await axios.post("http://localhost:3301/api/servicos", formData); // axios seta o Content‑Type automaticamente
 
-        // limpar campos
-        setProfissionalSelecionado("");
-        setEstilo("");
-        setTamanho("");
-        setLocalCorpo("");
-        setComCor("");
-        setDescricao("");
-        setArquivo(null);
-
-        // redirecionar
-        navigate("/agendamento");
-      })
-      .catch((err) => {
-        console.error("Erro ao enviar serviço:", err);
-        setToast("❌ Erro ao enviar. Tente novamente.");
-      });
+      showToast("✅ Serviço enviado com sucesso!", "success");
+      resetForm();
+      setTimeout(() => navigate("/agendamento"), 1200);
+    } catch (err) {
+      console.error("Erro ao enviar serviço:", err);
+      showToast("❌ Erro ao enviar. Tente novamente.");
+    }
   };
 
+  /* -------------------------------- componente ------------------------------- */
   return (
     <>
-      <div className="toast-container">
-        {toast && (
+      {/* toast */}
+      {toast && (
+        <div className="toast-container">
           <Toast
             message={toast.message}
             type={toast.type}
             onClose={() => setToast(null)}
           />
-        )}
-      </div>
+        </div>
+      )}
 
       <section className="secao-agenda">
         <div className="container-agenda">
           <h2>Fala mais do seu projeto pra nós</h2>
           <form className="form-agenda" onSubmit={handleSubmit}>
+            {/* linha 1: profissional + estilo */}
             <div className="linha1">
               <label>
                 Profissional:
                 <div className="select-wrapper">
                   <select
                     value={profissionalSelecionado}
-                    onChange={(e) =>
-                      setProfissionalSelecionado(parseInt(e.target.value))
-                    }
+                    onChange={(e) => setProfissionalSelecionado(parseInt(e.target.value))}
                     disabled={!!idusuario}
                     className={idusuario ? "select-bloqueado" : ""}
                   >
@@ -160,11 +160,10 @@ const Agenda = () => {
                       </option>
                     ))}
                   </select>
-                  {idusuario && (
-                    <img src="/images/cadeado2.png" className="cadeado" />
-                  )}
+                  {idusuario && <img src="/images/cadeado2.png" className="cadeado" />}
                 </div>
               </label>
+
               <label>
                 Estilo da tattoo:
                 <select
@@ -181,7 +180,8 @@ const Agenda = () => {
                 </select>
               </label>
             </div>
-            <br />
+
+            {/* linha 2: tamanho / local / comCor */}
             <div className="linha2">
               <label>
                 Tamanho:
@@ -194,6 +194,7 @@ const Agenda = () => {
                   tamanho="100%"
                 />
               </label>
+
               <label>
                 Local do corpo:
                 <InputCustomizado
@@ -205,18 +206,18 @@ const Agenda = () => {
                   tamanho="100%"
                 />
               </label>
+
               <label>
                 Tattoo colorida?
-                <select
-                  value={comCor}
-                  onChange={(e) => setComCor(e.target.value)}
-                >
+                <select value={comCor} onChange={(e) => setComCor(e.target.value)}>
                   <option value="">selecione</option>
                   <option value="sim">sim</option>
                   <option value="não">não</option>
                 </select>
               </label>
             </div>
+
+            {/* linha 3: descricao + imagem */}
             <div className="linha3">
               <label>
                 Qual sua ideia para esse projeto?
@@ -225,26 +226,15 @@ const Agenda = () => {
                     value={descricao}
                     placeholder="Descreva sua ideia aqui..."
                     onChange={(e) => setDescricao(e.target.value)}
-                  >
-                    {" "}
-                  </textarea>
-                  <input
-                    type="file"
-                    //onChange={(e) => setArquivo(e.target.files[0])}
-                    onChange={handleArquivoChange}
-                    className="input-img"
                   />
+                  <input type="file" onChange={handleArquivoChange} className="input-img" />
                 </div>
                 {nomeArquivo && (
-                  <p style={{ color: "red", marginTop: "8px" }}>
-                    {nomeArquivo}
-                  </p>
+                  <p style={{ color: "red", marginTop: 8 }}>{nomeArquivo}</p>
                 )}
               </label>
             </div>
-            <br />
-            <br />
-            <br />
+
             <BotaoContinuar texto="confirmar" largura="35%" />
           </form>
         </div>

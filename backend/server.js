@@ -276,7 +276,13 @@ app.get("/api/profissionais", (req, res) => {
   });
 });
 //********************ROTA PARA AGENDA**************************/ 
+app.use(cors({
+  origin: 'http://localhost:5173', // a porta em que teu Vite/React roda
+}));
+
+
 app.post('/api/servicos', upload.single('arquivo'), (req, res) => {
+  console.log('chegou no upload')
 
   const {
     profissional,
@@ -323,19 +329,33 @@ app.post('/api/servicos', upload.single('arquivo'), (req, res) => {
     }
   );
 });
+
+app.get('/api/servicos', (req, res) => {
+  const query = 'SELECT * FROM servico';
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar serviços:", err);
+      return res.status(500).json({ erro: "Erro ao buscar serviços" });
+    }
+
+    res.status(200).json(results);
+  });
+});
+
 //********************ROTA PARA AGENDAMENTO**************************/ 
-app.post("/api/agendamento", (req, res) => {
-  const { dataagendamento, horaagendamento, idservico, idusuario, valororcado } = req.body;
+app.post("/api/agendamentos", (req, res) => {
+  const { dataagendamento, horaagendamento, idservico, idusuario } = req.body;
 
   const sql = `
     INSERT INTO agendamento 
-    (dataagendamento, horaagendamento, idservico, idusuario, valororcado)
-    VALUES (?, ?, ?, ?, ?)
+    (dataagendamento, horaagendamento, idservico, idusuario)
+    VALUES (?, ?, ?, ?)
   `;
 
   db.query(
     sql,
-    [dataagendamento, horaagendamento, idservico, idusuario, valororcado],
+    [dataagendamento, horaagendamento, idservico, idusuario],
     (err, result) => {
       if (err) {
         console.error("Erro ao inserir agendamento:", err);

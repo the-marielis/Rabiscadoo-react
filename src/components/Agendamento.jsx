@@ -5,8 +5,6 @@ import { ChevronRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-
-
 const Agendamento = () => {
   const navigate = useNavigate();
   const { idservico } = useParams();
@@ -14,26 +12,27 @@ const Agendamento = () => {
   const [idProfissional, setIdProfissional] = useState(null);
 
   useEffect(() => {
-  axios.get(`http://localhost:3301/api/servicos/${idservico}`)
-    .then((res) => {
-      const profissional = res.data.idPerfil_tatuador;
-      setIdProfissional(profissional);
-    })
-    .catch((err) => console.error(err));
-}, [idservico]);
+    axios
+      .get(`http://localhost:3301/api/servicos/${idservico}`)
+      .then((res) => {
+        const profissional = res.data.idPerfil_tatuador;
+        setIdProfissional(profissional);
+      })
+      .catch((err) => console.error(err));
+  }, [idservico]);
 
   const [horariosOcupados, setHorariosOcupados] = useState([]);
 
-useEffect(() => {
-  if (idProfissional) {
-    axios.get(`http://localhost:3301/api/horarios-ocupados/${idProfissional}`)
-      .then((res) => {
-        setHorariosOcupados(res.data); // salva os horários ocupados
-      })
-      .catch((err) => console.error(err));
-  }
-}, [idProfissional]);
-
+  useEffect(() => {
+    if (idProfissional) {
+      axios
+        .get(`http://localhost:3301/api/horarios-ocupados/${idProfissional}`)
+        .then((res) => {
+          setHorariosOcupados(res.data); // salva os horários ocupados
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [idProfissional]);
 
   const meses = [
     "Janeiro",
@@ -90,9 +89,38 @@ useEffect(() => {
     return `${dia} de ${mes} de ${ano}`;
   };
 
-  const handleContinuar = () => {
-    console.log("Horário escolhido:", horarioSelecionado); // depois você pode mandar pro back
-    navigate(`/${idservico}/agendamento/orcamento`);
+  const handleContinuar = async () => {
+    if (!horarioSelecionado || !idProfissional || !idservico) {
+      alert("Selecione um horário antes de continuar.");
+      return;
+    }
+
+    const [data, hora] = horarioSelecionado.split(" "); // separa data e hora
+
+    const dados = {
+      dataagendamento: data,
+      horaagendamento: hora,
+      profissional: idProfissional,
+      idservico: idservico,
+      // adicione outros campos se forem obrigatórios no seu back-end
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3301/api/agendamentos",
+        dados
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        alert("Agendamento confirmado!");
+        navigate(`/${idservico}/agendamento/orcamento`);
+      } else {
+        alert("Erro ao confirmar agendamento. Tente novamente.");
+      }
+    } catch (error) {
+      console.error("Erro ao enviar agendamento:", error);
+      alert("Erro ao enviar agendamento. Verifique o console.");
+    }
   };
 
   return (
