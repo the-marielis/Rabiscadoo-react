@@ -90,6 +90,28 @@ app.post("/api/login", (req, res) => {
   });
 });
 
+//*************ROTA PARA RETORNAR DADOS DE LOGIN************/
+app.get("/api/usuario/:idusuario", (req, res) => {
+  const id = req.params.idusuario;
+  console.log("Requisição recebida para o ID:", id);
+
+  const query = "SELECT * FROM cadastrologin WHERE idusuario = ?";
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      console.error("Erro no servidor:", err);
+      return res.status(500).send({ error: "Erro no servidor" });
+    }
+
+    if (results.length === 0) {
+      console.warn("Usuário não encontrado para o ID:", id);
+      return res.status(404).send({ error: "Usuário não encontrado" });
+    }
+
+    console.log("Usuário retornado com sucesso:", results[0]);
+    res.status(200).send(results[0]);
+  });
+});
+
 //*******************ROTA DE CADASTRO**********************/
 app.post("/api/cadastro", (req, res) => {
   console.log(req.body);

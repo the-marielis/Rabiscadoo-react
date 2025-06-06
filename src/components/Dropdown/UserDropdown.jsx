@@ -36,7 +36,7 @@ const UserDropdown = () => {
 
       {aberto && (
         <div className="dropdown-menu">
-          <p className="saudacao">Olá, {usuario?.nome || "usuário"}!</p>
+          <p className="saudacao">Olá, {usuario?.nome?.split(" ")[0] || "usuário"}!</p>
           <ul>
             <li><Link to="/chats">Seus chats</Link></li>
             <li><Link to="/avaliacoes">Suas avaliações</Link></li>
