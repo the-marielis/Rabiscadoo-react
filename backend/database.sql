@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 31/05/2025 às 17:53
+-- Tempo de geração: 06/06/2025 às 22:37
 -- Versão do servidor: 8.2.0
 -- Versão do PHP: 8.2.13
 
@@ -29,16 +29,22 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `agendamento`;
 CREATE TABLE IF NOT EXISTS `agendamento` (
-  `valororcado` double NOT NULL,
   `dataagendamento` date NOT NULL,
   `horaagendamento` time NOT NULL,
   `idagendamento` bigint NOT NULL,
   `idusuario` bigint DEFAULT NULL,
-  `idtatuador` bigint DEFAULT NULL,
+  `idservico` bigint DEFAULT NULL,
   PRIMARY KEY (`idagendamento`),
   KEY `Id_usuario` (`idusuario`),
-  KEY `fk_agendamento_tatuador` (`idtatuador`)
+  KEY `idservico` (`idservico`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Despejando dados para a tabela `agendamento`
+--
+
+INSERT INTO `agendamento` (`dataagendamento`, `horaagendamento`, `idagendamento`, `idusuario`, `idservico`) VALUES
+('2025-06-07', '13:30:00', 1, 1, 18);
 
 -- --------------------------------------------------------
 
@@ -73,17 +79,11 @@ CREATE TABLE IF NOT EXISTS `cadastrologin` (
 --
 
 INSERT INTO `cadastrologin` (`cpf`, `cidade`, `nome`, `nome_usuario`, `email`, `senha`, `cep`, `endereco`, `rg`, `telefone`, `telefone2`, `tp_cadastro`, `nascimento`, `idusuario`) VALUES
-('222222222', 'Cascavel', 'Marieli Irene Teixeira Waideman', 'marielis', 'marieliirene@hotmail.com', '012345', 8581136, 'Avenida Toledo', 222222222, '45984335791', '999999999', 'rabiscadoo', '0020-06-03', 123),
-('000000000', 'Cascavel', 'Marieli Irene Teixeira Waideman', 'marielis2', 'marieliirene.mt@gmail.com', '012345', 8581136, 'Avenida Toledo', 0, '45984335791', '45984335791', 'rabiscadoo', '0002-06-03', 125),
-('2222222', 'Cascavel', 'Marieli Irene Teixeira Waideman', 'fraciscos', 'marieliiren@gmail.com', '101010', 8581136, 'Avenida Toledo', 0, '45984335791', '45984335791', 'rabiscadoo', '0000-00-00', 126),
 (NULL, 'Cascavel', 'Fulana da Silva', 'fulana_tattoo', 'fulana@email.com', '1234', NULL, NULL, 0, '44999999999', NULL, 'tatuador', '1995-08-15', 1),
 ('09999999999', 'Cascavel', 'Fulano Matos', 'fulanotattoo', 'fulano@gmail.com', '050505', NULL, NULL, 0, '4599999999', '45999999', 'tatuador', '0000-00-00', 2),
 ('05555555555', 'Cascavel', 'Joaquina Pão', 'joaquina', 'joaquinatattoo@hotmail.com', '3636360', NULL, NULL, 0, '98888888888', NULL, 'tatuador', '0000-00-00', 3),
 ('08708708777', 'Cascavel', 'José Zé', 'joseze', 'josezetattoo@hotmail.com', '04567898', NULL, NULL, 0, '0987654352', NULL, 'tatuador', '0000-00-00', 4),
 ('05555566666', 'Cascavel', 'Francisquinho', 'francisquinho', 'francisquinho@tattoo.com.br', '07894560', NULL, NULL, 0, '888888888888', NULL, 'tatuador', '0000-00-00', 5),
-('99999999999', 'Cascavel', 'Kelvyn Henrique Waideman Muzyk', 'kalvo', 'szdvsdchjdszchsd@ahsvjahkss.com', '1', 85811030, 'Avenida Toledo 1155', 22222222222, '45984335791', '45984335791', 'tatuador', '2001-07-26', 128),
-('88888888888', 'Manaus', 'kakakakaka', 'teste', 'teste@hotmail.com', '050505', 85100000, 'Rua Manaus 3495', 55555555555, '45999999999', '459999999999', 'rabiscadoo', '2000-01-01', 129),
-('11111111111', 'manaus', 'luiz miguel', 'miguel', 'miguel@hotmail.com', '012345', 84400000, 'rua centro', 5555555555, '458888888888', '458888888888', 'tatuador', '2005-01-01', 130);
 
 -- --------------------------------------------------------
 
@@ -208,17 +208,25 @@ CREATE TABLE IF NOT EXISTS `servico` (
   `comcor` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `descricao` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `arquivo` blob NOT NULL,
+  `valororcado` decimal(10,2) NOT NULL,
   PRIMARY KEY (`idservico`),
   KEY `fk_perfilTatuador` (`idPerfil_tatuador`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Despejando dados para a tabela `servico`
 --
 
-INSERT INTO `servico` (`idservico`, `idPerfil_tatuador`, `profissional`, `estilodatattoo`, `tamanho`, `local_corpo`, `comcor`, `descricao`, `arquivo`) VALUES
-(12, 3, 'Joaquina Pão', 'oldschool', 500, 'braço', 'não', 'testetstetstetstetes', 0x313734383634363636383435322e706e67),
-(11, 5, 'Francisquinho', 'anime/geek', 5555, 'braço', 'não', 'teste', 0x313734383634363433383339382e6a7067);
+INSERT INTO `servico` (`idservico`, `idPerfil_tatuador`, `profissional`, `estilodatattoo`, `tamanho`, `local_corpo`, `comcor`, `descricao`, `arquivo`, `valororcado`) VALUES
+(15, 3, 'Joaquina Pão', 'oldschool', 5555, 'zxzxzx', 'sim', 'zxzxzxz', 0x313734383732333235313739312e706e67, 500.00),
+(14, 2, 'Fulano Matos', 'realista', 5555, 'braço', '', '56', 0x313734383731383034353131332e706e67, 500.00),
+(13, 3, 'Joaquina Pão', 'oldschool', 10, 'panturrilha', 'não', '', 0x313734383731363632383730372e6a7067, 850.00),
+(12, 3, 'Joaquina Pão', 'oldschool', 500, 'braço', 'não', 'testetstetstetstetes', 0x313734383634363636383435322e706e67, 1500.00),
+(11, 5, 'Francisquinho', 'anime/geek', 5555, 'braço', 'não', 'teste', 0x313734383634363433383339382e6a7067, 2500.00),
+(17, 2, 'Fulano Matos', 'realista', 20, 'costela', 'não', 'tetse', 0x313734393038323135353334352e706e67, 250.00),
+(18, 4, 'José Zé', 'oriental', 10, 'panturrilha', 'não', 'teste', 0x313734393038333238303635392e706e67, 1000.00),
+(19, 2, 'Fulano Matos', 'realista', 10, 'braço', 'sim', 'teste', 0x313734393136313535333937342e706e67, 570.00),
+(20, 4, 'José Zé', 'oriental', 10, 'braço', 'não', 'teste', 0x313734393234393135363439332e706e67, 0.00);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
