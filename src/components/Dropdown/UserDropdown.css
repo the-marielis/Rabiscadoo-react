@@ -1,0 +1,169 @@
+/*//////////////////////////////////////////////////////////////////
+[ FONT ]*/
+
+@font-face {
+  font-family: 'Lakes_neue';
+  src: url(./fonts/tt_lakes_neue/TT\ Lakes\ Neue\ Trial\ Compressed\ Bold.ttf); 
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Prosto_sans';
+  src: url(./fonts/tt_prosto_sans/TT\ Prosto\ Sans\ Trial\ Condensed\ Regular.otf);
+  font-weight: normal;
+  font-style: normal; 
+}
+
+  @font-face {
+    font-family: 'Avallon';
+    src: url(./fonts/avallon/Avallon.ttf); 
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  
+
+/* Definição de variáveis de cor e fonte */
+:root {
+
+  --cor0: #310352;
+  --cor1: #8A2BE2; 
+  --cor2: #FFFFFF;
+  --cor3: #696969;
+  --cor4: #E0E0E0;
+  --cor5: #4b0082;
+  --cor7: #9831b8;
+
+  --fonte-padrao: 'Prosto_sans', sans-serif;
+  --fonte-destaque: 'Avallon', serif;
+  --fonte-cabeçalho: 'Lakes_neue'; 
+}
+/*//////////////////////////////////////////////////////////////////
+[ RESTYLE TAG ]*/
+
+* {
+	margin: 0px; 
+	padding: 0px; 
+	box-sizing: border-box;
+}
+
+body, html {
+  width: 100%;
+	height: 100%;
+	font-family: var(--fonte-padrao);
+	background-color: var(--cor0);
+}
+
+
+
+/*---------------------------------------------*/
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.perfil-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon {
+  height: 19px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--cor4);
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 220px;
+  
+}
+
+.dropdown-menu p {
+  font-family: var(--fonte-padrao);
+  font-size: 1.2rem;
+  letter-spacing: 0.05rem; 
+  text-align: center;
+  color: var(--cor5);
+}
+
+.dropdown-menu p::after {
+  content: '';
+  display: block;
+  width: 90%;
+  height: 0.05rem;
+  background-color: var(--cor1);
+  margin: 0 auto;
+  position: absolute;
+}
+
+
+.saudacao {
+  font-weight: bold;
+  color: #663399;
+  margin-bottom: 8px;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu ul li {
+  margin: 8px 0;
+}
+
+.dropdown-menu ul li a {
+  color: var(--cor5);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-family: var(--fonte-padrao);
+  font-size: 0.9rem;
+  letter-spacing: 0.06rem;
+
+}
+
+.dropdown-menu ul li a:hover {
+  color: #663399;
+}
+.divider {
+  margin: 12px 0;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+.sair-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #d00;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  transition: color 0.3s ease;
+}
+
+.sair-btn:hover {
+  color: #a00;
+}
+
+.logout-icon {
+  height: 16px;
+  transform: rotate(180deg); /* vira a seta pra esquerda */
+}

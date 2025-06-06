@@ -504,7 +504,7 @@ h1 {
   border: 5px solid var(--cor2);
   box-shadow: -15px 15px 1px #9831b8;
   position: relative; /* garante que o z-index funcione */
-  z-index: 2; /* mais alto que o fundo */
+  z-index: 1; /* mais alto que o fundo */
 }
 
 .slick-slide img {
