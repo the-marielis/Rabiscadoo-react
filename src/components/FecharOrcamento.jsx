@@ -1,37 +1,77 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaTrash, FaChevronLeft, FaArrowRight } from "react-icons/fa";
+import "../css/orcamento.css";
 
 const FecharOrcamento = () => {
   const { idagendamento } = useParams();
+  const navigate = useNavigate();
   const [dados, setDados] = useState(null);
-  const valor = 300.00; // valor fixo
+  const [addToGoogle, setAddToGoogle] = useState(false);
 
   useEffect(() => {
-    axios.get(`http://localhost:3301/api/fechar-orcamento/${idagendamento}`)
-      .then((res) => {
-        setDados(res.data);
-      })
-      .catch((err) => {
-        console.error("Erro ao buscar dados do agendamento:", err);
-      });
+    axios
+      .get(`http://localhost:3301/api/fechar-orcamento/${idagendamento}`)
+      .then((res) => setDados(res.data))
+      .catch((err) =>
+        console.error("Erro ao buscar dados do agendamento:", err)
+      );
   }, [idagendamento]);
 
   if (!dados) return <p>Carregando informações...</p>;
 
-  return (
-    <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <h1>Fechar Orçamento</h1>
-      <p><strong>Cliente:</strong> {dados.cliente}</p>
-      <p><strong>Profissional:</strong> {dados.profissional}</p>
-      <p><strong>Serviço:</strong> {dados.servico}</p>
-      <p><strong>Data:</strong> {dados.dataagendamento}</p>
-      <p><strong>Hora:</strong> {dados.horaagendamento}</p>
-      <p><strong>Valor:</strong> R$ {valor.toFixed(2)}</p>
+  const handleConfirm = () => {
+    // aqui tu chama teu endpoint de confirmação, depois redireciona
+    alert("Orçamento confirmado!");
+    // if (addToGoogle) { ... }
+    navigate("/"); // exemplo
+  };
 
-      <button style={{ marginTop: '1rem' }} onClick={() => alert("Orçamento confirmado!")}>
-        Confirmar Orçamento
+  return (
+    <div className="orcamento">
+      <h1>Confirmação de Orçamento</h1>
+
+      <div className="container-orcamento">
+        <div className="header-orcamento">
+          <span>
+            {dados.dataagendamento} ÀS {dados.horaagendamento}
+          </span>
+          <FaTrash className="trash" onClick={() => alert("Removido!")} />
+        </div>
+
+        <p>
+          <strong>Profissional:</strong> {dados.profissional}
+        </p>
+        <p>
+          <strong>Serviço:</strong> {dados.servico}
+        </p>
+        <p>
+          <strong>Valor total*:</strong> R$ {dados.valororcado},00
+        </p>
+        <p>
+          <strong>Pagamento:</strong> Parcelamento feito com o profissional
+        </p>
+        <p>
+          <strong>Endereço:</strong> Av. Brasil 5544 – Centro – Cascavel – PR
+        </p> <br />
+      </div>
+
+      <label className="checkbox-linha">
+        <input
+          type="checkbox"
+          checked={addToGoogle}
+          onChange={(e) => setAddToGoogle(e.target.checked)}
+        />
+        Adicionar lembrete à minha agenda do Google
+      </label>
+
+      <button className="botao-continuar" onClick={handleConfirm}>
+        CONTINUAR <FaArrowRight />
       </button>
+      <div className="footer-orcamento">
+      <p>*Valor total é a soma do valor negociado no orçamento com o profissional somado ao valor de manutenção da plataforma</p>
+      </div>
     </div>
   );
 };

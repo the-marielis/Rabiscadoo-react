@@ -1,0 +1,119 @@
+@font-face {
+  font-family: "Lakes_neue";
+  src: url(../fonts/tt_lakes_neue/TT\ Lakes\ Neue\ Trial\ Compressed\ Bold.ttf);
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Prosto_sans";
+  src: url(../fonts/tt_prosto_sans/TT\ Prosto\ Sans\ Trial\ Condensed\ Regular.otf);
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Avallon";
+  src: url(../fonts/avallon/Avallon.ttf);
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Definição de variáveis de cor e fonte */
+:root {
+  --cor0: #310352;
+  --cor1: #8a2be2;
+  --cor2: #ffffff;
+  --cor3: #696969;
+  --cor4: #e0e0e0;
+  --cor5: #4b0082;
+  --cor7: #9831b8;
+
+  --fonte-padrao: "Prosto_sans", sans-serif;
+  --fonte-destaque: "Avallon", serif;
+  --fonte-cabeçalho: "Lakes_neue";
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ RESET ESTILO ]*/
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+/*---------------------------------------------------------------------*/
+body {
+  font-family: var(--fonte-padrao);
+  background-color: var(--cor0);
+  color: var(--cor4);
+  overflow: hidden;
+}
+
+.orcamento {
+  margin-top: -10%;
+}
+
+.orcamento h1 {
+  font-size: 2.5rem;
+  margin-left: 40%;
+  letter-spacing: 0.2rem;
+}
+
+.orcamento h1::after {
+  content: "";
+  display: block;
+  width: 200%;
+  margin-left: -100%;
+  height: 0.15rem;
+  background-color: var(--cor1);
+}
+
+.container-orcamento {
+  margin: 5% 20%;
+  background-color: var(--cor2);
+  border-radius: 1.5rem;
+  width: 60%;
+}
+
+.container-orcamento p {
+  color: var(--cor5);
+  padding: 0 5rem;
+  font-family: var(--fonte-padrao);
+  font-size: 1.3rem;
+}
+
+.header-orcamento span {
+  letter-spacing: 0.1rem;
+  margin-left: 5%;
+}
+
+.header-orcamento {
+  background-color: var(--cor0);
+  border: 2px solid var(--cor2);
+  border-radius: 1.5rem 1.5rem 0 0;
+  padding: 1rem 1.2rem 0 1.2rem;
+  font-size: 1.2rem;
+  margin-bottom: 0.5%;
+}
+
+.trash {
+  margin-left: 95%;
+  margin-top: -50%;
+  margin-bottom: 1.5%;
+}
+
+.checkbox-linha {
+  margin: auto 20%;
+  font-size: 1.2rem;
+}
+
+.checkbox-linha input {
+  margin-right: 1%;
+}
+
+.footer-orcamento p {
+  margin: 10% 25%;
+  letter-spacing: 0.1rem;
+  font-weight: 100;
+}
