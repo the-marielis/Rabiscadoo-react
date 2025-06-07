@@ -531,7 +531,9 @@ app.get("/api/fechar-orcamento/:idagendamento", (req, res) => {
 app.get("/api/horarios-ocupados/:idprofissional", (req, res) => {
   const idprofissional = req.params.idprofissional;
   const sql = `
-    SELECT a.dataagendamento, a.horaagendamento 
+    SELECT
+      cast(a.dataagendamento as char),
+        a.horaagendamento 
     FROM agendamento a
     JOIN servico s ON a.idservico = s.idservico
     WHERE s.idPerfil_tatuador = ?
