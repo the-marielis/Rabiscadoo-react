@@ -500,8 +500,8 @@ app.get("/api/fechar-orcamento/:idagendamento", (req, res) => {
   const sql = `
   SELECT 
       a.idagendamento,
-      a.dataagendamento,
-      a.horaagendamento,
+      DATE_FORMAT(a.dataagendamento, '%d/%m/%Y') as dataagendamento,
+      DATE_FORMAT(a.horaagendamento , '%H:%i') as horaagendamento,
       s.valororcado,
       s.descricao AS servico,
       tatuador.nome AS profissional,
@@ -511,7 +511,7 @@ app.get("/api/fechar-orcamento/:idagendamento", (req, res) => {
     JOIN perfil_tatuador p ON s.idPerfil_tatuador = p.id
     JOIN cadastrologin usuario ON a.idusuario = usuario.idusuario
     join cadastrologin tatuador on tatuador.idusuario = p.idusuario
-    WHERE a.idagendamento = 1;
+    WHERE a.idagendamento = ?;
   `;
 
   db.query(sql, [idagendamento], (err, results) => {
