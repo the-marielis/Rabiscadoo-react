@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ChevronRight } from "lucide-react";
 import { FaTrash, FaChevronLeft, FaArrowRight } from "react-icons/fa";
 import "../css/orcamento.css";
 
@@ -65,10 +66,11 @@ const FecharOrcamento = () => {
         />
         Adicionar lembrete à minha agenda do Google
       </label>
-
-      <button className="botao-continuar" onClick={handleConfirm}>
-        CONTINUAR <FaArrowRight />
-      </button>
+       <div className="continuar">
+        <button onClick={handleConfirm}>
+          CONTINUAR <ChevronRight className="icone-navegacao" />
+        </button>
+      </div>
       <div className="footer-orcamento">
       <p>*Valor total é a soma do valor negociado no orçamento com o profissional somado ao valor de manutenção da plataforma</p>
       </div>

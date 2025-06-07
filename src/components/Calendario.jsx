@@ -8,7 +8,7 @@ export const Calendario = ({
   setHorarioSelecionado,
   horariosOcupados = []
 }) => {
-  const dataFormatada = data.toLocaleDateString('pt-BR').split('/').reverse().join('-');
+  const dataFormatada = data.toISOString().split("T")[0];
 
   const handleClick = (hora) => {
     const combinado = `${dataFormatada} ${hora}`;
