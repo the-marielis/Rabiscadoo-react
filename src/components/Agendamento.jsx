@@ -7,19 +7,32 @@ import axios from "axios";
 
 const Agendamento = () => {
   const navigate = useNavigate();
-  const { idservico } = useParams();
+  // const { idservico } = useParams();
+  const { idPerfil_tatuador } = useParams();
   const [horarioSelecionado, setHorarioSelecionado] = useState(null); // ← aqui
   const [idProfissional, setIdProfissional] = useState(null);
 
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:3301/api/servicos/${idservico}`)
+  //     .then((res) => {
+  //       const profissional = res.data.idPerfil_tatuador;
+  //       setIdProfissional(profissional);
+  //     })
+  //     .catch((err) => console.error(err));
+  // }, [idservico]);
   useEffect(() => {
-    axios
-      .get(`http://localhost:3301/api/servicos/${idservico}`)
-      .then((res) => {
-        const profissional = res.data.idPerfil_tatuador;
-        setIdProfissional(profissional);
-      })
-      .catch((err) => console.error(err));
-  }, [idservico]);
+    if (idPerfil_tatuador) {
+      axios
+          .get(`http://localhost:3301/api/horarios-ocupados/${idPerfil_tatuador}`)
+          .then((res) => {
+            setHorariosOcupados(res.data); // salva os horários ocupados
+            console.log("AAA")
+            console.log(res.data);
+          })
+          .catch((err) => console.error(err));
+    }
+  }, [idPerfil_tatuador]);
 
   const [horariosOcupados, setHorariosOcupados] = useState([]);
 
