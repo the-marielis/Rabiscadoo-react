@@ -532,6 +532,7 @@ app.get("/api/horarios-ocupados/:idprofissional", (req, res) => {
   const idprofissional = req.params.idprofissional;
   const sql = `
     SELECT
+    
       cast(a.dataagendamento as char) as dataagendamento,
         a.horaagendamento 
     FROM agendamento a
