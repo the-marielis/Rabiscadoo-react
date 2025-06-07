@@ -532,9 +532,8 @@ app.get("/api/horarios-ocupados/:idprofissional", (req, res) => {
   const idprofissional = req.params.idprofissional;
   const sql = `
     SELECT
-    
       cast(a.dataagendamento as char) as dataagendamento,
-        a.horaagendamento 
+      DATE_FORMAT(a.horaagendamento , '%H:%i') as horaagendamento
     FROM agendamento a
     JOIN servico s ON a.idservico = s.idservico
     WHERE s.idPerfil_tatuador = ?

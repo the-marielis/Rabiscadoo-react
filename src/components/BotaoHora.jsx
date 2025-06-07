@@ -43,4 +43,3 @@ export const BotaoHora = ({ hora, ativo, ocupado, onClick }) => {
   );
 };
 
-export default BotaoHora;
