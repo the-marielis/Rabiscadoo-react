@@ -1,0 +1,69 @@
+@font-face {
+  font-family: "Lakes_neue";
+  src: url(../fonts/tt_lakes_neue/TT\ Lakes\ Neue\ Trial\ Compressed\ Bold.ttf);
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Prosto_sans";
+  src: url(../fonts/tt_prosto_sans/TT\ Prosto\ Sans\ Trial\ Condensed\ Regular.otf);
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Avallon";
+  src: url(../fonts/avallon/Avallon.ttf);
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Definição de variáveis de cor e fonte */
+:root {
+  --cor0: #310352;
+  --cor1: #8a2be2;
+  --cor2: #ffffff;
+  --cor3: #696969;
+  --cor4: #e0e0e0;
+  --cor5: #4b0082;
+  --cor7: #9831b8;
+
+  --fonte-padrao: "Prosto_sans", sans-serif;
+  --fonte-destaque: "Avallon", serif;
+  --fonte-cabeçalho: "Lakes_neue";
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ RESET ESTILO ]*/
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+/*--------------------------------------------------------------------*/
+.perfil-content {
+    display: flex; 
+      flexDirection: column;
+}
+
+.perfil-content p {
+    margin-left: 5%;
+}
+.perfil-content h3 {
+    margin-left: 5%;
+}
+
+.perfil-info1,
+.perfil-info2,
+.perfil-info3,
+.perfil-info4 {
+    border: 1px solid var(--cor2);
+    border-radius: 1.5rem;
+    margin: 2rem;
+    width: 25%;
+    padding: 1%  ;
+    font-weight: 100;
+
+}
