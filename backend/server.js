@@ -530,39 +530,21 @@ app.get("/api/fechar-orcamento/:idagendamento", (req, res) => {
   });
 });
 //********************ROTA PARA DELETAR AGENDAMENTO**************************/
-app.get("/api/fechar-orcamento/deletar/:idagendamento", (req, res) => {
+app.delete("/api/fechar-orcamento/deletar/:idagendamento", (req, res) => {
   const { idagendamento } = req.params;
 
-  const sql = `
-  SELECT 
-      a.idagendamento,
-      DATE_FORMAT(a.dataagendamento, '%d/%m/%Y') as dataagendamento,
-      DATE_FORMAT(a.horaagendamento , '%H:%i') as horaagendamento,
-      s.valororcado,
-      s.descricao AS servico,
-      tatuador.nome AS profissional,
-      usuario.nome AS cliente
-    FROM agendamento a
-    JOIN servico s ON a.idservico = s.idservico
-    JOIN perfil_tatuador p ON s.idPerfil_tatuador = p.id
-    JOIN cadastrologin usuario ON a.idusuario = usuario.idusuario
-    join cadastrologin tatuador on tatuador.idusuario = p.idusuario
-    WHERE a.idagendamento = ?;
-  `;
+  const sql = `CALL deletaOrcamento(?);`;
 
   db.query(sql, [idagendamento], (err, results) => {
     if (err) {
-      console.error("Erro ao buscar agendamento:", err);
-      return res.status(500).json({ erro: "Erro ao buscar agendamento." });
+      console.error("Erro ao Deletar Agendamento e Serviço:", err);
+      return res.status(500).json({ erro: "Erro ao Deletar Agendamento e Serviço." });
     }
 
-    if (results.length === 0) {
-      return res.status(404).json({ erro: "Agendamento não encontrado." });
-    }
-
-    res.json(results[0]);
+    res.json({ sucesso: true });
   });
 });
+
 //********************ROTA PARA VER HORÁRIOS OCUPADOS**************************/
 app.get("/api/horarios-ocupados/:idprofissional", (req, res) => {
   const idprofissional = req.params.idprofissional;
