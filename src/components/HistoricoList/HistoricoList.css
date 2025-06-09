@@ -1,25 +1,35 @@
 .historico-list {
-  max-height: 50%;        /* ajusta como quiser */
+  flex-grow: 1;
   overflow-y: auto;
-  padding: 0.2rem;
-  margin: 0.5rem 0;
-  border: 1px solid #ccc;
+  padding: 0.5rem;
+  margin: 0.5rem 0 0 0;
   border-radius: 8px;
-  background-color: ;
+  background-color: transparent; 
+  min-height: 0; 
 }
 
-/* opcional: estiliza scrollbar */
 .historico-list::-webkit-scrollbar {
-  width: 8px;
+  width: 6px; /* mais fininha */
+}
+
+.historico-list::-webkit-scrollbar-track {
+  background: transparent; /* ou um roxo bem escuro pra combinar */
 }
 
 .historico-list::-webkit-scrollbar-thumb {
-  background-color: #999;
-  border-radius: 4px;
+  background-color: #a259ff; /* roxinho claro estiloso */
+  border-radius: 10px;
+  border: 2px solid transparent; /* dá o efeito de espaço interno */
+  background-clip: content-box;
 }
 
+.historico-list::-webkit-scrollbar-thumb:hover {
+  background-color: #c084fc; /* um tom mais claro ao passar o mouse */
+}
+
+
 .historico-item {
-  padding: 0.5rem;
+  padding: 0.5rem 0;
   border-bottom: 1px solid #eee;
   display: flex;
   flex-direction: column;

@@ -65,7 +65,7 @@ const Perfil = () => {
             <p>Sobre a Rabiscadoo</p>
             <p>v.0.0.1/2024</p>
           </article>
-          <br /> <br />
+          <br /> 
         </div>
 
         <BotaoContinuar texto="confirmar" largura="35%"/>

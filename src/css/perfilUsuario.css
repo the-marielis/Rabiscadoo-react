@@ -63,7 +63,7 @@ body, html, #root {
 .perfil-card {
   background: var(--cor0);
   border-radius: 2rem;
-  padding: 3rem 4rem;
+  padding: 2rem 4rem;
   width: 100%;
   max-width: 1150px;
   position: relative;
@@ -137,6 +137,14 @@ body, html, #root {
   margin-bottom: 0.2rem;
   font-size: 1.4rem;
 }
+
+.perfil-box.historicos {
+  max-height: 250px; /* ou a altura que você quiser deixar visível */
+  overflow: hidden;  /* impede o conteúdo de estourar */
+  display: flex;
+  flex-direction: column;
+}
+
 .linha-historicos {
   display: flex;
   align-items: center;
