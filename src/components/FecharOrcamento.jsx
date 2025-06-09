@@ -34,24 +34,25 @@ const FecharOrcamento = () => {
   };
 
 
-  const remover = () => {
+    const remover = () => {
+        const confirmar = window.confirm("Tem certeza que deseja deletar este agendamento?");
+        if (!confirmar) return; // Se o usuário clicar em "Cancelar", não faz nada
 
-      axios
-          .delete(`http://localhost:3301/api/fechar-orcamento/deletar/${idagendamento}`)
-          .then(() => {
-              showToast("⚠️Agendamento Deletado ⚠️", "success");
+        axios
+            .delete(`http://localhost:3301/api/fechar-orcamento/deletar/${idagendamento}`)
+            .then(() => {
+                showToast("⚠️Agendamento Deletado ⚠️", "success");
 
-              // Espera 2 segundos antes de navegar
-              setTimeout(() => {
-                  navigate(`/`);
-              }, 2000); // 2000 ms = 2 segundos
-          })
-          .catch((error) => {
-              console.error("Erro ao deletar agendamento:", error);
-              showToast("Erro ao deletar agendamento", "error");
-          });
-
-  }
+                // Espera 2 segundos antes de navegar
+                setTimeout(() => {
+                    navigate(`/perfil`);
+                }, 2000);
+            })
+            .catch((error) => {
+                console.error("Erro ao deletar agendamento:", error);
+                showToast("Erro ao deletar agendamento", "error");
+            });
+    };
 
   return (
       <>
