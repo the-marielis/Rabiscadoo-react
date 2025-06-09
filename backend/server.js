@@ -95,7 +95,24 @@ app.get("/api/usuario/:idusuario", (req, res) => {
   const id = req.params.idusuario;
   console.log("Requisição recebida para o ID:", id);
 
-  const query = "SELECT * FROM cadastrologin WHERE idusuario = ?";
+  const query = "" +
+      "SELECT \n" +
+      "c.cpf,\n" +
+      "c.cidade,\n" +
+      "c.nome,\n" +
+      "c.nome_usuario,\n" +
+      "c.email,\n" +
+      "c.senha,\n" +
+      "c.cep,\n" +
+      "c.endereco,\n" +
+      "c.rg,\n" +
+      "c.telefone,\n" +
+      "c.telefone2,\n" +
+      "c.tp_cadastro,\n" +
+      " DATE_FORMAT(c.nascimento , '%d/%m/%Y') as nascimento,\n" +
+      "c.idusuario\n" +
+      "FROM cadastrologin c\n" +
+      "WHERE idusuario = ?";
   db.query(query, [id], (err, results) => {
     if (err) {
       console.error("Erro no servidor:", err);
