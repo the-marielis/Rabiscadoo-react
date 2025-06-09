@@ -228,6 +228,29 @@ INSERT INTO `servico` (`idservico`, `idPerfil_tatuador`, `profissional`, `estilo
 (18, 4, 'José Zé', 'oriental', 10, 'panturrilha', 'não', 'teste', 0x313734393038333238303635392e706e67, 1000.00),
 (19, 2, 'Fulano Matos', 'realista', 10, 'braço', 'sim', 'teste', 0x313734393136313535333937342e706e67, 570.00),
 (20, 4, 'José Zé', 'oriental', 10, 'braço', 'não', 'teste', 0x313734393234393135363439332e706e67, 0.00);
+
+-- procedure que deleta agendamentos e servicos na pagina fechar-orcamento
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `rabiscadoo`.`deletaOrcamento`(agendamento INT)
+begin
+
+	   DECLARE Servico INT;
+
+    -- Buscar o idServico associado ao agendamento
+    SELECT s.idservico INTO Servico
+    FROM servico s
+    INNER JOIN agendamento a ON a.idservico = s.idservico
+    WHERE a.idAgendamento = agendamento;
+
+    -- Deletar o agendamento
+    DELETE FROM agendamento a
+    WHERE a.idAgendamento = agendamento;
+
+    -- Deletar o serviço correspondente
+    DELETE FROM servico s
+    WHERE s.idservico = Servico;
+END
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
