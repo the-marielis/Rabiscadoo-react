@@ -615,7 +615,6 @@ app.get("/api/servico-Tatuador/:idservico", (req, res) => {
 
 app.post('/api/salvarAgendamento', (req, res) => {
   const {
-    idagendamento = null,
     dataagendamento,
     horaagendamento,
     idservico,
@@ -631,13 +630,13 @@ app.post('/api/salvarAgendamento', (req, res) => {
     // Inserção do novo agendamento
     const inserirAgendamentoQuery = `
       INSERT INTO agendamento 
-          (idagendamento, idusuario, idservico, dataagendamento, horaagendamento)
-      VALUES (?,?,?,?,?)
+          ( idusuario, idservico, dataagendamento, horaagendamento)
+      VALUES (?,?,?,?)
     `;
 
     db.query(
         inserirAgendamentoQuery,
-        [idagendamento, idusuario, idservico, dataagendamento, horaagendamento],
+        [idusuario, idservico, dataagendamento, horaagendamento],
         (err, result) => {
           if (err) {
             console.error("Erro ao salvar agendamento:", err);
@@ -683,5 +682,34 @@ app.post("/api/pegaIdAgendamento", (req, res) => {
 
     console.log(results[0]);
 
+  });
+});
+
+//***************************ROTA HISTÓRICO DE AGENDAMENTOS************************* */
+app.get("/api/historico-agendamentos/:idusuario", (req, res) => {
+  const { idusuario } = req.params;
+
+  const sql = `
+    SELECT 
+      a.idagendamento,
+      DATE_FORMAT(a.dataagendamento,'%d/%m/%Y') AS data,
+      DATE_FORMAT(a.horaagendamento,'%H:%i')  AS hora,
+      s.descricao                              AS servico,
+      s.valororcado                            AS valor,
+      tatuador.nome                            AS profissional
+    FROM agendamento a
+    JOIN servico         s  ON a.idservico = s.idservico
+    JOIN perfil_tatuador p  ON s.idPerfil_tatuador = p.id
+    JOIN cadastrologin   tatuador ON tatuador.idusuario = p.idusuario
+    WHERE a.idusuario = ?
+    ORDER BY a.dataagendamento DESC, a.horaagendamento DESC;
+  `;
+
+  db.query(sql, [idusuario], (err, rows) => {
+    if (err) {
+      console.error("Erro ao buscar histórico:", err);
+      return res.status(500).json({ erro: "Erro ao buscar histórico." });
+    }
+    res.json(rows);               // devolve um array já ordenado
   });
 });

@@ -167,3 +167,11 @@ body, html {
   height: 16px;
   transform: rotate(180deg); /* vira a seta pra esquerda */
 }
+
+.link-perfil {
+  color: var(--cor5);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.2rem;
+  letter-spacing: 0.06rem;
+}

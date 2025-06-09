@@ -1,6 +1,7 @@
 import React from "react";
 import "../css/perfilUsuario.css";
 import BotaoContinuar from "./BotaoContinuar";
+import HistoricoList from "../components/HistoricoList/HistoricoList";
 import { GoPencil } from "react-icons/go";
 import { GoHistory } from "react-icons/go";
 import { GoGear } from "react-icons/go";
@@ -39,9 +40,7 @@ const Perfil = () => {
                 <h3>Históricos</h3>
                 <GoHistory />
             </div>
-            <p>Pedidos finalizados</p>
-            <p>Suas avaliações</p>
-            <p>Chats arquivados</p>
+            <HistoricoList />
           </article>
 
           <article className="perfil-box privacidade">
