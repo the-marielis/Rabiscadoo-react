@@ -35,7 +35,7 @@ const router = createBrowserRouter([
       { path: "/homelogado", element: <HomeLogado /> },
       { path: "/paineltatuador", element: <PainelTatuador /> },
       { path: "/agendamento", element: <Agendamento /> },
-      { path: "/agendamento/:idPerfil_tatuador", element: <Agendamento /> },
+      { path: "/agendamento/:idservico", element: <Agendamento /> },
       { path: "/profissionais/:idusuario", element: <PerfilProfissional /> },
       { path: "/profissionais/:idusuario/agenda", element: <Agenda /> },
       { path: "/fechar-orcamento/:idagendamento", element: <FecharOrcamento /> },

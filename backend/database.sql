@@ -28,12 +28,13 @@ SET time_zone = "+00:00";
 --
 
 DROP TABLE IF EXISTS `agendamento`;
+
 CREATE TABLE IF NOT EXISTS `agendamento` (
-  `dataagendamento` date NOT NULL,
-  `horaagendamento` time NOT NULL,
-  `idagendamento` bigint NOT NULL,
+ `idagendamento` bigint NOT NULL AUTO_INCREMENT,
   `idusuario` bigint DEFAULT NULL,
   `idservico` bigint DEFAULT NULL,
+  `dataagendamento` date NOT NULL,
+  `horaagendamento` time NOT NULL,
   PRIMARY KEY (`idagendamento`),
   KEY `Id_usuario` (`idusuario`),
   KEY `idservico` (`idservico`) USING BTREE

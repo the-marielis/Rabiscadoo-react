@@ -476,6 +476,8 @@ app.post("/api/servicos", upload.single("arquivo"), (req, res) => {
         mensagem: "Serviço salvo com sucesso",
         idservico: result.insertId,
       });
+      console.log("RESULTADOID")
+      console.log(result.insertId);
     });
   });
 });
@@ -527,6 +529,40 @@ app.get("/api/fechar-orcamento/:idagendamento", (req, res) => {
     res.json(results[0]);
   });
 });
+//********************ROTA PARA DELETAR AGENDAMENTO**************************/
+app.get("/api/fechar-orcamento/deletar/:idagendamento", (req, res) => {
+  const { idagendamento } = req.params;
+
+  const sql = `
+  SELECT 
+      a.idagendamento,
+      DATE_FORMAT(a.dataagendamento, '%d/%m/%Y') as dataagendamento,
+      DATE_FORMAT(a.horaagendamento , '%H:%i') as horaagendamento,
+      s.valororcado,
+      s.descricao AS servico,
+      tatuador.nome AS profissional,
+      usuario.nome AS cliente
+    FROM agendamento a
+    JOIN servico s ON a.idservico = s.idservico
+    JOIN perfil_tatuador p ON s.idPerfil_tatuador = p.id
+    JOIN cadastrologin usuario ON a.idusuario = usuario.idusuario
+    join cadastrologin tatuador on tatuador.idusuario = p.idusuario
+    WHERE a.idagendamento = ?;
+  `;
+
+  db.query(sql, [idagendamento], (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar agendamento:", err);
+      return res.status(500).json({ erro: "Erro ao buscar agendamento." });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ erro: "Agendamento não encontrado." });
+    }
+
+    res.json(results[0]);
+  });
+});
 //********************ROTA PARA VER HORÁRIOS OCUPADOS**************************/
 app.get("/api/horarios-ocupados/:idprofissional", (req, res) => {
   const idprofissional = req.params.idprofissional;
@@ -546,5 +582,106 @@ app.get("/api/horarios-ocupados/:idprofissional", (req, res) => {
     }
 
     res.json(results); // retorna [{dataagendamento: "2025-06-03", horaagendamento: "14:00"}, ...]
+  });
+});
+//********************Pega o Tatuador apartir do servico **************************/
+app.get("/api/servico-Tatuador/:idservico", (req, res) => {
+  const idServico = req.params.idservico;
+  const sql = `
+    SELECT
+      s.idPerfil_tatuador
+    FROM  servico s 
+    WHERE s.idservico = ?
+  `;
+
+  db.query(sql, [idServico], (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar tatuador:", err);
+      return res.status(500).json({ error: "Erro interno do servidor" });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Serviço não encontrado" });
+    }
+
+    // Retorna só o objeto, não um array
+    res.json(results[0]);
+  });
+});
+
+
+//**********************************Salva o Agendamento*************************************************//
+
+
+app.post('/api/salvarAgendamento', (req, res) => {
+  const {
+    idagendamento = null,
+    dataagendamento,
+    horaagendamento,
+    idservico,
+    idusuario
+  } = req.body;
+
+  if (
+      !dataagendamento, !horaagendamento, !idservico, !idusuario
+  ) {
+    return res.status(400).json({ erro: "Todos os campos são obrigatórios" });
+  }
+
+    // Inserção do novo agendamento
+    const inserirAgendamentoQuery = `
+      INSERT INTO agendamento 
+          (idagendamento, idusuario, idservico, dataagendamento, horaagendamento)
+      VALUES (?,?,?,?,?)
+    `;
+
+    db.query(
+        inserirAgendamentoQuery,
+        [idagendamento, idusuario, idservico, dataagendamento, horaagendamento],
+        (err, result) => {
+          if (err) {
+            console.error("Erro ao salvar agendamento:", err);
+            return res.status(500).json({ erro: "Erro um" });
+          }
+
+          return res.status(201).json({ mensagem: "Agendamento realizado com sucesso" });
+        }
+    );
+  });
+
+//***************************/  Pega Id do agendamento/***************************//
+
+app.post("/api/pegaIdAgendamento", (req, res) => {
+  const {
+    idservico,
+    idusuario,
+    dataagendamento,
+    horaagendamento
+  } = req.body;
+  console.log("entrou api")
+  console.log(idservico,
+      idusuario,
+      dataagendamento,
+      horaagendamento)
+
+  const sql = `
+    SELECT idagendamento FROM agendamento a
+    WHERE a.idservico = ?
+      AND a.idusuario = ?
+      AND a.dataagendamento = ?
+      AND a.horaagendamento = ?
+  `;
+
+  db.query(sql, [idservico, idusuario, dataagendamento, horaagendamento], (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar ID do po:", err);
+      return res.status(500).json({ error: "Erro interno do servidor" });
+    }
+
+    res.json(results[0]);
+
+
+    console.log(results[0]);
+
   });
 });

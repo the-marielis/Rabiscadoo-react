@@ -113,11 +113,19 @@ const Agenda = () => {
 
     // envio
     try {
-      await axios.post("http://localhost:3301/api/servicos", formData); // axios seta o Content‑Type automaticamente
+      let idServico = await axios.get()
+      await axios.post("http://localhost:3301/api/servicos", formData).then((result) =>{
+
+        idServico = result.data.idservico;
+      }); // axios seta o Content‑Type automaticamente
+
+
 
       showToast("✅ Serviço enviado com sucesso!", "success");
       resetForm();
-      setTimeout(() => navigate("/agendamento"), 1200);
+      console.log(idServico.toString())
+      setTimeout(() => navigate(`/agendamento/${idServico}`), 1200);
+
     } catch (err) {
       console.error("Erro ao enviar serviço:", err);
       showToast("❌ Erro ao enviar. Tente novamente.");

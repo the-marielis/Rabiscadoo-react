@@ -4,23 +4,33 @@ import Calendario from "./Calendario";
 import { ChevronRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import {useAuth} from "../context/AuthContext.jsx";
 
 const Agendamento = () => {
   const navigate = useNavigate();
-  // const { idservico } = useParams();
-  const { idPerfil_tatuador } = useParams();
+  const { idservico } = useParams();
   const [horarioSelecionado, setHorarioSelecionado] = useState(null); // ← aqui
-  const [idProfissional, setIdProfissional] = useState(null);
+  // const idusuario = localStorage.getItem("idusuario"); // ou pega de onde você estiver salvando
+  const { usuario, logout } = useAuth();
+  const [idPerfil_tatuador, setIdPerfil_tatuador] = useState(null);
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:3301/api/servicos/${idservico}`)
-  //     .then((res) => {
-  //       const profissional = res.data.idPerfil_tatuador;
-  //       setIdProfissional(profissional);
-  //     })
-  //     .catch((err) => console.error(err));
-  // }, [idservico]);
+
+  useEffect(() => {
+    if (idservico) {
+      axios
+          .get(`http://localhost:3301/api/servico-Tatuador/${idservico}`)
+          .then((res) => {
+            const perfilID = res.data.idPerfil_tatuador; // verifique se esse é o nome do campo correto
+            setIdPerfil_tatuador(perfilID);
+            console.log("OLHA O TATUAS: ", perfilID )
+          })
+          .catch((err) => console.error(err));
+    }
+  }, [idservico]);
+
+
+
+
   useEffect(() => {
     if (idPerfil_tatuador) {
       axios
@@ -36,16 +46,6 @@ const Agendamento = () => {
 
   const [horariosOcupados, setHorariosOcupados] = useState([]);
 
-  useEffect(() => {
-    if (idProfissional) {
-      axios
-        .get(`http://localhost:3301/api/horarios-ocupados/${idProfissional}`)
-        .then((res) => {
-          setHorariosOcupados(res.data); // salva os horários ocupados
-        })
-        .catch((err) => console.error(err));
-    }
-  }, [idProfissional]);
 
   const meses = [
     "Janeiro",
@@ -102,31 +102,109 @@ const Agendamento = () => {
     return `${dia} de ${mes} de ${ano}`;
   };
 
+  const pegaIdAgendamento = async () => {
+    try {
+      console.log("AAAAAAAAAAA");
+      console.log(dataagendamento);
+      console.log(horaagendamento);
+      console.log(idservico);
+      console.log(idusuario);
+
+      const res = await axios.post("http://localhost:3301/api/pegaIdAgendamento", {
+        dataagendamento,
+        horaagendamento,
+        idservico,
+        idusuario,
+      });
+
+      if (res.status === 200 && res.data?.idagendamento) {
+        const idagendamento = res.data.idagendamento;
+        console.log(idagendamento);
+        navigate(`/fechar-orcamento/${idagendamento}`);
+      } else {
+        console.log(res.status );
+        console.log(res.data?.idagendamento);
+        alert("SOCORRROOOO");
+      }
+
+    } catch (err) {
+      console.error("Erro ao agendar:", err);
+      alert("ErroAASsasasasasas ao buscar agendamento");
+    }
+  };
+
+
+
+
   const handleContinuar = async () => {
-    if (!horarioSelecionado || !idProfissional || !idservico) {
+
+    if (!horarioSelecionado || !idPerfil_tatuador
+        || !idservico
+    ) {
+
       alert("Selecione um horário antes de continuar.");
       return;
     }
 
     const [dataagendamento, horaagendamento] = horarioSelecionado.split(" ");
-    const idusuario = localStorage.getItem("idusuario"); // ou pega de onde você estiver salvando
+
+    const idusuario =  usuario?.idusuario
+
+    try {
 
     axios
-      .post("http://localhost:3301/api/agendamentos", {
+      .post("http://localhost:3301/api/salvarAgendamento", {
         dataagendamento,
         horaagendamento,
         idservico,
         idusuario,
       })
       .then((res) => {
-        const { idagendamento } = res.data;
-        navigate(`/fechar-orcamento/${idagendamento}`);
+       if (res.status === 201) {
+
+         console.log("AAAAAAAAAAA");
+         console.log(dataagendamento);
+         console.log(horaagendamento);
+         console.log(idservico);
+         console.log(idusuario);
+
+           axios.post("http://localhost:3301/api/pegaIdAgendamento", {
+           dataagendamento,
+           horaagendamento,
+           idservico,
+           idusuario,
+         }).then((age) => {
+
+
+             if (age) {
+               const idagendamento = age.data.idagendamento
+               navigate(`/fechar-orcamento/${idagendamento}`);
+             } else {
+               console.log("LOL")
+               console.log(res);
+               console.log(res.data?.idagendamento.toString() );
+               console.log(res.data?.idagendamento);
+               alert("SOCORRROOOO");
+             }
+
+           })
+
+
+
+
+
+       } else{
+         console.log(res.status);
+         alert("primeirto");
+       }
+
       })
-      .catch((err) => {
-        console.error("Erro ao agendar:", err);
-        alert("Erro ao agendar, tente novamente.");
-      });
-  };
+    }catch (error) {
+      console.error("Erro ao processar agendamento:", error);
+      alert("Erro ao processar o agendamento. Verifique o console.");
+    }
+    };
+
 
   return (
     <div className="agendamento-container">

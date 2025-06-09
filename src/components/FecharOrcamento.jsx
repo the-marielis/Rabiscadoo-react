@@ -29,6 +29,18 @@ const FecharOrcamento = () => {
     navigate("/"); // exemplo
   };
 
+  //   TODO
+  // const remover = () => {
+  //     useEffect(() => {
+  //         axios
+  //             .get(`http://localhost:3301/api/fechar-orcamento/deletar/${idagendamento}`)
+  //             .then((res) => setDados(res.data))
+  //             .catch((err) =>
+  //                 console.error("Erro ao buscar dados do agendamento:", err)
+  //             );
+  //     }, [idagendamento]);
+  // }
+
   return (
     <div className="orcamento">
       <h1>Confirmação de Orçamento</h1>
