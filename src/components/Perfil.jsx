@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import "../css/perfilUsuario.css";
 import BotaoContinuar from "./BotaoContinuar";
+import HistoricoList from "../components/HistoricoList/HistoricoList";
 import { GoPencil } from "react-icons/go";
 import { GoHistory } from "react-icons/go";
 import { GoGear } from "react-icons/go";
@@ -90,9 +91,7 @@ const deletarConta =() => {
                 <h3>Históricos</h3>
                 <GoHistory />
             </div>
-            <p>Pedidos finalizados</p>
-            <p>Suas avaliações</p>
-            <p>Chats arquivados</p>
+            <HistoricoList />
           </article>
 
           <article className="perfil-box privacidade">
@@ -117,7 +116,7 @@ const deletarConta =() => {
             <p>Sobre a Rabiscadoo</p>
             <p>v.0.0.1/2024</p>
           </article>
-          <br /> <br />
+          <br /> 
         </div>
 
         <BotaoContinuar texto="confirmar" largura="35%"/>
