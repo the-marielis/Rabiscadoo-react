@@ -684,3 +684,23 @@ app.post("/api/pegaIdAgendamento", (req, res) => {
 
   });
 });
+
+//************* DELETA USUARIO  ************/
+
+app.delete("/api/usuario/deletar/:idusuario", (req, res) => {
+  const { idusuario } = req.params;
+
+  const sql = `
+  delete 
+    from cadastrologin c
+    where c.idusuario = ?;`;
+
+  db.query(sql, [idusuario], (err, results) => {
+    if (err) {
+      console.error("Erro ao Deletar cadastro do usuario:", err);
+      return res.status(500).json({ erro: "Erro ao Deletar cadastro do usuario." });
+    }
+    console.log("Deleteado usuario", idusuario)
+    res.json({ sucesso: true });
+  });
+});

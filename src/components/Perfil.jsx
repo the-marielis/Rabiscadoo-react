@@ -1,16 +1,67 @@
-import React from "react";
+import React, {useState} from "react";
 import "../css/perfilUsuario.css";
 import BotaoContinuar from "./BotaoContinuar";
 import { GoPencil } from "react-icons/go";
 import { GoHistory } from "react-icons/go";
 import { GoGear } from "react-icons/go";
 import { VscInfo } from "react-icons/vsc";
-import { useAuth } from "../context/AuthContext"; 
+import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Toast from "./Toast/Toast.jsx";
 
 const Perfil = () => {
-    const { usuario } = useAuth();
+  const navigate = useNavigate();
+  const [toast, setToast]  = useState(null);
+  const { usuario,logout } = useAuth();
+
+  const showToast = (message, type = "error") => setToast({ message, type });
+
+
+
+const deletarConta =() => {
+  console.log("deletarConta");
+  let confirmar = window.confirm("Tem certeza que deseja deletar sua conta?");
+  if (!confirmar){ return;} // Se o usuário clicar em "Cancelar", não faz nada
+  confirmar = window.confirm("Tem certeza MESMO?");
+  confirmar = window.confirm("Tem certeza? Faz isso comigo não pufavo");
+
+
+
+  axios
+      // para prod usar essa
+      .delete(`http://localhost:3301/api/usuario/deletar/${usuario?.idusuario}`, {})
+      // teste usar essa passando o id que quer deletar
+      // .delete(`http://localhost:3301/api/usuario/deletar/133`, {})
+      .then(() => {
+        console.log("Deletar conta");
+        showToast("⚠️ USUARIO Deletado ⚠️", "success");
+        // Espera 2 segundos antes de navegar
+        setTimeout(() => {
+          logout();
+          navigate(`/login`);
+        }, 2000);
+      })
+      .catch((error) => {
+        console.error("Erro ao deletar agendamento:", error);
+        showToast("Erro ao deletar agendamento", "error");
+      });
+
+};
 
   return (
+      <>
+          {/* toast */}
+          {toast && (
+              <div className="toast-container">
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+              </div>
+          )}
+
     <div
       className="perfil-container"
       style={{ backgroundImage: "url('/images/BACKGROUND_LOGIN.png')" }}
@@ -53,7 +104,7 @@ const Perfil = () => {
             <p>Mudar para perfil profissional</p>
             <p>Alterar preferências da conta</p>
             <p>Ocultar pessoas</p>
-            <p className="delete"><br />Deletar conta</p>
+            <p className="delete" onClick={() => deletarConta()} ><br />Deletar conta</p>
           </article>
 
           <article className="perfil-box preferencias">
@@ -72,6 +123,7 @@ const Perfil = () => {
         <BotaoContinuar texto="confirmar" largura="35%"/>
       </section>
     </div>
+</>
   );
 };
 
