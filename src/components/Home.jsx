@@ -1,6 +1,7 @@
 import React from "react";
 import '../css/main.css';
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -14,6 +15,8 @@ import tattoo6 from "../../public/images/tatuagem6.jpg";
 import manchaImg from "../../public/images/mancha3.png";
 
 const Home = () => {
+    const { usuario } = useAuth();
+
   const settings = {
     dots: true,
     infinite: true,
@@ -45,7 +48,10 @@ const Home = () => {
       <div className="img-fundo">
         <img src={manchaImg} alt="mancha" />
       </div>
-      <Link to="/login" className="btn-entrar"> VENHA <br /> CONHECER</Link>
+      {/*<Link to="/login" className="btn-entrar"> VENHA <br /> CONHECER</Link>*/}
+        {!usuario && (
+            <Link to="/login" className="btn-entrar">VENHA <br /> CONHECER</Link>
+        )}
     </div> 
   );
 };

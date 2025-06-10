@@ -1,10 +1,22 @@
-import React from "react";
+import React, {useState} from "react";
 import { GoPencil, GoHistory, GoGear } from "react-icons/go";
 import "../css/perfilUsuario.css";
 import BotaoContinuar from "./BotaoContinuar";
+import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Toast from "./Toast/Toast.jsx";
 
 const HomeLogado = () => {
-  return (
+const navigate = useNavigate();
+const [toast, setToast]  = useState(null);
+const { usuario } = useAuth();
+
+const showToast = (message, type = "error") => setToast({ message, type });
+
+
+
+return (
     <div
       className="perfil-container"
       style={{ backgroundImage: "url('/images/BACKGROUND_LOGIN.png')" }}
@@ -20,12 +32,13 @@ const HomeLogado = () => {
             <div className="dados">
               <div className="linha-nome">
                 <h2>Nome do Tatuador</h2>
+                  <h2>{usuario?.nome || "Nome do Tatuador"}</h2>
                 <GoPencil />
               </div>
-              <p>email@email.com</p>
-              <p>Telefone: 00 0000-0000</p>
-              <p>Data de nascimento: 00/00/0000</p>
-              <div className="linha-informacoes">
+              <p>{usuario?.email || "email@email.com"}</p>
+              <p>Telefone: {usuario?.telefone || "Não informado"}</p>
+                <p>Data de nascimento: {usuario?.nascimento || "00/00/0000"}</p>
+                <div className="linha-informacoes">
                   <div className="linha-historicos">
                     <h3>Históricos</h3>
                     <GoHistory />
