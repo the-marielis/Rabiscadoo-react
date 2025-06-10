@@ -8,6 +8,8 @@ const UserDropdown = () => {
   const [aberto, setAberto] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const perfilLink = usuario?.tp_cadastro === "tatuador" ? "/paineltatuador" : "/perfil";
+
 
   const toggleMenu = () => setAberto(!aberto);
 
@@ -36,7 +38,8 @@ const UserDropdown = () => {
 
       {aberto && (
         <div className="dropdown-menu">
-          <p className="saudacao">Olá, <Link className="link-perfil" to= "/perfil">{usuario?.nome?.split(" ")[0] || "usuário"}</Link>!</p>
+          <p className="saudacao">Olá, <Link className="link-perfil" to={perfilLink}>{usuario?.nome?.split(" ")[0] || "usuário"}</Link>!</p>
+
           <ul>
             <li><Link to="/chats">Seus chats</Link></li>
             <li><Link to="/avaliacoes">Suas avaliações</Link></li>
