@@ -1,18 +1,18 @@
-import React, {useState} from "react";
+//import React, {useState} from "react";
 import { GoPencil, GoHistory, GoGear } from "react-icons/go";
 import "../css/perfilUsuario.css";
 import BotaoContinuar from "./BotaoContinuar";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import HistoricoList from "../components/HistoricoList/HistoricoList";
+//import { useNavigate } from "react-router-dom";
 import Toast from "./Toast/Toast.jsx";
 
 const HomeLogado = () => {
-const navigate = useNavigate();
-const [toast, setToast]  = useState(null);
+//const navigate = useNavigate();
+//const [toast, setToast]  = useState(null);
 const { usuario } = useAuth();
 
-const showToast = (message, type = "error") => setToast({ message, type });
+//const showToast = (message, type = "error") => setToast({ message, type });
 
 
 
@@ -31,7 +31,6 @@ return (
             <div className="avatar-tatu"></div>
             <div className="dados">
               <div className="linha-nome">
-                <h2>Nome do Tatuador</h2>
                   <h2>{usuario?.nome || "Nome do Tatuador"}</h2>
                 <GoPencil />
               </div>
@@ -43,9 +42,7 @@ return (
                     <h3>Históricos</h3>
                     <GoHistory />
                   </div>
-                  <p>Pedidos finalizados</p>
-                  <p>Suas avaliações</p>
-                  <p>Chats arquivados</p>
+                  <HistoricoList papel="cliente" scope="todos" />
                   <div className="linha-privacidade">
                     <h3>Privacidade e Segurança</h3>
                     <GoGear />
@@ -66,10 +63,7 @@ return (
             <div className="linha-agendas">
               <h3>Próximos Agendamentos</h3>
             </div>
-            <p>Nome</p>
-            <p>Notificações</p>
-            <p>Data</p>
-            <p>Hora</p>
+            <HistoricoList papel="tatuador" scope="proximos" />
 
             <div className="portfolio">
             <br />
