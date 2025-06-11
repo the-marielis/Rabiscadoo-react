@@ -96,6 +96,8 @@ body, html, #root {
   display: flex;
   align-items: center;
   grid-column: span 1;
+  position: relative;
+  padding-top: 2rem; /* caso precise ajustar para o ícone não sobrepor */
 }
 
 .info-principal .avatar {
@@ -107,12 +109,36 @@ body, html, #root {
   margin-top: -10%;
 }
 
+.avatar-pencil {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 1.2rem;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 6px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* impede clique acidental */
+}
+
+.avatar:hover .avatar-pencil {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.info-principal .avatar:hover {
+  transform: scale(1.05);
+}
+
 .dados {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   position: relative;
 }
+
 
 .linha-nome {
   display: flex;
@@ -207,6 +233,19 @@ body, html, #root {
   margin-top: -55%;
 }
 
+.avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--cor7); /* roxo se não tiver imagem */
+  margin-right: 1.8rem;
+  margin-top: -10%;
+  transition: transform 0.2s ease;
+}
+
+
+
+
 .linha-informacoes {
   margin-left: -30%;
 }
@@ -223,3 +262,74 @@ body, html, #root {
     margin-left: auto;
   }
 }
+
+.input-group {
+  padding: 0px 7%;
+}
+
+.input-group input {
+  width: 200%; /* Isso faz o input ocupar toda a largura da div */
+  box-sizing: border-box; /* Garante que padding/borda não ultrapassem os limites */
+  font-family: var(--fonte-padrao);
+  letter-spacing: 1px;
+  font-weight: lighter;
+  font-size: 1.4rem;
+  color: var(--cor1);
+  padding: 2%;
+  border-radius: 10px;
+  display: block; /* Garante que não haja elementos lado a lado */
+  margin-bottom: 1rem; /* Espaço entre inputs */
+  lex-wrap: wrap; /* Garante responsividade */
+}
+
+.botoes-edicao {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.botao-salvar,
+.botao-cancelar {
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.botao-salvar {
+  background-color: var(--cor0);
+  box-shadow: -3px 2px 1px #9831b8;
+  color: white;
+}
+
+.botao-salvar:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+.botao-cancelar {
+  background-color: var(--cor0);
+  box-shadow: -3px 2px 1px #9831b8;
+  color: white;
+}
+
+.botao-cancelar:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+.goPencil {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  /*font-size: 1.5rem;*/
+  z-index: 1;
+}
+
+
+
+
+

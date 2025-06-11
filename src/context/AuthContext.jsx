@@ -45,7 +45,12 @@ const login = (dadosUsuario) => {
   };
 
   return (
-    <AuthContext.Provider value={{ usuario, login, logout }}>
+    <AuthContext.Provider value={{
+      usuario,
+      login,
+      logout,
+      setUsuario,
+      buscarUsuario }}>
       {children}
     </AuthContext.Provider>
   );

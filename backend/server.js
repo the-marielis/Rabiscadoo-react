@@ -733,3 +733,41 @@ app.get("/api/historico-agendamentos/:idusuario", (req, res) => {
     res.json(rows);               // devolve um array já ordenado
   });
 });
+
+//*********************************      *************************************//
+
+app.put("/api/usuario/atualizar/:idusuario", (req, res) => {
+  const id = req.params.idusuario;
+  const { nome, email, telefone, nascimento } = req.body;
+
+  console.log("Requisição de atualização recebida para o ID:", id);
+
+  // Validação básica
+  if (!nome || !email || !telefone || !nascimento) {
+    console.warn("Campos obrigatórios ausentes na requisição:", req.body);
+    return res.status(400).send({ error: "Todos os campos são obrigatórios." });
+  }
+
+  const query = `
+    UPDATE cadastrologin
+    SET nome = ?, email = ?, telefone = ?, nascimento = ?
+    WHERE idusuario = ?
+  `;
+
+  const values = [nome, email, telefone, nascimento, id];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Erro ao atualizar usuário:", err);
+      return res.status(500).send({ error: "Erro ao atualizar usuário" });
+    }
+
+    if (result.affectedRows === 0) {
+      console.warn("Nenhum usuário atualizado. ID inexistente:", id);
+      return res.status(404).send({ error: "Usuário não encontrado" });
+    }
+
+    console.log("Usuário atualizado com sucesso:", { id, ...req.body });
+    res.status(200).send({ message: "Usuário atualizado com sucesso!" });
+  });
+});
