@@ -1,22 +1,21 @@
-import React, {useState} from "react";
+//import React, {useState} from "react";
 import { GoPencil, GoHistory, GoGear } from "react-icons/go";
 import "../css/perfilUsuario.css";
 import BotaoContinuar from "./BotaoContinuar";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import HistoricoList from "../components/HistoricoList/HistoricoList";
+import PortfolioCarousel from "../components/Carousel/PortfolioCarousel";
+//import { useNavigate } from "react-router-dom";
 import Toast from "./Toast/Toast.jsx";
 
 const HomeLogado = () => {
-const navigate = useNavigate();
-const [toast, setToast]  = useState(null);
-const { usuario } = useAuth();
+  //const navigate = useNavigate();
+  //const [toast, setToast]  = useState(null);
+  const { usuario } = useAuth();
 
-const showToast = (message, type = "error") => setToast({ message, type });
+  //const showToast = (message, type = "error") => setToast({ message, type });
 
-
-
-return (
+  return (
     <div
       className="perfil-container"
       style={{ backgroundImage: "url('/images/BACKGROUND_LOGIN.png')" }}
@@ -31,33 +30,30 @@ return (
             <div className="avatar-tatu"></div>
             <div className="dados">
               <div className="linha-nome">
-                <h2>Nome do Tatuador</h2>
-                  <h2>{usuario?.nome || "Nome do Tatuador"}</h2>
+                <h2>{usuario?.nome || "Nome do Tatuador"}</h2>
                 <GoPencil />
               </div>
               <p>{usuario?.email || "email@email.com"}</p>
               <p>Telefone: {usuario?.telefone || "Não informado"}</p>
-                <p>Data de nascimento: {usuario?.nascimento || "00/00/0000"}</p>
-                <div className="linha-informacoes">
-                  <div className="linha-historicos">
-                    <h3>Históricos</h3>
-                    <GoHistory />
-                  </div>
-                  <p>Pedidos finalizados</p>
-                  <p>Suas avaliações</p>
-                  <p>Chats arquivados</p>
-                  <div className="linha-privacidade">
-                    <h3>Privacidade e Segurança</h3>
-                    <GoGear />
-                  </div>
-                  <p>Alterar senha</p>
-                  <p>Mudar para perfil profissional</p>
-                  <p>Alterar preferências da conta</p>
-                  <p>Ocultar pessoas</p>
-                  <p className="delete">
-                    <br />
-                    Deletar conta
-                  </p>
+              <p>Data de nascimento: {usuario?.nascimento || "00/00/0000"}</p>
+              <div className="linha-informacoes">
+                <div className="linha-historicos">
+                  <h3>Históricos</h3>
+                  <GoHistory />
+                </div>
+                <HistoricoList papel="cliente" scope="todos" />
+                <div className="linha-privacidade">
+                  <h3>Privacidade e Segurança</h3>
+                  <GoGear />
+                </div>
+                <p>Alterar senha</p>
+                <p>Mudar para perfil profissional</p>
+                <p>Alterar preferências da conta</p>
+                <p>Ocultar pessoas</p>
+                <p className="delete">
+                  <br />
+                  Deletar conta
+                </p>
               </div>
             </div>
           </article>
@@ -66,22 +62,17 @@ return (
             <div className="linha-agendas">
               <h3>Próximos Agendamentos</h3>
             </div>
-            <p>Nome</p>
-            <p>Notificações</p>
-            <p>Data</p>
-            <p>Hora</p>
+            <HistoricoList papel="tatuador" scope="proximos" />
 
             <div className="portfolio">
-            <br />
+              <br />
               <h3>Portfólio</h3>
-              <p>Aqui ficará o carrossel do portfolio</p>
+              <PortfolioCarousel idusuario={usuario?.idusuario} imagensPorPagina={3} modoCompacto={true} />
             </div>
-
-
           </article>
           <br />
         </div>
-        <BotaoContinuar texto="confirmar" largura="35%"/>
+        <BotaoContinuar texto="confirmar" largura="35%" />
       </section>
     </div>
   );

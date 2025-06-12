@@ -43,8 +43,9 @@ const Perfil = () => {
   }, [usuario]);
 
   const showToast = (message, type = "error") => setToast({ message, type });
-
   const toggleEdicao = () => setEditando(!editando);
+  const [preview, setPreview] = useState(null);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,7 +57,7 @@ const Perfil = () => {
 
   const handleIconClick = () => {
     if (inputFileRef.current) {
-      inputFileRef.current.click();
+      inputFileRef.current.click(); // <== Simula clique no input file
     }
   };
 
@@ -270,20 +271,20 @@ const Perfil = () => {
                 <HistoricoList />
               </article>
 
-              <article className="perfil-box privacidade">
-                <div className="linha-privacidade">
-                  <h3>Privacidade e Segurança</h3>
-                  <GoGear />
-                </div>
-                <p>Alterar senha</p>
-                <p>Mudar para perfil profissional</p>
-                <p>Alterar preferências da conta</p>
-                <p>Ocultar pessoas</p>
-                <p className="delete" onClick={deletarConta}>
-                  <br />
-                  Deletar conta
-                </p>
-              </article>
+            <article className="perfil-box privacidade">
+              <div className="linha-privacidade">
+                <h3>Privacidade e Segurança</h3>
+                <GoGear />
+              </div>
+              <p>Alterar senha</p>
+              <p>Mudar para perfil profissional</p>
+              <p>Alterar preferências da conta</p>
+              <p>Ocultar pessoas</p>
+              <p className="delete" onClick={deletarConta}>
+                <br />
+                Deletar conta
+              </p>
+            </article>
 
               <article className="perfil-box preferencias">
                 <div className="linha-preferencias">

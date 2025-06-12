@@ -1,0 +1,44 @@
+.portfolio-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.carousel-container {
+  display: flex;
+  overflow: hidden;
+  max-width: 100%;
+  width: 100%;
+}
+
+.img-portfolio {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+.btn-carousel {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  padding: 4px;
+}
+
+.icone-navegacao {
+  width: 20px;
+  height: 20px;
+}
+
+.portfolio-carousel.compacta .img-portfolio {
+  width: 5rem;
+  height: 10rem;
+}

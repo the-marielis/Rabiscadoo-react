@@ -708,30 +708,50 @@ app.delete("/api/usuario/deletar/:idusuario", (req, res) => {
 
 //***************************ROTA HISTÓRICO DE AGENDAMENTOS************************* */
 app.get("/api/historico-agendamentos/:idusuario", (req, res) => {
-  const { idusuario } = req.params;
+  const { idusuario }      = req.params;
+  const { papel = "cliente", scope = "todos" } = req.query;  // papel = cliente | tatuador
+  let sql = "";
+  const params = [idusuario];
 
-  const sql = `
-    SELECT 
-      a.idagendamento,
-      DATE_FORMAT(a.dataagendamento,'%d/%m/%Y') AS data,
-      DATE_FORMAT(a.horaagendamento,'%H:%i')  AS hora,
-      s.descricao                              AS servico,
-      s.valororcado                            AS valor,
-      tatuador.nome                            AS profissional
-    FROM agendamento a
-    JOIN servico         s  ON a.idservico = s.idservico
-    JOIN perfil_tatuador p  ON s.idPerfil_tatuador = p.id
-    JOIN cadastrologin   tatuador ON tatuador.idusuario = p.idusuario
-    WHERE a.idusuario = ?
-    ORDER BY a.dataagendamento DESC, a.horaagendamento DESC;
-  `;
+  if (papel === "tatuador") {
+    sql = `
+      SELECT 
+        a.idagendamento,
+        DATE_FORMAT(a.dataagendamento,'%d/%m/%Y') AS data,
+        DATE_FORMAT(a.horaagendamento,'%H:%i')    AS hora,
+        s.descricao                                AS servico,
+        s.valororcado                              AS valor,
+        cliente.nome                               AS cliente
+      FROM agendamento a
+      JOIN servico            s       ON a.idservico         = s.idservico
+      JOIN perfil_tatuador    p       ON s.idPerfil_tatuador = p.id
+      JOIN cadastrologin      cliente ON cliente.idusuario   = a.idusuario
+      WHERE p.idusuario = ?`;
+  } else { // cliente
+    sql = `
+      SELECT 
+        a.idagendamento,
+        DATE_FORMAT(a.dataagendamento,'%d/%m/%Y') AS data,
+        DATE_FORMAT(a.horaagendamento,'%H:%i')    AS hora,
+        s.descricao                                AS servico,
+        s.valororcado                              AS valor,
+        tatuador.nome                              AS profissional
+      FROM agendamento a
+      JOIN servico            s       ON a.idservico         = s.idservico
+      JOIN perfil_tatuador    p       ON s.idPerfil_tatuador = p.id
+      JOIN cadastrologin      tatuador ON tatuador.idusuario = p.idusuario
+      WHERE a.idusuario = ?`;
+  }
 
-  db.query(sql, [idusuario], (err, rows) => {
-    if (err) {
-      console.error("Erro ao buscar histórico:", err);
-      return res.status(500).json({ erro: "Erro ao buscar histórico." });
-    }
-    res.json(rows);               // devolve um array já ordenado
+  // corta só futuros ou só passados se quiser
+  if (scope === "proximos") sql += " AND a.dataagendamento >= CURDATE()";
+  if (scope === "passados") sql += " AND a.dataagendamento <  CURDATE()";
+
+  sql += " ORDER BY a.dataagendamento DESC, a.horaagendamento DESC";
+
+  db.query(sql, params, (err, rows) => {
+    if (err) return res.status(500).json({ erro: "Erro ao buscar histórico." });
+    res.json(rows);
   });
 });
 
