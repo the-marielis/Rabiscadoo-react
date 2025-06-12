@@ -1,15 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../css/perfilUsuario.css";
 import BotaoContinuar from "./BotaoContinuar";
 import HistoricoList from "../components/HistoricoList/HistoricoList";
-import { GoPencil } from "react-icons/go";
-import { GoHistory } from "react-icons/go";
-import { GoGear } from "react-icons/go";
+import { GoPencil, GoHistory, GoGear } from "react-icons/go";
 import { VscInfo } from "react-icons/vsc";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Toast from "./Toast/Toast.jsx";
+import {converteData} from "../Utils/converteData.js";
 
 const Perfil = () => {
   const navigate = useNavigate();
@@ -18,17 +17,34 @@ const Perfil = () => {
   const [editando, setEditando] = useState(false);
   const [arquivo, setArquivo] = useState(null);
   const [nomeArquivo, setNomeArquivo] = useState("");
-  const [formData, setFormData] = useState({
-    nome: usuario?.nome || "",
-    email: usuario?.email || "",
-    telefone: usuario?.telefone || "",
-    nascimento: usuario?.nascimento || "",
-  });
   const inputFileRef = useRef(null);
-  const showToast = (message, type = "error") => setToast({ message, type });
-  const toggleEdicao = () => setEditando(!editando);
   const [preview, setPreview] = useState(null);
 
+  const [formData, setFormData] = useState({
+    nome: "",
+    email: "",
+    telefone: "",
+    nascimento: "",
+    avatar: "",
+  });
+
+  // Atualiza formData quando usuario for carregado
+  useEffect(() => {
+
+    if (usuario) {
+      setFormData({
+        nome: usuario.nome || "",
+        email: usuario.email || "",
+        telefone: usuario.telefone || "",
+        nascimento: converteData(usuario.nascimento)|| "",
+        avatar: usuario.avatar || "",
+      });
+    }
+  }, [usuario]);
+
+  const showToast = (message, type = "error") => setToast({ message, type });
+
+  const toggleEdicao = () => setEditando(!editando);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,13 +55,20 @@ const Perfil = () => {
   };
 
   const handleIconClick = () => {
-    console.log("AAAAAAA")
     if (inputFileRef.current) {
-      inputFileRef.current.click(); // <== Simula clique no input file
+      inputFileRef.current.click();
     }
   };
 
-
+  const handleArquivoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setArquivo(file);
+      setNomeArquivo(file.name);
+      const imageURL = URL.createObjectURL(file);
+      setPreview(imageURL);
+    }
+  };
 
   const deletarConta = () => {
     let confirmar = window.confirm("Tem certeza que deseja deletar sua conta?");
@@ -68,13 +91,34 @@ const Perfil = () => {
         });
   };
 
+  const SalvaAvatar = async () => {
+    const form = new FormData();
+    form.append("avatar", arquivo);
+    form.append("idusuario", usuario?.idusuario);
+
+    try {
+      const response = await fetch("http://localhost:3301/api/avatar", {
+        method: "POST",
+        body: form,
+      });
+
+      const data = await response.json();
+      console.log(data);
+      await buscarUsuario(usuario?.idusuario); // Atualiza o contexto
+      showToast("Avatar salvo com sucesso!", "success");
+    } catch (error) {
+      console.error("Erro ao enviar avatar:", error);
+      showToast("Erro ao salvar avatar", "error");
+    }
+  };
+
   const salvarEdicao = () => {
     axios
         .put(`http://localhost:3301/api/usuario/atualizar/${usuario?.idusuario}`, formData)
         .then(() => {
           showToast("Dados atualizados com sucesso", "success");
           setEditando(false);
-          buscarUsuario(usuario?.idusuario);
+          buscarUsuario(usuario?.idusuario); // Atualiza os dados do usuário
         })
         .catch((error) => {
           console.error("Erro ao atualizar dados:", error);
@@ -89,30 +133,15 @@ const Perfil = () => {
       email: usuario?.email || "",
       telefone: usuario?.telefone || "",
       nascimento: usuario?.nascimento || "",
+      avatar: usuario?.avatar || "",
     });
   };
-  const handleArquivoChange = (e) => {
-    console.log("LOLO")
-    const file = e.target.files[0];
-    if (file) {
-      console.log("Arquivo selecionado:", file.name);
-      setArquivo(file);
-      setNomeArquivo(file.name);
-    }
-    const imageURL = URL.createObjectURL(file);
-    setPreview(imageURL);
-  };
-
 
   return (
       <>
         {toast && (
             <div className="toast-container">
-              <Toast
-                  message={toast.message}
-                  type={toast.type}
-                  onClose={() => setToast(null)}
-              />
+              <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
             </div>
         )}
 
@@ -128,12 +157,11 @@ const Perfil = () => {
                 <div className="goPencil">
                   {!editando && (
                       <GoPencil
-                                onClick={toggleEdicao}
-                                style={{ cursor: "pointer", marginBottom: "1rem" }}
+                          onClick={toggleEdicao}
+                          style={{ cursor: "pointer", marginBottom: "1rem" }}
                       />
                   )}
                 </div>
-                {/*aaa/*/}
 
                 <div
                     className="avatar"
@@ -144,9 +172,14 @@ const Perfil = () => {
                       overflow: "hidden",
                     }}
                 >
-                  {preview ? (
+                  {preview || formData.avatar ? (
                       <img
-                          src={preview}
+                          src={
+                              preview ||
+                              (formData.avatar
+                                  ? `http://localhost:3301/${formData.avatar}`
+                                  : "/images/default-avatar.png")
+                          }
                           alt="Avatar"
                           className="avatar-img"
                           style={{
@@ -156,7 +189,9 @@ const Perfil = () => {
                             borderRadius: "50%",
                           }}
                       />
+
                   ) : null}
+
                   <GoPencil className="avatar-pencil" />
                   <input
                       type="file"
@@ -166,75 +201,65 @@ const Perfil = () => {
                       onChange={handleArquivoChange}
                   />
                 </div>
+
                 <div className="dados">
-
-
                   <div className="linha-nome">
-
                     {editando ? (
-                      <div className="input-group">
-                        <input
-                            type="text"
-                            name="nome"
-                            value={formData.nome}
-                            onChange={handleChange}
-                        />
-                      </div>
+                        <div className="input-group">
+                          <input
+                              type="text"
+                              name="nome"
+                              value={formData.nome}
+                              onChange={handleChange}
+                          />
+                        </div>
                     ) : (
                         <h2>{usuario?.nome || "Nome do Usuário"}</h2>
                     )}
-
-                    {/*aqui*/}
-
                   </div>
-
-
 
                   {editando ? (
                       <>
-                      <div className="input-group">
+                        <div className="input-group">
+                          <input
+                              type="email"
+                              name="email"
+                              value={formData.email}
+                              onChange={handleChange}
+                          />
+                          <input
+                              type="text"
+                              name="telefone"
+                              value={formData.telefone}
+                              onChange={handleChange}
+                          />
+                          <input
+                              type="date"
+                              name="nascimento"
+                              value={formData.nascimento}
+                              onChange={handleChange}
+                          />
 
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                        />
-
-                        <input
-                            type="text"
-                            name="telefone"
-                            value={formData.telefone}
-                            onChange={handleChange}
-                        />
-
-                        <input
-                            type="date"
-                            name="nascimento"
-                            value={formData.nascimento}
-                            onChange={handleChange}
-                        />
-
-                        <div className="botoes-edicao">
-                          <button className="botao-salvar" onClick={salvarEdicao}>Salvar</button>
-                          <button className="botao-cancelar" onClick={cancelarEdicao}>Cancelar</button>
+                          <div className="botoes-edicao">
+                            <button className="botao-salvar" onClick={salvarEdicao}>
+                              Salvar
+                            </button>
+                            <button className="botao-cancelar" onClick={cancelarEdicao}>
+                              Cancelar
+                            </button>
+                          </div>
                         </div>
-                      </div>
                       </>
-
                   ) : (
                       <>
                         <p>{usuario?.email || "email@email.com"}</p>
                         <p>Telefone: {usuario?.telefone || "Não informado"}</p>
                         <p>
-                          Data de nascimento:{" "}
-                          {usuario?.nascimento || "00/00/0000"}
+                          Data de nascimento: {formData?.nascimento || "00/00/0000"}
                         </p>
                       </>
                   )}
-
                 </div>
-
               </article>
 
               <article className="perfil-box historicos">
@@ -273,7 +298,7 @@ const Perfil = () => {
               <br />
             </div>
 
-            <BotaoContinuar texto="confirmar" largura="35%" />
+            <BotaoContinuar texto="confirmar" onClick={SalvaAvatar} largura="35%" />
           </section>
         </div>
       </>
