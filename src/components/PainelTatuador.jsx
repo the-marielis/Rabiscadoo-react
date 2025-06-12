@@ -66,7 +66,9 @@ const HomeLogado = () => {
 
             <div className="portfolio">
               <br />
-              <h3>Portfólio</h3>
+              
+              <h3>Portfólio</h3> 
+              <GoPencil />
               <PortfolioCarousel idusuario={usuario?.idusuario} imagensPorPagina={3} modoCompacto={true} />
             </div>
           </article>
