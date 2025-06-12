@@ -44,7 +44,7 @@ const Perfil = () => {
 
   const showToast = (message, type = "error") => setToast({ message, type });
   const toggleEdicao = () => setEditando(!editando);
-  const [preview, setPreview] = useState(null);
+
 
 
   const handleChange = (e) => {
