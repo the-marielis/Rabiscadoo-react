@@ -110,7 +110,8 @@ app.get("/api/usuario/:idusuario", (req, res) => {
       "c.telefone2,\n" +
       "c.tp_cadastro,\n" +
       " DATE_FORMAT(c.nascimento , '%d/%m/%Y') as nascimento,\n" +
-      "c.idusuario\n" +
+      "c.idusuario,\n" +
+      "c.avatar\n"
       "FROM cadastrologin c\n" +
       "WHERE idusuario = ?";
   db.query(query, [id], (err, results) => {
@@ -791,3 +792,52 @@ app.put("/api/usuario/atualizar/:idusuario", (req, res) => {
     res.status(200).send({ message: "Usuário atualizado com sucesso!" });
   });
 });
+
+//***************************************  Salva Avatar Usuario   *********************************//
+
+// app.post("/api/avatar", upload.single("avatar"), (req, res) => {
+//   const idusuario = req.body.idusuario;
+//   const avatarBuffer = req.file?.buffer;
+//
+//   if (!idusuario || !avatarBuffer) {
+//     return res
+//         .status(400)
+//         .json({ erro: "ID do usuário e avatar são obrigatórios." });
+//   }
+//
+//   const sql = `UPDATE cadastrologin SET avatar = ? WHERE idusuario = ?`;
+//
+//   db.query(sql, [avatarBuffer, idusuario], (err, result) => {
+//     if (err) {
+//       console.error("Erro ao salvar avatar no Banco:", err);
+//       return res.status(500).json({ erro: "Erro ao salvar avatar." });
+//     }
+//
+//     res.json({ mensagem: "Avatar salvo com sucesso!" });
+//   });
+// });
+//
+
+app.post("/api/avatar/", upload.single("avatar"), async (req, res) => {
+  try {
+    const  userId  = req.body.idusuario;
+    const avatarPath = "uploads/" + req.file.filename;
+
+    // log pra debug
+    console.log("Avatar recebido:", req.file);
+    console.log("UserId recebido:", userId);
+    console.log("UserId recebido:", req.body.idusuario);
+
+    // grava no banco
+    await db.execute("UPDATE cadastrologin c  SET c.avatar = ? WHERE c.idusuario = ?", [
+      avatarPath,
+      userId,
+    ]);
+
+    res.json({ success: true, path: avatarPath });
+  } catch (error) {
+    console.error("Erro ao salvar avatar:", error);
+    res.status(500).json({ success: false, message: "Erro ao salvar avatar." });
+  }
+});
+
