@@ -841,3 +841,33 @@ app.post("/api/avatar/", upload.single("avatar"), async (req, res) => {
   }
 });
 
+//******************************EDITA PORTFOLIO********************************// 
+// Buscar portfólio
+app.get("/api/portfolio/:idusuario", (req, res) => {
+  const { idusuario } = req.params;
+  const sql = "SELECT imagem FROM portfolio WHERE idusuario = ?";
+  db.query(sql, [idusuario], (err, result) => {
+    if (err) return res.status(500).send(err);
+    res.json(result);
+  });
+});
+
+// Adicionar imagem
+app.post("/api/portfolio", (req, res) => {
+  const { idusuario, imagem } = req.body;
+  const sql = "INSERT INTO portfolio (idusuario, imagem) VALUES (?, ?)";
+  db.query(sql, [idusuario, imagem], (err, result) => {
+    if (err) return res.status(500).send(err);
+    res.send("Imagem adicionada.");
+  });
+});
+
+// Remover imagem
+app.delete("/api/portfolio", (req, res) => {
+  const { idusuario, imagem } = req.body;
+  const sql = "DELETE FROM portfolio WHERE idusuario = ? AND imagem = ?";
+  db.query(sql, [idusuario, imagem], (err, result) => {
+    if (err) return res.status(500).send(err);
+    res.send("Imagem removida.");
+  });
+});

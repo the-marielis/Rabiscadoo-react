@@ -5,6 +5,7 @@ import BotaoContinuar from "./BotaoContinuar";
 import { useAuth } from "../context/AuthContext";
 import HistoricoList from "../components/HistoricoList/HistoricoList";
 import PortfolioCarousel from "../components/Carousel/PortfolioCarousel";
+import PortfolioEditor from "../components/PortfolioEditor/PortfolioEditor.jsx";
 //import { useNavigate } from "react-router-dom";
 import Toast from "./Toast/Toast.jsx";
 
@@ -66,10 +67,15 @@ const HomeLogado = () => {
 
             <div className="portfolio">
               <br />
-              
-              <h3>Portfólio</h3> 
+
+              <h3>Portfólio</h3>
               <GoPencil />
-              <PortfolioCarousel idusuario={usuario?.idusuario} imagensPorPagina={3} modoCompacto={true} />
+              <PortfolioCarousel
+                idusuario={usuario?.idusuario}
+                imagensPorPagina={3}
+                modoCompacto={true}
+              />
+              <PortfolioEditor idusuario={usuario?.idusuario} />
             </div>
           </article>
           <br />
