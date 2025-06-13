@@ -8,7 +8,7 @@ import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Toast from "./Toast/Toast.jsx";
-import {converteData} from "../Utils/converteData.js";
+import { converteDataBR, converteDataUsa} from "../Utils/converteData.js";
 
 const Perfil = () => {
   const navigate = useNavigate();
@@ -19,6 +19,8 @@ const Perfil = () => {
   const [nomeArquivo, setNomeArquivo] = useState("");
   const inputFileRef = useRef(null);
   const [preview, setPreview] = useState(null);
+  const deletouAvatar = useRef(false);
+
 
   const [formData, setFormData] = useState({
     nome: "",
@@ -30,13 +32,13 @@ const Perfil = () => {
 
   // Atualiza formData quando usuario for carregado
   useEffect(() => {
-
     if (usuario) {
       setFormData({
         nome: usuario.nome || "",
         email: usuario.email || "",
         telefone: usuario.telefone || "",
-        nascimento: converteData(usuario.nascimento)|| "",
+        nascimento: converteDataUsa(usuario.nascimento) || "",
+
         avatar: usuario.avatar || "",
       });
     }
@@ -93,9 +95,16 @@ const Perfil = () => {
   };
 
   const SalvaAvatar = async () => {
+    console.log("TESTE")
     const form = new FormData();
+
     form.append("avatar", arquivo);
     form.append("idusuario", usuario?.idusuario);
+
+    console.log("AAA")
+    console.log(formData.avatar)
+    console.log(arquivo);
+    console.log(nomeArquivo);
 
     try {
       const response = await fetch("http://localhost:3301/api/avatar", {
@@ -125,17 +134,41 @@ const Perfil = () => {
           console.error("Erro ao atualizar dados:", error);
           showToast("Erro ao atualizar dados", "error");
         });
+
+    if(deletouAvatar.current){
+      console.log("entrou aqui")
+      console.log(preview)
+      SalvaAvatar();
+    }
+
   };
+
+  const deletarAvatar = () => {
+    deletouAvatar.current = true;
+    setPreview('null');
+
+    setArquivo('');
+    console.log("AJUSTE AVATAR",formData.nascimento);
+    console.log("AJUSTE AVATAR",usuario.nascimento);
+
+  }
 
   const cancelarEdicao = () => {
     setEditando(false);
+    console.log("editando",formData.nascimento);
+    console.log("editar conta",usuario?.nascimento);
     setFormData({
       nome: usuario?.nome || "",
-      email: usuario?.email || "",
+      email: usuario?.email | "",
       telefone: usuario?.telefone || "",
-      nascimento: usuario?.nascimento || "",
+      nascimento: converteDataUsa(usuario?.nascimento) || "",
       avatar: usuario?.avatar || "",
     });
+
+    if(deletouAvatar){
+      const url = `http://localhost:3301/${usuario?.avatar}`;
+      setPreview(url);
+    }
   };
 
   return (
@@ -163,7 +196,7 @@ const Perfil = () => {
                       />
                   )}
                 </div>
-
+              <div  className={"avatar-container"}>
                 <div
                     className="avatar"
                     onClick={handleIconClick}
@@ -181,7 +214,7 @@ const Perfil = () => {
                                   ? `http://localhost:3301/${formData.avatar}`
                                   : "/images/default-avatar.png")
                           }
-                          alt="Avatar"
+                          alt=""
                           className="avatar-img"
                           style={{
                             width: "100%",
@@ -189,9 +222,12 @@ const Perfil = () => {
                             objectFit: "cover",
                             borderRadius: "50%",
                           }}
-                      />
+                      />,
+
 
                   ) : null}
+
+
 
                   <GoPencil className="avatar-pencil" />
                   <input
@@ -201,12 +237,25 @@ const Perfil = () => {
                       accept="image/*"
                       onChange={handleArquivoChange}
                   />
+
+                </div>
+
+                {editando ? (
+
+                    preview || formData.avatar ? (
+
+                        <button className="botao-avatar" onClick={deletarAvatar}>
+                          Deletar foto
+                        </button>
+
+                    ) : null
+                ):null}
                 </div>
 
                 <div className="dados">
                   <div className="linha-nome">
                     {editando ? (
-                        <div className="input-group">
+                        <div className="input-groupos">
                           <input
                               type="text"
                               name="nome"
@@ -221,7 +270,7 @@ const Perfil = () => {
 
                   {editando ? (
                       <>
-                        <div className="input-group">
+                        <div className="input-groupos">
                           <input
                               type="email"
                               name="email"
@@ -237,10 +286,9 @@ const Perfil = () => {
                           <input
                               type="date"
                               name="nascimento"
-                              value={formData.nascimento}
+                              value={formData.nascimento || ""}
                               onChange={handleChange}
                           />
-
                           <div className="botoes-edicao">
                             <button className="botao-salvar" onClick={salvarEdicao}>
                               Salvar
@@ -256,7 +304,7 @@ const Perfil = () => {
                         <p>{usuario?.email || "email@email.com"}</p>
                         <p>Telefone: {usuario?.telefone || "Não informado"}</p>
                         <p>
-                          Data de nascimento: {formData?.nascimento || "00/00/0000"}
+                          Data de nascimento: {converteDataBR(formData?.nascimento) || "00/00/0000"}
                         </p>
                       </>
                   )}

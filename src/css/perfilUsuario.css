@@ -105,8 +105,10 @@ body, html, #root {
   height: 90px;
   border-radius: 50%;
   background: var(--cor7);
-  margin-right: 1.8rem;
+  /*margin-right: 1.8rem;*/
+  margin-left: 25%;
   margin-top: -10%;
+  margin-bottom: 0.5rem;
 }
 
 .avatar-pencil {
@@ -263,12 +265,12 @@ body, html, #root {
   }
 }
 
-.input-group {
+.input-groupos {
   padding: 0px 7%;
 }
 
-.input-group input {
-  width: 200%; /* Isso faz o input ocupar toda a largura da div */
+.input-groupos input {
+  width: 180%; /* Isso faz o input ocupar toda a largura da div */
   box-sizing: border-box; /* Garante que padding/borda não ultrapassem os limites */
   font-family: var(--fonte-padrao);
   letter-spacing: 1px;
@@ -328,8 +330,32 @@ body, html, #root {
   /*font-size: 1.5rem;*/
   z-index: 1;
 }
+.botao-avatar {
+  margin-top: 0.5rem;
+  margin-left: 0rem;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  background-color: var(--cor0);
+  text-align: center;
+  color: var(--cor2);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
+.botao-avatar:hover {
+  background-color: red; /* verde ou outro efeito */
+}
+.botao-avatar {
+  background-color: var(--cor0);
+  box-shadow: -3px 2px 1px #9831b8;
+  color: white;
+}
 
-
-
-
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 1.8rem;
+}
