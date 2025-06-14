@@ -844,11 +844,11 @@ app.post("/api/avatar/", upload.single("avatar"), async (req, res) => {
 //******************************EDITA PORTFOLIO********************************// 
 // Upload de imagem no portfólio
 app.post("/api/portfolio", upload.single("arquivo"), (req, res) => {
-  const { idPerfil_tatuador, descricao } = req.body;
+  const { idtatuador, descricao } = req.body;  // Mude para idtatuador
   const arquivo = req.file.filename;
 
-  const sql = `INSERT INTO portfolio (idPerfil_tatuador, descricao, arquivo) VALUES (?, ?, ?)`;
-  db.query(sql, [idPerfil_tatuador, descricao, arquivo], (err, result) => {
+  const sql = `INSERT INTO portfolio (idtatuador, descricao, imagem) VALUES (?, ?, ?)`;  // Mude os nomes das colunas
+  db.query(sql, [idtatuador, descricao, arquivo], (err, result) => {
     if (err) return res.status(500).json({ erro: "Erro ao salvar no banco" });
     res.json({ message: "Imagem salva", id: result.insertId });
   });
@@ -858,15 +858,15 @@ app.post("/api/portfolio", upload.single("arquivo"), (req, res) => {
 app.delete("/api/portfolio/:id", (req, res) => {
   const { id } = req.params;
 
-  const sqlBusca = "SELECT arquivo FROM portfolio WHERE idportfolio = ?";
+  const sqlBusca = "SELECT imagem FROM portfolio WHERE id = ?";  // Já está correto
   db.query(sqlBusca, [id], (err, rows) => {
     if (err || rows.length === 0) {
       return res.status(404).json({ erro: "Imagem não encontrada" });
     }
 
-    const nomeArquivo = rows[0].arquivo;
+    const nomeArquivo = rows[0].imagem;  // Mude de 'arquivo' para 'imagem'
 
-    const sqlDelete = "DELETE FROM portfolio WHERE idportfolio = ?";
+    const sqlDelete = "DELETE FROM portfolio WHERE id = ?";
     db.query(sqlDelete, [id], (err) => {
       if (err) return res.status(500).json({ erro: "Erro ao deletar do banco" });
 
