@@ -1,60 +1,84 @@
-// src/components/PortfolioEditor.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Trash2 } from "lucide-react";
+import "./portfolioEditor.css";
 
 const PortfolioEditor = ({ idusuario }) => {
   const [imagens, setImagens] = useState([]);
   const [novaImagem, setNovaImagem] = useState("");
 
+  // Buscar imagens existentes
   useEffect(() => {
-    buscarImagens();
+    if (idusuario) {
+      axios
+        .get(`http://localhost:3301/api/portfolio/${idusuario}`)
+        .then((res) => setImagens(res.data))
+        .catch((err) => console.error("Erro ao buscar portfólio:", err));
+    }
   }, [idusuario]);
 
-  const buscarImagens = () => {
-    axios.get(`/api/portfolio/${idusuario}`).then((res) => {
-      setImagens(res.data);
-    });
+  // Adicionar imagem
+  const handleAdicionarImagem = async (e) => {
+    e.preventDefault();
+    if (!novaImagem) return;
+
+    try {
+      const res = await axios.post(
+        `http://localhost:3301/api/portfolio`,
+        {
+          idusuario: idusuario,
+          imagem: novaImagem,
+        }
+      );
+      setImagens((prev) => [...prev, res.data]);
+      setNovaImagem("");
+    } catch (err) {
+      console.error("Erro ao adicionar imagem:", err);
+    }
   };
 
-  const handleAdicionar = () => {
-    if (!novaImagem.trim()) return;
-
-    axios
-      .post("/api/portfolio", { idusuario, imagem: novaImagem })
-      .then(() => {
-        buscarImagens();
-        setNovaImagem("");
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const handleRemover = (imagem) => {
-    axios
-      .delete("/api/portfolio", { data: { idusuario, imagem } })
-      .then(() => buscarImagens())
-      .catch((err) => console.error(err));
+  // Excluir imagem
+  const handleExcluirImagem = async (idportfolio) => {
+    try {
+      await axios.delete(
+        `http://localhost:3301/api/portfolio/${idportfolio}`
+      );
+      setImagens((prev) =>
+        prev.filter((img) => img.idportfolio !== idportfolio)
+      );
+    } catch (err) {
+      console.error("Erro ao excluir imagem:", err);
+    }
   };
 
   return (
-    <div>
-      <div style={{ marginBottom: "1rem" }}>
+    <div className="portfolio-editor">
+      <form onSubmit={handleAdicionarImagem} className="form-portfolio">
         <input
           type="text"
           placeholder="URL da imagem"
           value={novaImagem}
           onChange={(e) => setNovaImagem(e.target.value)}
-          style={{ width: "70%" }}
         />
-        <button onClick={handleAdicionar}>Adicionar</button>
-      </div>
+        <button type="submit">Adicionar</button>
+      </form>
 
-      <div className="portfolio-grid">
-        {imagens.map((img, idx) => (
-          <div key={idx} className="imagem-item" style={{ marginBottom: "1rem" }}>
-            <img src={img.imagem} alt="img" width={120} />
-            <button onClick={() => handleRemover(img.imagem)}>Remover</button>
-          </div>
-        ))}
+      <div className="lista-imagens">
+        {imagens.length > 0 ? (
+          imagens.map((img) => (
+            <div key={img.idportfolio} className="imagem-item">
+              <img src={img.imagem} alt="Portfólio" />
+              <button
+                className="btn-delete"
+                onClick={() => handleExcluirImagem(img.idportfolio)}
+              >
+                <Trash2 size={18} />
+              </button>
+            </div>
+          ))
+        ) : (
+          <p>Você ainda não adicionou imagens.</p>
+        )}
       </div>
     </div>
   );

@@ -42,7 +42,7 @@ const HomeLogado = () => {
                   <h3>Históricos</h3>
                   <GoHistory />
                 </div>
-                <HistoricoList papel="cliente" scope="todos" />
+                <HistoricoList papel="tatuador" scope="todos" />
                 <div className="linha-privacidade">
                   <h3>Privacidade e Segurança</h3>
                   <GoGear />

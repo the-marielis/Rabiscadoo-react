@@ -842,32 +842,39 @@ app.post("/api/avatar/", upload.single("avatar"), async (req, res) => {
 });
 
 //******************************EDITA PORTFOLIO********************************// 
-// Buscar portfólio
-app.get("/api/portfolio/:idusuario", (req, res) => {
-  const { idusuario } = req.params;
-  const sql = "SELECT imagem FROM portfolio WHERE idusuario = ?";
-  db.query(sql, [idusuario], (err, result) => {
-    if (err) return res.status(500).send(err);
-    res.json(result);
+// Upload de imagem no portfólio
+app.post("/api/portfolio", upload.single("arquivo"), (req, res) => {
+  const { idPerfil_tatuador, descricao } = req.body;
+  const arquivo = req.file.filename;
+
+  const sql = `INSERT INTO portfolio (idPerfil_tatuador, descricao, arquivo) VALUES (?, ?, ?)`;
+  db.query(sql, [idPerfil_tatuador, descricao, arquivo], (err, result) => {
+    if (err) return res.status(500).json({ erro: "Erro ao salvar no banco" });
+    res.json({ message: "Imagem salva", id: result.insertId });
   });
 });
 
-// Adicionar imagem
-app.post("/api/portfolio", (req, res) => {
-  const { idusuario, imagem } = req.body;
-  const sql = "INSERT INTO portfolio (idusuario, imagem) VALUES (?, ?)";
-  db.query(sql, [idusuario, imagem], (err, result) => {
-    if (err) return res.status(500).send(err);
-    res.send("Imagem adicionada.");
-  });
-});
+// Deletar imagem do portfólio
+app.delete("/api/portfolio/:id", (req, res) => {
+  const { id } = req.params;
 
-// Remover imagem
-app.delete("/api/portfolio", (req, res) => {
-  const { idusuario, imagem } = req.body;
-  const sql = "DELETE FROM portfolio WHERE idusuario = ? AND imagem = ?";
-  db.query(sql, [idusuario, imagem], (err, result) => {
-    if (err) return res.status(500).send(err);
-    res.send("Imagem removida.");
+  const sqlBusca = "SELECT arquivo FROM portfolio WHERE idportfolio = ?";
+  db.query(sqlBusca, [id], (err, rows) => {
+    if (err || rows.length === 0) {
+      return res.status(404).json({ erro: "Imagem não encontrada" });
+    }
+
+    const nomeArquivo = rows[0].arquivo;
+
+    const sqlDelete = "DELETE FROM portfolio WHERE idportfolio = ?";
+    db.query(sqlDelete, [id], (err) => {
+      if (err) return res.status(500).json({ erro: "Erro ao deletar do banco" });
+
+      fs.unlink(`./uploads/${nomeArquivo}`, (err) => {
+        if (err) console.log("Erro ao deletar arquivo físico:", err);
+      });
+
+      res.json({ message: "Imagem deletada com sucesso" });
+    });
   });
 });
