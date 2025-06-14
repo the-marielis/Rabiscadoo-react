@@ -283,6 +283,23 @@ body, html, #root {
   margin-bottom: 1rem; /* Espaço entre inputs */
   lex-wrap: wrap; /* Garante responsividade */
 }
+ input-groupos-config {
+  padding: 0px 7%;
+}
+.input-groupos-config input,select {
+  width: 50%; /* Isso faz o input ocupar toda a largura da div */
+  box-sizing: border-box; /* Garante que padding/borda não ultrapassem os limites */
+  font-family: var(--fonte-padrao);
+  letter-spacing: 1px;
+  font-weight: lighter;
+  font-size: 1.4rem;
+  color: var(--cor1);
+  padding: 2%;
+  border-radius: 10px;
+  display: block; /* Garante que não haja elementos lado a lado */
+  margin-bottom: 1rem; /* Espaço entre inputs */
+  lex-wrap: wrap; /* Garante responsividade */
+}
 
 .botoes-edicao {
   display: flex;

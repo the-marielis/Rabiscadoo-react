@@ -15,6 +15,7 @@ const Perfil = () => {
   const [toast, setToast] = useState(null);
   const { usuario, logout, buscarUsuario } = useAuth();
   const [editando, setEditando] = useState(false);
+  const [configurando, setConfigurando] = useState(false);
   const [arquivo, setArquivo] = useState(null);
   const [nomeArquivo, setNomeArquivo] = useState("");
   const inputFileRef = useRef(null);
@@ -28,7 +29,11 @@ const Perfil = () => {
     telefone: "",
     nascimento: "",
     avatar: "",
+    senha:"",
+    tp_cadastro: "",
+    editouConfig: false,
   });
+
 
   // Atualiza formData quando usuario for carregado
   useEffect(() => {
@@ -38,14 +43,18 @@ const Perfil = () => {
         email: usuario.email || "",
         telefone: usuario.telefone || "",
         nascimento: converteDataUsa(usuario.nascimento) || "",
-
         avatar: usuario.avatar || "",
+        senha: usuario.senha || "",
+        tp_cadastro: usuario.tp_cadastro || "",
+        editouConfig: false,
       });
     }
   }, [usuario]);
 
   const showToast = (message, type = "error") => setToast({ message, type });
   const toggleEdicao = () => setEditando(!editando);
+  const toggleConfiguracao = () => setConfigurando(!configurando);
+
 
 
 
@@ -71,6 +80,7 @@ const Perfil = () => {
       const imageURL = URL.createObjectURL(file);
       setPreview(imageURL);
     }
+    nomeArquivo;
   };
 
   const deletarConta = () => {
@@ -95,16 +105,10 @@ const Perfil = () => {
   };
 
   const SalvaAvatar = async () => {
-    console.log("TESTE")
     const form = new FormData();
 
     form.append("avatar", arquivo);
     form.append("idusuario", usuario?.idusuario);
-
-    console.log("AAA")
-    console.log(formData.avatar)
-    console.log(arquivo);
-    console.log(nomeArquivo);
 
     try {
       const response = await fetch("http://localhost:3301/api/avatar", {
@@ -123,6 +127,12 @@ const Perfil = () => {
   };
 
   const salvarEdicao = () => {
+    console.log("Entrou aqyu na Edição")
+
+    if (usuario.senha != formData.senha || usuario.tp_cadastro != formData.tp_cadastro) {
+      formData.editouConfig = true;
+    }
+
     axios
         .put(`http://localhost:3301/api/usuario/atualizar/${usuario?.idusuario}`, formData)
         .then(() => {
@@ -134,42 +144,38 @@ const Perfil = () => {
           console.error("Erro ao atualizar dados:", error);
           showToast("Erro ao atualizar dados", "error");
         });
-
+    console.log(deletouAvatar.current,"AAAAAAAAAAAAAAAAAAAA");
     if(deletouAvatar.current){
       console.log("entrou aqui")
-      console.log(preview)
+      console.log(deletouAvatar.current,"BBBBBBBBBBBBBBBB");
       SalvaAvatar();
     }
-
+    setEditando(false);
+    setConfigurando(false);
   };
 
   const deletarAvatar = () => {
     deletouAvatar.current = true;
     setPreview('null');
-
     setArquivo('');
-    console.log("AJUSTE AVATAR",formData.nascimento);
-    console.log("AJUSTE AVATAR",usuario.nascimento);
-
   }
 
   const cancelarEdicao = () => {
     setEditando(false);
-    console.log("editando",formData.nascimento);
-    console.log("editar conta",usuario?.nascimento);
     setFormData({
       nome: usuario?.nome || "",
-      email: usuario?.email | "",
+      email: usuario?.email || "",
       telefone: usuario?.telefone || "",
       nascimento: converteDataUsa(usuario?.nascimento) || "",
       avatar: usuario?.avatar || "",
     });
-
     if(deletouAvatar){
       const url = `http://localhost:3301/${usuario?.avatar}`;
       setPreview(url);
     }
   };
+
+  const cancelarEdicaoConfig = () => {    setConfigurando(false);  };
 
   return (
       <>
@@ -222,7 +228,7 @@ const Perfil = () => {
                             objectFit: "cover",
                             borderRadius: "50%",
                           }}
-                      />,
+                      />
 
 
                   ) : null}
@@ -322,8 +328,50 @@ const Perfil = () => {
             <article className="perfil-box privacidade">
               <div className="linha-privacidade">
                 <h3>Privacidade e Segurança</h3>
-                <GoGear />
+                <div className="goGear">
+
+                  {!configurando && (
+                      <GoGear
+                          onClick={toggleConfiguracao}
+                          style={{ cursor: "pointer", marginBottom: "1rem" }}
+                      />
+                  )}
+                </div>
               </div>
+              {configurando ? (
+                  <>
+                    <div className="input-groupos-config">
+                    <input
+                        type="text"
+                        name="senha"
+                        placeholder="Senha"
+                        value={formData.senha}
+                        onChange={handleChange}
+                    />
+                    <select
+                        type="text"
+                        name="tp_cadastro"
+                        value={formData.tp_cadastro}
+                        onChange={handleChange}
+                    >
+                      {/*<option value="">Selecione o tipo</option>*/}
+                      <option value="rabiscadoo">rabiscadoo</option>
+                      <option value="tatuador">tatuador</option>
+                    </select>
+                    </div>
+
+                  <div className="botoes-edicao">
+                    <button className="botao-salvar" onClick={salvarEdicao}>
+                      Salvar
+                    </button>
+                    <button className="botao-cancelar" onClick={cancelarEdicaoConfig}>
+                      Cancelar
+                    </button>
+                  </div>
+
+                  </>
+                  ) : (
+                  <>
               <p>Alterar senha</p>
               <p>Mudar para perfil profissional</p>
               <p>Alterar preferências da conta</p>
@@ -332,6 +380,9 @@ const Perfil = () => {
                 <br />
                 Deletar conta
               </p>
+              </>
+              )
+              }
             </article>
 
               <article className="perfil-box preferencias">

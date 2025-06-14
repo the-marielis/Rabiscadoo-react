@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
+const {useState} = require("react");
 
 const app = express();
 app.use(cors());
@@ -759,23 +760,36 @@ app.get("/api/historico-agendamentos/:idusuario", (req, res) => {
 
 app.put("/api/usuario/atualizar/:idusuario", (req, res) => {
   const id = req.params.idusuario;
-  const { nome, email, telefone, nascimento } = req.body;
+  const { nome, email, telefone, nascimento,senha,tp_cadastro,editouConfig } = req.body;
+  let query = ``;
+  let values = [];
 
-  console.log("Requisição de atualização recebida para o ID:", id);
+  if (editouConfig){
+    if (!senha || !tp_cadastro ) {
+      console.warn("Campos obrigatórios ausentes na requisição:", req.body);
+      return res.status(400).send({ error: "Todos os campos são obrigatórios." });
+    }
 
-  // Validação básica
-  if (!nome || !email || !telefone || !nascimento) {
-    console.warn("Campos obrigatórios ausentes na requisição:", req.body);
-    return res.status(400).send({ error: "Todos os campos são obrigatórios." });
-  }
+    query =`UPDATE cadastrologin
+    SET senha = ?, tp_cadastro = ?
+    WHERE idusuario = ?
+  `;
 
-  const query = `
-    UPDATE cadastrologin
+    values=[senha,tp_cadastro,id];
+  } else {
+    if (!nome || !email || !telefone || !nascimento) {
+      console.warn("Campos obrigatórios ausentes na requisição:", req.body);
+      return res.status(400).send({ error: "Todos os campos são obrigatórios." });
+    }
+
+    query =`UPDATE cadastrologin
     SET nome = ?, email = ?, telefone = ?, nascimento = ?
     WHERE idusuario = ?
   `;
 
-  const values = [nome, email, telefone, nascimento, id];
+    values=[nome, email, telefone, nascimento, id];
+  }
+
 
   db.query(query, values, (err, result) => {
     if (err) {
