@@ -8,17 +8,20 @@ import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Toast from "./Toast/Toast.jsx";
-import {converteData} from "../Utils/converteData.js";
+import { converteDataBR, converteDataUsa} from "../Utils/converteData.js";
 
 const Perfil = () => {
   const navigate = useNavigate();
   const [toast, setToast] = useState(null);
   const { usuario, logout, buscarUsuario } = useAuth();
   const [editando, setEditando] = useState(false);
+  const [configurando, setConfigurando] = useState(false);
   const [arquivo, setArquivo] = useState(null);
   const [nomeArquivo, setNomeArquivo] = useState("");
   const inputFileRef = useRef(null);
   const [preview, setPreview] = useState(null);
+  const deletouAvatar = useRef(false);
+
 
   const [formData, setFormData] = useState({
     nome: "",
@@ -26,24 +29,32 @@ const Perfil = () => {
     telefone: "",
     nascimento: "",
     avatar: "",
+    senha:"",
+    tp_cadastro: "",
+    editouConfig: false,
   });
+
 
   // Atualiza formData quando usuario for carregado
   useEffect(() => {
-
     if (usuario) {
       setFormData({
         nome: usuario.nome || "",
         email: usuario.email || "",
         telefone: usuario.telefone || "",
-        nascimento: converteData(usuario.nascimento)|| "",
+        nascimento: converteDataUsa(usuario.nascimento) || "",
         avatar: usuario.avatar || "",
+        senha: usuario.senha || "",
+        tp_cadastro: usuario.tp_cadastro || "",
+        editouConfig: false,
       });
     }
   }, [usuario]);
 
   const showToast = (message, type = "error") => setToast({ message, type });
   const toggleEdicao = () => setEditando(!editando);
+  const toggleConfiguracao = () => setConfigurando(!configurando);
+
 
 
 
@@ -69,6 +80,7 @@ const Perfil = () => {
       const imageURL = URL.createObjectURL(file);
       setPreview(imageURL);
     }
+    nomeArquivo;
   };
 
   const deletarConta = () => {
@@ -94,6 +106,7 @@ const Perfil = () => {
 
   const SalvaAvatar = async () => {
     const form = new FormData();
+
     form.append("avatar", arquivo);
     form.append("idusuario", usuario?.idusuario);
 
@@ -114,6 +127,12 @@ const Perfil = () => {
   };
 
   const salvarEdicao = () => {
+    console.log("Entrou aqyu na Edição")
+
+    if (usuario.senha != formData.senha || usuario.tp_cadastro != formData.tp_cadastro) {
+      formData.editouConfig = true;
+    }
+
     axios
         .put(`http://localhost:3301/api/usuario/atualizar/${usuario?.idusuario}`, formData)
         .then(() => {
@@ -125,7 +144,21 @@ const Perfil = () => {
           console.error("Erro ao atualizar dados:", error);
           showToast("Erro ao atualizar dados", "error");
         });
+    console.log(deletouAvatar.current,"AAAAAAAAAAAAAAAAAAAA");
+    if(deletouAvatar.current){
+      console.log("entrou aqui")
+      console.log(deletouAvatar.current,"BBBBBBBBBBBBBBBB");
+      SalvaAvatar();
+    }
+    setEditando(false);
+    setConfigurando(false);
   };
+
+  const deletarAvatar = () => {
+    deletouAvatar.current = true;
+    setPreview('null');
+    setArquivo('');
+  }
 
   const cancelarEdicao = () => {
     setEditando(false);
@@ -133,10 +166,16 @@ const Perfil = () => {
       nome: usuario?.nome || "",
       email: usuario?.email || "",
       telefone: usuario?.telefone || "",
-      nascimento: usuario?.nascimento || "",
+      nascimento: converteDataUsa(usuario?.nascimento) || "",
       avatar: usuario?.avatar || "",
     });
+    if(deletouAvatar){
+      const url = `http://localhost:3301/${usuario?.avatar}`;
+      setPreview(url);
+    }
   };
+
+  const cancelarEdicaoConfig = () => {    setConfigurando(false);  };
 
   return (
       <>
@@ -163,7 +202,7 @@ const Perfil = () => {
                       />
                   )}
                 </div>
-
+              <div  className={"avatar-container"}>
                 <div
                     className="avatar"
                     onClick={handleIconClick}
@@ -181,7 +220,7 @@ const Perfil = () => {
                                   ? `http://localhost:3301/${formData.avatar}`
                                   : "/images/default-avatar.png")
                           }
-                          alt="Avatar"
+                          alt=""
                           className="avatar-img"
                           style={{
                             width: "100%",
@@ -191,7 +230,10 @@ const Perfil = () => {
                           }}
                       />
 
+
                   ) : null}
+
+
 
                   <GoPencil className="avatar-pencil" />
                   <input
@@ -201,12 +243,25 @@ const Perfil = () => {
                       accept="image/*"
                       onChange={handleArquivoChange}
                   />
+
+                </div>
+
+                {editando ? (
+
+                    preview || formData.avatar ? (
+
+                        <button className="botao-avatar" onClick={deletarAvatar}>
+                          Deletar foto
+                        </button>
+
+                    ) : null
+                ):null}
                 </div>
 
                 <div className="dados">
                   <div className="linha-nome">
                     {editando ? (
-                        <div className="input-group">
+                        <div className="input-groupos">
                           <input
                               type="text"
                               name="nome"
@@ -221,7 +276,7 @@ const Perfil = () => {
 
                   {editando ? (
                       <>
-                        <div className="input-group">
+                        <div className="input-groupos">
                           <input
                               type="email"
                               name="email"
@@ -237,10 +292,9 @@ const Perfil = () => {
                           <input
                               type="date"
                               name="nascimento"
-                              value={formData.nascimento}
+                              value={formData.nascimento || ""}
                               onChange={handleChange}
                           />
-
                           <div className="botoes-edicao">
                             <button className="botao-salvar" onClick={salvarEdicao}>
                               Salvar
@@ -256,7 +310,7 @@ const Perfil = () => {
                         <p>{usuario?.email || "email@email.com"}</p>
                         <p>Telefone: {usuario?.telefone || "Não informado"}</p>
                         <p>
-                          Data de nascimento: {formData?.nascimento || "00/00/0000"}
+                          Data de nascimento: {converteDataBR(formData?.nascimento) || "00/00/0000"}
                         </p>
                       </>
                   )}
@@ -274,8 +328,50 @@ const Perfil = () => {
             <article className="perfil-box privacidade">
               <div className="linha-privacidade">
                 <h3>Privacidade e Segurança</h3>
-                <GoGear />
+                <div className="goGear">
+
+                  {!configurando && (
+                      <GoGear
+                          onClick={toggleConfiguracao}
+                          style={{ cursor: "pointer", marginBottom: "1rem" }}
+                      />
+                  )}
+                </div>
               </div>
+              {configurando ? (
+                  <>
+                    <div className="input-groupos-config">
+                    <input
+                        type="text"
+                        name="senha"
+                        placeholder="Senha"
+                        value={formData.senha}
+                        onChange={handleChange}
+                    />
+                    <select
+                        type="text"
+                        name="tp_cadastro"
+                        value={formData.tp_cadastro}
+                        onChange={handleChange}
+                    >
+                      {/*<option value="">Selecione o tipo</option>*/}
+                      <option value="rabiscadoo">rabiscadoo</option>
+                      <option value="tatuador">tatuador</option>
+                    </select>
+                    </div>
+
+                  <div className="botoes-edicao">
+                    <button className="botao-salvar" onClick={salvarEdicao}>
+                      Salvar
+                    </button>
+                    <button className="botao-cancelar" onClick={cancelarEdicaoConfig}>
+                      Cancelar
+                    </button>
+                  </div>
+
+                  </>
+                  ) : (
+                  <>
               <p>Alterar senha</p>
               <p>Mudar para perfil profissional</p>
               <p>Alterar preferências da conta</p>
@@ -284,6 +380,9 @@ const Perfil = () => {
                 <br />
                 Deletar conta
               </p>
+              </>
+              )
+              }
             </article>
 
               <article className="perfil-box preferencias">
