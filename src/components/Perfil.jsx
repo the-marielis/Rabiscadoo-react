@@ -9,6 +9,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Toast from "./Toast/Toast.jsx";
 import { converteDataBR, converteDataUsa} from "../Utils/converteData.js";
+import {logout} from "../services/auth.js";
+import BotaoDeletarConta from "./BotaoDeletarConta/BotaoDeletarConta.jsx";
 
 const Perfil = () => {
   const navigate = useNavigate();
@@ -81,27 +83,6 @@ const Perfil = () => {
       setPreview(imageURL);
     }
     nomeArquivo;
-  };
-
-  const deletarConta = () => {
-    let confirmar = window.confirm("Tem certeza que deseja deletar sua conta?");
-    if (!confirmar) return;
-    confirmar = window.confirm("Tem certeza MESMO?");
-    confirmar = window.confirm("Tem certeza? Faz isso comigo não pufavo");
-
-    axios
-        .delete(`http://localhost:3301/api/usuario/deletar/${usuario?.idusuario}`)
-        .then(() => {
-          showToast("⚠️ USUÁRIO Deletado ⚠️", "success");
-          setTimeout(() => {
-            logout();
-            navigate(`/login`);
-          }, 2000);
-        })
-        .catch((error) => {
-          console.error("Erro ao deletar conta:", error);
-          showToast("Erro ao deletar conta", "error");
-        });
   };
 
   const SalvaAvatar = async () => {
@@ -376,10 +357,11 @@ const Perfil = () => {
               <p>Mudar para perfil profissional</p>
               <p>Alterar preferências da conta</p>
               <p>Ocultar pessoas</p>
-              <p className="delete" onClick={deletarConta}>
-                <br />
-                Deletar conta
-              </p>
+                    <BotaoDeletarConta
+                    idusuario={usuario?.idusuario}
+                    idTatuador={usuario?.idTatuador}
+                    showToast={showToast}
+                    />
               </>
               )
               }

@@ -112,9 +112,16 @@ app.get("/api/usuario/:idusuario", (req, res) => {
       "c.tp_cadastro,\n" +
       " DATE_FORMAT(c.nascimento , '%d/%m/%Y') as nascimento,\n" +
       "c.idusuario,\n" +
-      "c.avatar\n" +
+      "c.avatar,\n" +
+      "p.id as idTatuador,\n" +
+      "p.estilo,\n" +
+      "p.descricao,\n" +
+      "p.imagem,\n" +
+      "p.instagram,\n" +
+      "p.portifolio_url\n" +
       "FROM cadastrologin c\n" +
-      "WHERE idusuario = ?";
+      "left join perfil_tatuador p on (p.idusuario = c.idusuario) \n" +
+      "WHERE c.idusuario = ?";
   db.query(query, [id], (err, results) => {
     if (err) {
       console.error("Erro no servidor:", err);
@@ -688,24 +695,44 @@ app.post("/api/pegaIdAgendamento", (req, res) => {
 
 //************* DELETA USUARIO  ************/
 
-app.delete("/api/usuario/deletar/:idusuario", (req, res) => {
-  const { idusuario } = req.params;
+app.post("/api/usuario/deletar/", (req,res) => {
+  const { idusuario, idTatuador } = req.body;
+  const ehTatuador = idTatuador != null;
+  let sql =``;
 
-  const sql = `
-  delete 
-    from cadastrologin c
-    where c.idusuario = ?;`;
+  if (ehTatuador) {
+    const sqlTatuador = `
+      DELETE FROM perfil_tatuador
+      WHERE idusuario = ?;
+    `;
 
-  db.query(sql, [idusuario], (err, results) => {
+    console.log(sqlTatuador);
+    console.log(ehTatuador);
+    console.log(idusuario,idTatuador);
+
+    db.query(sqlTatuador, [idusuario], (err) => {
+      if (err) {
+        console.error("Erro ao deletar perfil_tatuador:", err);
+        return res.status(500).json({ erro: "Erro ao deletar perfil do tatuador." });
+      }
+      console.log("Perfil de tatuador deletado");
+    });
+  }
+
+  const sqlUsuario = `
+    DELETE FROM cadastrologin
+    WHERE idusuario = ?;
+  `;
+
+  db.query(sqlUsuario, [idusuario], (err) => {
     if (err) {
-      console.error("Erro ao Deletar cadastro do usuario:", err);
-      return res.status(500).json({ erro: "Erro ao Deletar cadastro do usuario." });
+      console.error("Erro ao deletar usuário:", err);
+      return res.status(500).json({ erro: "Erro ao deletar usuário." });
     }
-    console.log("Deleteado usuario", idusuario)
+    console.log("Usuário deletado com sucesso");
     res.json({ sucesso: true });
   });
 });
-
 
 //***************************ROTA HISTÓRICO DE AGENDAMENTOS************************* */
 app.get("/api/historico-agendamentos/:idusuario", (req, res) => {
