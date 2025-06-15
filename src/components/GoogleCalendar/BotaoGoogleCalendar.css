@@ -1,0 +1,16 @@
+.botao-google-calendar {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.botao-google-calendar:hover {
+  background-color: #3367d6;
+}

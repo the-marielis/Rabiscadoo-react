@@ -161,8 +161,6 @@ const HomeLogado = () => {
                         borderRadius: "50%",
                       }}
                   />
-
-
               ) : null}
 
               <GoPencil className="avatar-tatu-pencil" />
@@ -173,8 +171,6 @@ const HomeLogado = () => {
                   accept="image/*"
                   onChange={handleArquivoChange}
               />
-
-
             </div>
 
             {/* Ícone/avatar + dados */}
@@ -217,18 +213,20 @@ const HomeLogado = () => {
             <div>
             <HistoricoList papel="tatuador" scope="proximos" />
             </div>
-            <div className="portfolio">
-              <br />
+<div className="portfolio">
+  <div className="linha-portfolio">
+    <h3>Portfólio</h3>
+    <GoPencil />
+  </div>
 
-              <h3>Portfólio</h3>
-              <GoPencil />
-              <PortfolioCarousel
-                idusuario={usuario?.idusuario}
-                imagensPorPagina={3}
-                modoCompacto={true}
-              />
-              <PortfolioEditor idusuario={usuario?.idusuario} />
-            </div>
+  <PortfolioCarousel
+    idusuario={usuario?.idusuario}
+    imagensPorPagina={3}
+    modoCompacto={true}
+  />
+  <PortfolioEditor idusuario={usuario?.idusuario} />
+</div>
+
           </article>
           <br />
         </div>
