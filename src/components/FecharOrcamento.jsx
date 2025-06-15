@@ -5,12 +5,12 @@ import { ChevronRight } from "lucide-react";
 import { FaTrash, FaChevronLeft, FaArrowRight } from "react-icons/fa";
 import "../css/orcamento.css";
 import Toast from "./Toast/Toast.jsx";
+import BotaoGoogleCalendar from "./GoogleCalendar/BotaoGoogleCalendar.jsx"; 
 
 const FecharOrcamento = () => {
   const { idagendamento } = useParams();
   const navigate = useNavigate();
   const [dados, setDados] = useState(null);
-  const [addToGoogle, setAddToGoogle] = useState(false);
   const [toast, setToast]  = useState(null);
 
   const showToast = (message, type = "error") => setToast({ message, type });
@@ -95,11 +95,7 @@ const FecharOrcamento = () => {
       </div>
 
       <label className="checkbox-linha">
-        <input
-          type="checkbox"
-          checked={addToGoogle}
-          onChange={(e) => setAddToGoogle(e.target.checked)}
-        />
+        <BotaoGoogleCalendar agendamento={dados} />
         Adicionar lembrete à minha agenda do Google
       </label>
        <div className="continuar">
