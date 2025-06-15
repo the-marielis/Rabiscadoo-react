@@ -7,7 +7,17 @@
   overflow: hidden;
   padding: 0;
   box-sizing: border-box;
+  margin: 20px auto;
 }
+
+.section-portfolio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 
 .carousel-container {
   display: flex;
@@ -40,5 +50,9 @@
 
 .portfolio-carousel.compacta .img-portfolio {
   width: 5rem;
-  height: 10rem;
+  height: 5rem;
+}
+
+.portfolio-carousel.compacta {
+  width: 80%;
 }

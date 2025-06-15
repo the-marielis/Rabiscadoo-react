@@ -96,7 +96,6 @@ const FecharOrcamento = () => {
 
       <label className="checkbox-linha">
         <BotaoGoogleCalendar agendamento={dados} />
-        Adicionar lembrete à minha agenda do Google
       </label>
        <div className="continuar">
         <button onClick={handleConfirm}>

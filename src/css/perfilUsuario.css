@@ -63,7 +63,7 @@ body, html, #root {
 .perfil-card {
   background: var(--cor5);
   border-radius: 2rem;
-  padding: 2rem 4rem;
+  padding: 2rem 2rem;
   width: 100%;
   max-width: 1150px;
   position: relative;
@@ -75,15 +75,13 @@ body, html, #root {
   font-family: var(--fonte-cabeçalho);
   font-size: 2.5rem;
   text-align: center;
-  margin: -2% auto 3% auto;
+  margin: -1% auto 1% auto;
   letter-spacing: 0.2rem;
 }
-
-/* Grid de blocos (60% / 40%) */
 .perfil-grid {
   display: grid;
   grid-template-columns: 3fr 2fr;
-  grid-gap: 2rem 2.5rem;
+  grid-gap: 2rem 1rem;
 }
 
 .perfil-box {
@@ -94,13 +92,13 @@ body, html, #root {
 
 .info-principal {
   display: flex;
-  align-items: center;
   grid-column: span 1;
   position: relative;
   padding-top: 2rem; /* caso precise ajustar para o ícone não sobrepor */
 }
 
 .info-principal .avatar {
+  align-items: center;
   width: 90px;
   height: 90px;
   border-radius: 50%;
@@ -189,7 +187,8 @@ body, html, #root {
   display: flex;
   align-items: center;
   justify-content: space-between; 
-  gap: 2.5rem; /* Espaço entre nome e ícone */
+  gap: 2.5rem; 
+  white-space: nowrap; /* Impede quebra de linha */
 }
 
 .linha-privacidade svg {
@@ -402,9 +401,19 @@ body, html, #root {
   transform: scale(1.05);
 }
 
+.linha-portfolio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
+.linha-portfolio h3 {
+  margin: 0;
+}
 
-
+.linha-portfolio svg {
+  cursor: pointer;
+}
 
 .botao-avatar:hover {
   background-color: red; /* verde ou outro efeito */
