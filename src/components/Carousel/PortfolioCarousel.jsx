@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
 import "../Carousel/PortfolioCarousel.css"; // ou crie outro CSS se preferir
 
-function PortfolioCarousel({ idusuario, imagensPorPagina = 5, modoCompacto = false }) {
+function PortfolioCarousel({ idusuario, modoCompacto = false }) {
   const [portfolio, setPortfolio] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [startIndex, setStartIndex] = useState(0);
@@ -26,28 +26,40 @@ function PortfolioCarousel({ idusuario, imagensPorPagina = 5, modoCompacto = fal
     }
   }, [idusuario]);
 
-  const handlePrev = () => {
-    setStartIndex(prev => Math.max(prev - imagensPorPagina, 0));
+  const  handlePrev = () => {
+    setStartIndex((prev) => (prev + 1) % portfolio.length);
   };
 
   const handleNext = () => {
-    setStartIndex(prev =>
-      Math.min(prev + imagensPorPagina, portfolio.length - imagensPorPagina)
+    setStartIndex((prev) =>
+        prev === 0 ? portfolio.length - 1 : prev - 1
     );
   };
 
-  const imagensVisiveis = portfolio.slice(startIndex, startIndex + imagensPorPagina);
+  const imagensVisiveis = () => {
+    const total = portfolio.length;
+    const items = [];
+
+    for (let i = 0; i < 5; i++) {
+      const index = (startIndex + i) % total;
+      items.push(portfolio[index]);
+    }
+
+    return items;
+  };
+
+  const visivel = imagensVisiveis();
 
   if (carregando) return <p>Carregando portfólio...</p>;
   if (!portfolio.length) return <p>Esse profissional ainda não adicionou imagens ao portfólio.</p>;
 
   return (
     <div className={`portfolio-carousel ${modoCompacto ? "compacta" : ""}`}>
-      <button onClick={handlePrev} className="btn-carousel">
+      <button onClick={handleNext} className="btn-carousel">
         <ChevronLeft className="icone-navegacao" />
       </button>
       <div className="carousel-container">
-        {imagensVisiveis.map((item, index) => (
+        {visivel.map((item, index) => (
           <img
             key={index}
             src={item.imagem}
@@ -56,7 +68,7 @@ function PortfolioCarousel({ idusuario, imagensPorPagina = 5, modoCompacto = fal
           />
         ))}
       </div>
-      <button onClick={handleNext} className="btn-carousel">
+      <button onClick={handlePrev} className="btn-carousel">
         <ChevronRight className="icone-navegacao" />
       </button>
     </div>

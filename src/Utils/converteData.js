@@ -3,7 +3,7 @@
  * @param {string} dataISO - Data no formato ISO (ex: "1899-11-30T03:06:28.000Z")
  * @returns {string} - Data formatada no formato dd/MM/yyyy
  */
-export function converteData(dataISO) {
+export function converteDataBR(dataISO) {
     if (!dataISO) return "";
 
     const date = new Date(dataISO);
@@ -16,3 +16,10 @@ export function converteData(dataISO) {
 
     return `${dia}/${mes}/${ano}`;
 }
+
+export function converteDataUsa(dataBR) {
+    if (!dataBR || !dataBR.includes("/")) return ""; // <-- proteção
+    const [dia, mes, ano] = dataBR.split("/");
+    return `${ano}-${mes}-${dia}`;
+}
+

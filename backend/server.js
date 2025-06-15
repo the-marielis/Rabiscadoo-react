@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
+const {useState} = require("react");
 
 const app = express();
 app.use(cors());
@@ -111,9 +112,16 @@ app.get("/api/usuario/:idusuario", (req, res) => {
       "c.tp_cadastro,\n" +
       " DATE_FORMAT(c.nascimento , '%d/%m/%Y') as nascimento,\n" +
       "c.idusuario,\n" +
-      "c.avatar\n"
+      "c.avatar,\n" +
+      "p.id as idTatuador,\n" +
+      "p.estilo,\n" +
+      "p.descricao,\n" +
+      "p.imagem,\n" +
+      "p.instagram,\n" +
+      "p.portifolio_url\n" +
       "FROM cadastrologin c\n" +
-      "WHERE idusuario = ?";
+      "left join perfil_tatuador p on (p.idusuario = c.idusuario) \n" +
+      "WHERE c.idusuario = ?";
   db.query(query, [id], (err, results) => {
     if (err) {
       console.error("Erro no servidor:", err);
@@ -687,24 +695,44 @@ app.post("/api/pegaIdAgendamento", (req, res) => {
 
 //************* DELETA USUARIO  ************/
 
-app.delete("/api/usuario/deletar/:idusuario", (req, res) => {
-  const { idusuario } = req.params;
+app.post("/api/usuario/deletar/", (req,res) => {
+  const { idusuario, idTatuador } = req.body;
+  const ehTatuador = idTatuador != null;
+  let sql =``;
 
-  const sql = `
-  delete 
-    from cadastrologin c
-    where c.idusuario = ?;`;
+  if (ehTatuador) {
+    const sqlTatuador = `
+      DELETE FROM perfil_tatuador
+      WHERE idusuario = ?;
+    `;
 
-  db.query(sql, [idusuario], (err, results) => {
+    console.log(sqlTatuador);
+    console.log(ehTatuador);
+    console.log(idusuario,idTatuador);
+
+    db.query(sqlTatuador, [idusuario], (err) => {
+      if (err) {
+        console.error("Erro ao deletar perfil_tatuador:", err);
+        return res.status(500).json({ erro: "Erro ao deletar perfil do tatuador." });
+      }
+      console.log("Perfil de tatuador deletado");
+    });
+  }
+
+  const sqlUsuario = `
+    DELETE FROM cadastrologin
+    WHERE idusuario = ?;
+  `;
+
+  db.query(sqlUsuario, [idusuario], (err) => {
     if (err) {
-      console.error("Erro ao Deletar cadastro do usuario:", err);
-      return res.status(500).json({ erro: "Erro ao Deletar cadastro do usuario." });
+      console.error("Erro ao deletar usuário:", err);
+      return res.status(500).json({ erro: "Erro ao deletar usuário." });
     }
-    console.log("Deleteado usuario", idusuario)
+    console.log("Usuário deletado com sucesso");
     res.json({ sucesso: true });
   });
 });
-
 
 //***************************ROTA HISTÓRICO DE AGENDAMENTOS************************* */
 app.get("/api/historico-agendamentos/:idusuario", (req, res) => {
@@ -759,23 +787,36 @@ app.get("/api/historico-agendamentos/:idusuario", (req, res) => {
 
 app.put("/api/usuario/atualizar/:idusuario", (req, res) => {
   const id = req.params.idusuario;
-  const { nome, email, telefone, nascimento } = req.body;
+  const { nome, email, telefone, nascimento,senha,tp_cadastro,editouConfig } = req.body;
+  let query = ``;
+  let values = [];
 
-  console.log("Requisição de atualização recebida para o ID:", id);
+  if (editouConfig){
+    if (!senha || !tp_cadastro ) {
+      console.warn("Campos obrigatórios ausentes na requisição:", req.body);
+      return res.status(400).send({ error: "Todos os campos são obrigatórios." });
+    }
 
-  // Validação básica
-  if (!nome || !email || !telefone || !nascimento) {
-    console.warn("Campos obrigatórios ausentes na requisição:", req.body);
-    return res.status(400).send({ error: "Todos os campos são obrigatórios." });
-  }
+    query =`UPDATE cadastrologin
+    SET senha = ?, tp_cadastro = ?
+    WHERE idusuario = ?
+  `;
 
-  const query = `
-    UPDATE cadastrologin
+    values=[senha,tp_cadastro,id];
+  } else {
+    if (!nome || !email || !telefone || !nascimento) {
+      console.warn("Campos obrigatórios ausentes na requisição:", req.body);
+      return res.status(400).send({ error: "Todos os campos são obrigatórios." });
+    }
+
+    query =`UPDATE cadastrologin
     SET nome = ?, email = ?, telefone = ?, nascimento = ?
     WHERE idusuario = ?
   `;
 
-  const values = [nome, email, telefone, nascimento, id];
+    values=[nome, email, telefone, nascimento, id];
+  }
+
 
   db.query(query, values, (err, result) => {
     if (err) {
@@ -795,46 +836,27 @@ app.put("/api/usuario/atualizar/:idusuario", (req, res) => {
 
 //***************************************  Salva Avatar Usuario   *********************************//
 
-// app.post("/api/avatar", upload.single("avatar"), (req, res) => {
-//   const idusuario = req.body.idusuario;
-//   const avatarBuffer = req.file?.buffer;
-//
-//   if (!idusuario || !avatarBuffer) {
-//     return res
-//         .status(400)
-//         .json({ erro: "ID do usuário e avatar são obrigatórios." });
-//   }
-//
-//   const sql = `UPDATE cadastrologin SET avatar = ? WHERE idusuario = ?`;
-//
-//   db.query(sql, [avatarBuffer, idusuario], (err, result) => {
-//     if (err) {
-//       console.error("Erro ao salvar avatar no Banco:", err);
-//       return res.status(500).json({ erro: "Erro ao salvar avatar." });
-//     }
-//
-//     res.json({ mensagem: "Avatar salvo com sucesso!" });
-//   });
-// });
-//
 
 app.post("/api/avatar/", upload.single("avatar"), async (req, res) => {
   try {
     const  userId  = req.body.idusuario;
-    const avatarPath = "uploads/" + req.file.filename;
 
-    // log pra debug
-    console.log("Avatar recebido:", req.file);
-    console.log("UserId recebido:", userId);
-    console.log("UserId recebido:", req.body.idusuario);
 
-    // grava no banco
-    await db.execute("UPDATE cadastrologin c  SET c.avatar = ? WHERE c.idusuario = ?", [
-      avatarPath,
-      userId,
-    ]);
+    if (req.file == null || '' ){
+      await db.execute("UPDATE cadastrologin c  SET avatar = null WHERE idusuario = ?", [
+        userId,
+      ]);
+    } else {
+      const avatarPath =  req.file.filename == null ? null :"uploads/" + req.file.filename;
 
-    res.json({ success: true, path: avatarPath });
+      // grava no banco
+      await db.execute("UPDATE cadastrologin c  SET avatar = ? WHERE idusuario = ?", [
+        avatarPath,
+        userId,
+      ]);
+
+    }
+    res.json({ success: true });
   } catch (error) {
     console.error("Erro ao salvar avatar:", error);
     res.status(500).json({ success: false, message: "Erro ao salvar avatar." });
