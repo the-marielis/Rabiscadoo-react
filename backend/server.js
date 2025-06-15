@@ -862,19 +862,27 @@ app.post("/api/avatar/", upload.single("avatar"), async (req, res) => {
     res.status(500).json({ success: false, message: "Erro ao salvar avatar." });
   }
 });
-
-//******************************EDITA PORTFOLIO********************************// 
-// Upload de imagem no portfólio
 app.post("/api/portfolio", upload.single("arquivo"), (req, res) => {
-  const { idtatuador, descricao } = req.body;  // Mude para idtatuador
-  const arquivo = req.file.filename;
+  const { idtatuador, descricao, imagem } = req.body;
+  let imagemFinal = imagem;
 
-  const sql = `INSERT INTO portfolio (idtatuador, descricao, imagem) VALUES (?, ?, ?)`;  // Mude os nomes das colunas
-  db.query(sql, [idtatuador, descricao, arquivo], (err, result) => {
+
+  if (req.file) {
+    imagemFinal = req.file.filename; // caso tenha sido upload
+  }
+
+  // const sql = `INSERT INTO portfolio (idtatuador, descricao, imagem) VALUES (?, ?, ?)`;
+  const sql = `INSERT INTO portfolio (idtatuador, imagem, descricao) VALUES (?, ?, ?)`;
+  db.query(sql, [idtatuador, descricao, imagemFinal], (err, result) => {
     if (err) return res.status(500).json({ erro: "Erro ao salvar no banco" });
-    res.json({ message: "Imagem salva", id: result.insertId });
+    res.json({ idportfolio: result.insertId, imagem: imagemFinal });
   });
 });
+
+
+
+
+
 
 // Deletar imagem do portfólio
 app.delete("/api/portfolio/:id", (req, res) => {

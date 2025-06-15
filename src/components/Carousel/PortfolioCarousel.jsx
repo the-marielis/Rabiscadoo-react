@@ -60,12 +60,23 @@ function PortfolioCarousel({ idusuario, modoCompacto = false }) {
       </button>
       <div className="carousel-container">
         {visivel.map((item, index) => (
-          <img
-            key={index}
-            src={item.imagem}
-            alt={`Imagem do portfólio ${index + 1}`}
-            className="img-portfolio"
+            item.id > 28 ? (
+                  <img
+                      key={index}
+                      // src={'http://localhost:5173/images/fulana.png'}
+                      src={String(item.descricao)}
+                      alt={`Imagem do portfólio ${index + 1}`}
+                      className="img-portfolio"
+                  />
+              ) : (
+                  <img
+              key={index}
+              src={item.imagem}
+              alt={`Imagem do portfólio ${index + 1}`}
+              className="img-portfolio"
+
           />
+          )
         ))}
       </div>
       <button onClick={handlePrev} className="btn-carousel">
