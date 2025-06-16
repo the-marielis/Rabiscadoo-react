@@ -9,6 +9,7 @@ const PortfolioEditor = ({ idusuario }) => {
   const [arquivo, setArquivo] = useState(null);
   const [nomeArquivo, setNomeArquivo] = useState("");
   const inputFileRef = useRef(null);
+  
 
   const [formData, setFormData] = useState({
    url_imagem: "",

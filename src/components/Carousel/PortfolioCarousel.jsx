@@ -1,10 +1,9 @@
-// src/components/PortfolioCarousel.jsx
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 import axios from "axios";
-import "../Carousel/PortfolioCarousel.css"; // ou crie outro CSS se preferir
+import "../Carousel/PortfolioCarousel.css";
 
-function PortfolioCarousel({ idusuario, modoCompacto = false }) {
+function PortfolioCarousel({ idusuario, modoEdicao = false, modoCompacto = false }) {
   const [portfolio, setPortfolio] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [startIndex, setStartIndex] = useState(0);
@@ -26,13 +25,24 @@ function PortfolioCarousel({ idusuario, modoCompacto = false }) {
     }
   }, [idusuario]);
 
-  const  handlePrev = () => {
+  const handleExcluirImagem = async (idportfolio) => {
+    try {
+      await axios.delete(`http://localhost:3301/api/portfolio/${idportfolio}`);
+      setPortfolio((prev) =>
+        prev.filter((img) => img.idportfolio !== idportfolio)
+      );
+    } catch (err) {
+      console.error("Erro ao excluir imagem:", err);
+    }
+  };
+
+  const handlePrev = () => {
     setStartIndex((prev) => (prev + 1) % portfolio.length);
   };
 
   const handleNext = () => {
     setStartIndex((prev) =>
-        prev === 0 ? portfolio.length - 1 : prev - 1
+      prev === 0 ? portfolio.length - 1 : prev - 1
     );
   };
 
@@ -60,23 +70,29 @@ function PortfolioCarousel({ idusuario, modoCompacto = false }) {
       </button>
       <div className="carousel-container">
         {visivel.map((item, index) => (
-            item.id > 28 ? (
-                  <img
-                      key={index}
-                      // src={'http://localhost:5173/images/fulana.png'}
-                      src={String(item.descricao)}
-                      alt={`Imagem do portfólio ${index + 1}`}
-                      className="img-portfolio"
-                  />
-              ) : (
-                  <img
-              key={index}
-              src={item.imagem}
-              alt={`Imagem do portfólio ${index + 1}`}
-              className="img-portfolio"
-
-          />
-          )
+          <div key={index} className="imagem-container">
+            {item.id > 28 ? (
+              <img
+                src={String(item.descricao)}
+                alt={`Imagem do portfólio ${index + 1}`}
+                className="img-portfolio"
+              />
+            ) : (
+              <img
+                src={item.imagem}
+                alt={`Imagem do portfólio ${index + 1}`}
+                className="img-portfolio"
+              />
+            )}
+            {modoEdicao && (
+              <button
+                className="btn-delete"
+                onClick={() => handleExcluirImagem(item.idportfolio)}
+              >
+                <Trash2 size={18} />
+              </button>
+            )}
+          </div>
         ))}
       </div>
       <button onClick={handlePrev} className="btn-carousel">

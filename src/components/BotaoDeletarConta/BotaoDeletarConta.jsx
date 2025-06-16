@@ -33,8 +33,7 @@ const BotaoDeletarConta = ({ idusuario, idTatuador, showToast }) => {
     };
 
     return (
-        <p className="delete" onClick={deletarConta}>
-            <br />
+        <p className="delete" onClick={deletarConta} style={{ marginTop: "2%" }}>
             Deletar conta
         </p>
     );

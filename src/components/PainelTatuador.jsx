@@ -22,6 +22,10 @@ const HomeLogado = () => {
   const [nomeArquivo, setNomeArquivo] = useState("");
   const inputFileRef = useRef(null);
   const [preview, setPreview] = useState(null);
+  const [modoEdicao, setModoEdicao] = useState(false);
+  const alternarModoEdicao = () => {
+    setModoEdicao(!modoEdicao);
+  };
 
   const [formData, setFormData] = useState({
     idususario: "",
@@ -216,21 +220,34 @@ const HomeLogado = () => {
               <div className="portfolio">
                 <div className="linha-portfolio">
                   <h3>Portfólio</h3>
-                  <GoPencil />
+                  <GoPencil
+                    size={22}
+                    className={`icone-editar ${modoEdicao ? "ativo" : ""}`}
+                    onClick={alternarModoEdicao}
+                    title={
+                      modoEdicao
+                        ? "Sair do modo edição"
+                        : "Entrar no modo edição"
+                    }
+                  />
                 </div>
 
                 <PortfolioCarousel
                   idusuario={usuario?.idusuario}
+                  modoEdicao={modoEdicao}
                   imagensPorPagina={3}
                   modoCompacto={true}
                 />
-                <PortfolioEditor idusuario={usuario?.idusuario} />
-              </div> <br /><br /><br /><br />
-              <span className="span-continuar">
+                {modoEdicao && (
+                  <PortfolioEditor idusuario={usuario?.idusuario} />
+                )}
+              </div>{" "}
+              <br />
+              <br />
+              <br />
+              <br />
               <BotaoContinuar texto="confirmar" largura="35%" />
-              </span>
             </article>
-            
           </div>
         </section>
       </div>

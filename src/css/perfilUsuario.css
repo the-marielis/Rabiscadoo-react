@@ -159,7 +159,7 @@ body, html, #root {
 
 .info-principal .dados h2 {
   font-size: clamp(1rem, 2vw, 1.4rem);
-  margin-bottom: 0.1rem;
+  margin-bottom: -0.5rem;
   font-family: var(--fonte-cabeçalho);
   letter-spacing: 0.04rem;
 }
@@ -181,6 +181,7 @@ body, html, #root {
   align-items: center;
   justify-content: space-between; 
   gap: 2.5rem; /* Espaço entre nome e ícone */
+  margin-bottom: -0.8rem;
 }
 
 .linha-historicos svg {
@@ -223,7 +224,6 @@ body, html, #root {
 }
 
 .delete {
-  margin-top: 1%;
   color: #e84141;
   font-weight: 600;
   cursor: pointer;
