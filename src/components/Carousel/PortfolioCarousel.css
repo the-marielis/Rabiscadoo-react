@@ -18,10 +18,10 @@
   width: 100%;
 }
 
+
 .carousel-container {
   display: flex;
   overflow: hidden;
-  scrollbar-width: none;
   max-width: 100%;
   width: 100%;
 }
