@@ -862,16 +862,15 @@ app.post("/api/avatar/", upload.single("avatar"), async (req, res) => {
     res.status(500).json({ success: false, message: "Erro ao salvar avatar." });
   }
 });
-app.post("/api/portfolio", upload.single("arquivo"), (req, res) => {
+// Salva portifolio
+app.post("/api/portfolio", upload.single("arquivo"), async (req, res) => {
   const { idtatuador, descricao, imagem } = req.body;
   let imagemFinal = imagem;
 
-
   if (req.file) {
-    imagemFinal = req.file.filename; // caso tenha sido upload
+    imagemFinal =  req.file.filename == null ? null :"http://localhost:3301/uploads/" + req.file.filename;
   }
 
-  // const sql = `INSERT INTO portfolio (idtatuador, descricao, imagem) VALUES (?, ?, ?)`;
   const sql = `INSERT INTO portfolio (idtatuador, imagem, descricao) VALUES (?, ?, ?)`;
   db.query(sql, [idtatuador, descricao, imagemFinal], (err, result) => {
     if (err) return res.status(500).json({ erro: "Erro ao salvar no banco" });
