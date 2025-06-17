@@ -5,7 +5,8 @@
   margin: 0.5rem 0 0 0;
   border-radius: 8px;
   background-color: transparent; 
-  min-height: 0; 
+  min-height: 0;
+  max-height: 220px;
 }
 
 .historico-list::-webkit-scrollbar {

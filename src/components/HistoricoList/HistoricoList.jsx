@@ -6,6 +6,7 @@ import "./HistoricoList.css";      // se quiser estilizar separado
 const HistoricoList = ({
   papel  = "cliente",   // "cliente" ou "tatuador"
   scope  = "todos",     // "todos" | "proximos" | "passados"
+  style  = {}
 }) => {
   const { usuario } = useAuth();
   const [itens, setItens]     = useState([]);
@@ -28,7 +29,7 @@ const HistoricoList = ({
   if (!itens.length) return <p>Nenhum agendamento.</p>;
 
   return (
-    <ul className="historico-list">
+    <ul className="historico-list" style={style}>
       {itens.map((item) => (
         <li key={item.idagendamento} className="historico-item">
           <span className="data">{item.data} às {item.hora}</span>

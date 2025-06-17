@@ -6,15 +6,15 @@ import { useAuth } from "../context/AuthContext";
 import HistoricoList from "../components/HistoricoList/HistoricoList";
 import PortfolioCarousel from "../components/Carousel/PortfolioCarousel";
 import PortfolioEditor from "../components/PortfolioEditor/PortfolioEditor.jsx";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import Toast from "./Toast/Toast.jsx";
 import React, { useEffect, useRef, useState } from "react";
-import { converteDataUsa } from "../Utils/converteData.js";
+import {converteDataBR, converteDataUsa} from "../Utils/converteData.js";
 import BotaoDeletarConta from "../components/BotaoDeletarConta/BotaoDeletarConta.jsx";
 import axios from "axios";
 
 const HomeLogado = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [toast, setToast] = useState(null);
   const { usuario, buscarUsuario } = useAuth();
   const [editando, setEditando] = useState(false);
@@ -69,6 +69,7 @@ const HomeLogado = () => {
   const showToast = (message, type = "error") => setToast({ message, type });
   const toggleEdicao = () => setEditando(!editando);
   const toggleConfiguracao = () => setConfigurando(!configurando);
+  const cancelarEdicaoConfig = () => {    setConfigurando(false);  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -109,7 +110,7 @@ const HomeLogado = () => {
 
       const data = await response.json();
       console.log(data);
-      await buscarUsuario(usuario?.idusuario); // Atualiza o contexto
+      // await buscarUsuario(usuario?.idusuario); // Atualiza o contexto
       showToast("Avatar salvo com sucesso!", "success");
     } catch (error) {
       console.error("Erro ao enviar avatar:", error);
@@ -317,7 +318,9 @@ const HomeLogado = () => {
                 <h3>Próximos Agendamentos</h3>
               </div>
               <div>
-                <HistoricoList papel="tatuador" scope="proximos" />
+                <HistoricoList papel="tatuador" scope="proximos"
+                               style={{ maxHeight: "140px" }}
+                />
               </div>
               <div className="portfolio">
                 <div className="linha-portfolio">

@@ -5,15 +5,14 @@ import "./portfolioEditor.css";
 
 const PortfolioEditor = ({ idusuario }) => {
   const [imagens, setImagens] = useState([]);
+  const [toast, setToast] = useState(null);
   const [novaImagem, setNovaImagem] = useState("");
   const [arquivo, setArquivo] = useState(null);
   const [nomeArquivo, setNomeArquivo] = useState("");
   const inputFileRef = useRef(null);
-  
-
-  const [formData, setFormData] = useState({
-   url_imagem: "",
-  });
+  const showToast = (message, type = "error") => setToast({ message, type });
+  const [previews, setPreviews] = useState([]);
+  const [formData, setFormData] = useState({url_imagem: "",});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,33 +37,10 @@ const PortfolioEditor = ({ idusuario }) => {
     if (file) {
       setArquivo(file);
       setNomeArquivo(file.name);
-      formData.url_imagem = URL.createObjectURL(file);
-      // setPreview(imageURL);
-    }
-    nomeArquivo;
-  };
-  // const handleIconClick = () => {
-  //   if (inputFileRef.current) {
-  //     inputFileRef.current.click();
-  //   }
-  // };
 
-  const handleAdicionarImagem = async (e) => {
-    e.preventDefault();
-    if (!novaImagem) return;
-
-    try {
-      const res = await axios.post(
-        `http://localhost:3301/api/portfolio`,
-        {
-          idusuario: idusuario,
-          imagem: novaImagem,
-        }
-      );
-      setImagens((prev) => [...prev, res.data]);
-      setNovaImagem("");
-    } catch (err) {
-      console.error("Erro ao adicionar imagem:", err);
+      const urlPreview = URL.createObjectURL(file);
+      setPreviews((prev) => [...prev, { src: urlPreview, tipo: "upload", arquivo: file }]);
+      setFormData((prev) => ({ ...prev, url_imagem: "" }));
     }
   };
 
@@ -81,57 +57,57 @@ const PortfolioEditor = ({ idusuario }) => {
     }
   };
 
+  const removerPreview = (index) => {
+    setPreviews((prev) => prev.filter((_, i) => i !== index));
+  };
 
+  const validaInputImagem = () => {
+    if (formData.url_imagem.trim() === "") {
+      inputFileRef.current.click();
+    } else {
+      setPreviews((prev) => [...prev, { src: formData.url_imagem, tipo: "url" }]);
+      setFormData((prev) => ({ ...prev, url_imagem: "" }));
+    }
+  };
 
   const adicionaImagem = async () => {
-    // Se for URL
-    if (formData.url_imagem.trim() !== "") {
-      console.log("Entrou aqui")
+    for (const preview of previews) {
+      if (preview.tipo === "url") {
+        try {
+          const res = await axios.post("http://localhost:3301/api/portfolio", {
+            idtatuador: idusuario,
+            descricao: "Imagem por URL",
+            imagem: preview.src,
+          });
+          setImagens((prev) => [...prev, res.data]);
+        } catch (err) {
+          console.error("Erro ao enviar imagem por URL:", err);
+        }
+      } else if (preview.tipo === "upload") {
+        const fd = new FormData();
+        fd.append("arquivo", preview.arquivo);
+        fd.append("idtatuador", idusuario);
+        fd.append("descricao", "Imagem enviada por upload");
 
-      try {
-        const res = await axios.post("http://localhost:3301/api/portfolio", {
-          idtatuador: idusuario,
-          descricao: "Imagem por URL",
-          imagem: formData.url_imagem,
-        });
-        setImagens((prev) => [...prev, res.data]);
-        setFormData({ url_imagem: "" });
-      } catch (err) {
-        console.error("Erro ao enviar imagem por URL:", err);
+        try {
+          const res = await axios.post("http://localhost:3301/api/portfolio", fd, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+          setImagens((prev) => [...prev, res.data]);
+        } catch (err) {
+          console.error("Erro ao enviar imagem por upload:", err);
+        }
       }
     }
-    // Se for upload de arquivo
-    else if (arquivo) {
-      const fd = new FormData();
-      fd.append("arquivo", arquivo);
-      fd.append("idtatuador", idusuario);
-      fd.append("descricao", "Imagem enviada por upload");
 
-      try {
-        const res = await axios.post("http://localhost:3301/api/portfolio", fd, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        setImagens((prev) => [...prev, res.data]);
-
-        setArquivo(null);
-      } catch (err) {
-        console.error("Erro ao enviar imagem por upload:", err);
-      }
-    }
-    // Se nenhum dos dois foi preenchido
-    else {
-      if (inputFileRef.current) {
-        inputFileRef.current.click(); // abre seleção de imagem
-      }
-    }
+    setPreviews([]);
+    showToast("Imagens salvas com sucesso!", "success");
   };
 
 
   return (
     <div className="portfolio-editor">
-      <form onSubmit={handleAdicionarImagem} className="form-portfolio">
+      <form  className="form-portfolio">
         <input
           type="text"
           name={"url_imagem"}
@@ -146,27 +122,21 @@ const PortfolioEditor = ({ idusuario }) => {
             accept="image/*"
             onChange={handleArquivoChange}
         />
-        <button type="button" onClick={adicionaImagem}>Adicionar</button>
+        <button type="button" onClick={validaInputImagem}>preview</button>
+        <button type="button" onClick={adicionaImagem}>miau</button>
 
-      </form>
+      </form         >
 
       <div className="lista-imagens">
-        {imagens.length > 0 ? (
-          imagens.map((img) => (
-            <div key={img.idportfolio} className="imagem-item">
-                    <img src={img.imagem} alt="Portfólio" />
-                    {/*<img src={formData.url_imagem} alt="Portfólio" />*/}
-              <button
-                className="btn-delete"
-                onClick={() => handleExcluirImagem(img.idportfolio)}
-              >
+        {previews.map((preview, index) => (
+            <div key={index} className="imagem-item preview-item">
+              <img src={preview.src} alt="Preview da imagem" />
+              <button className="btn-delete" onClick={() => removerPreview(index)}>
                 <Trash2 size={18} />
               </button>
             </div>
-          ))
-        ) : (
-          <p>Você ainda não adicionou imagens.</p>
-        )}
+        ))}
+
       </div>
     </div>
   );
