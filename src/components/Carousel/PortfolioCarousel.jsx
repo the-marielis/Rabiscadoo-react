@@ -7,6 +7,7 @@ function PortfolioCarousel({ idusuario, modoEdicao = false, modoCompacto = false
   const [portfolio, setPortfolio] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [startIndex, setStartIndex] = useState(0);
+  const [remove, setremove] = useState([]);
 
   useEffect(() => {
     const buscarPortfolio = async () => {
@@ -25,34 +26,40 @@ function PortfolioCarousel({ idusuario, modoEdicao = false, modoCompacto = false
     }
   }, [idusuario]);
 
-  const handleExcluirImagem = async (idportfolio) => {
+  const handleExcluirImagem = async (imagem) => {
+    let confirmar = window.confirm("Tem certeza que deseja deletar está imagem??");
+    if (!confirmar) return;
+    confirmar = window.confirm("Tem certeza MESMO?");
+    console.log(imagem);
+    console.log(remove);
+    setremove([...remove, imagem.id]);
+
+
     try {
-      await axios.delete(`http://localhost:3301/api/portfolio/${idportfolio}`);
+      await axios.delete(`http://localhost:3301/api/portfolio/${imagem.id}`);
       setPortfolio((prev) =>
-        prev.filter((img) => img.idportfolio !== idportfolio)
+        prev.filter((img) => img.idportfolio !== imagem.id)
       );
     } catch (err) {
       console.error("Erro ao excluir imagem:", err);
     }
   };
 
-  const handlePrev = () => {
-    setStartIndex((prev) => (prev + 1) % portfolio.length);
-  };
+  const handlePrev = () => {setStartIndex((prev) => (prev + 1) % total);};
 
-  const handleNext = () => {
-    setStartIndex((prev) =>
-      prev === 0 ? portfolio.length - 1 : prev - 1
-    );
-  };
+  const handleNext = () => {setStartIndex((prev) =>  prev === 0 ? total - 1 : prev - 1
+    );};
+
+  const imagensFiltradas = portfolio.filter((item) => !remove.includes(item.id));
+  const total = imagensFiltradas.length;
 
   const imagensVisiveis = () => {
-    const total = portfolio.length;
     const items = [];
+    let index = startIndex;
 
-    for (let i = 0; i < 5; i++) {
-      const index = (startIndex + i) % total;
-      items.push(portfolio[index]);
+    while (items.length < 5 && total > 0) {
+      items.push(imagensFiltradas[index % total]);
+      index++;
     }
 
     return items;
@@ -69,9 +76,11 @@ function PortfolioCarousel({ idusuario, modoEdicao = false, modoCompacto = false
         <ChevronLeft className="icone-navegacao" />
       </button>
       <div className="carousel-container">
-        {visivel.map((item, index) => (
+        {visivel
+            .filter((item) => !remove.includes(item.id))
+            .map((item, index) => (
           <div key={index} className="imagem-container">
-            {item.id > 28 ? (
+            {(item.id > 28 && !remove.includes(item.id)) ? (
               <img
                 src={String(item.descricao)}
                 alt={`Imagem do portfólio ${index + 1}`}
@@ -87,7 +96,7 @@ function PortfolioCarousel({ idusuario, modoEdicao = false, modoCompacto = false
             {modoEdicao && (
               <button
                 className="btn-delete"
-                onClick={() => handleExcluirImagem(item.idportfolio)}
+                onClick={() => handleExcluirImagem(item)}
               >
                 <Trash2 size={18} />
               </button>

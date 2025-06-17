@@ -887,23 +887,26 @@ app.post("/api/portfolio", upload.single("arquivo"), async (req, res) => {
 app.delete("/api/portfolio/:id", (req, res) => {
   const { id } = req.params;
 
-  const sqlBusca = "SELECT imagem FROM portfolio WHERE id = ?";  // Já está correto
-  db.query(sqlBusca, [id], (err, rows) => {
-    if (err || rows.length === 0) {
-      return res.status(404).json({ erro: "Imagem não encontrada" });
-    }
+  console.log("OLHA O ID")
+  console.log(id)
 
-    const nomeArquivo = rows[0].imagem;  // Mude de 'arquivo' para 'imagem'
+  // const sqlBusca = "SELECT imagem FROM portfolio WHERE id = ?";
+  // db.query(sqlBusca, [id], (err, rows) => {
+  //   if (err || rows.length === 0) {
+  //     return res.status(404).json({ erro: "Imagem não encontrada" });
+  //   }
+
+    // const nomeArquivo = rows[0].imagem;  // Mude de 'arquivo' para 'imagem'
 
     const sqlDelete = "DELETE FROM portfolio WHERE id = ?";
     db.query(sqlDelete, [id], (err) => {
       if (err) return res.status(500).json({ erro: "Erro ao deletar do banco" });
 
-      fs.unlink(`./uploads/${nomeArquivo}`, (err) => {
-        if (err) console.log("Erro ao deletar arquivo físico:", err);
-      });
+      // fs.unlink(`./uploads/${nomeArquivo}`, (err) => {
+      //   if (err) console.log("Erro ao deletar arquivo físico:", err);
+      // });
 
       res.json({ message: "Imagem deletada com sucesso" });
-    });
+    // });
   });
 });
