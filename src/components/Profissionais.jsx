@@ -94,7 +94,7 @@ export default function CatalogoProfissionais() {
       <section className="secao-profissionais">
         <h2 className="titulo-profissionais">Conheça os brabos</h2>
         <div className="container-carrossel">
-          <button className="botao-navegacao esquerdo" onClick={handlePrev}>
+          <button className="botao-navegacao esquerdo" onClick={handleNext}>
             <ChevronLeft className="icone-navegacao" />
           </button>
 
@@ -124,7 +124,7 @@ export default function CatalogoProfissionais() {
             ))}
           </div>
 
-          <button className="botao-navegacao direito" onClick={handleNext}>
+          <button className="botao-navegacao direito" onClick={handlePrev}>
             <ChevronRight className="icone-navegacao" />
           </button>
         </div>
