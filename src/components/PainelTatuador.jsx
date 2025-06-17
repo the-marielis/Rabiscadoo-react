@@ -11,29 +11,30 @@ import Toast from "./Toast/Toast.jsx";
 import React, { useEffect, useRef, useState } from "react";
 import { converteDataUsa } from "../Utils/converteData.js";
 import BotaoDeletarConta from "../components/BotaoDeletarConta/BotaoDeletarConta.jsx";
+import axios from "axios";
 
 const HomeLogado = () => {
   const navigate = useNavigate();
   const [toast, setToast] = useState(null);
-  const { usuario } = useAuth();
+  const { usuario, buscarUsuario } = useAuth();
   const [editando, setEditando] = useState(false);
   const [configurando, setConfigurando] = useState(false);
   const [arquivo, setArquivo] = useState(null);
   const [nomeArquivo, setNomeArquivo] = useState("");
   const inputFileRef = useRef(null);
   const [preview, setPreview] = useState(null);
+  const deletouAvatar = useRef(false); // Para verificar se o avatar foi deletado
   const [modoEdicao, setModoEdicao] = useState(false);
   const alternarModoEdicao = () => {
     setModoEdicao(!modoEdicao);
   };
 
   const [formData, setFormData] = useState({
-    idususario: "",
     nome: "",
     email: "",
     telefone: "",
     nascimento: "",
-    avatar: null,
+    avatar: "",
     senha: "",
     tp_cadastro: "",
     editouConfig: false,
@@ -48,12 +49,11 @@ const HomeLogado = () => {
   useEffect(() => {
     if (usuario) {
       setFormData({
-        idusuario: usuario.idusuario || "",
         nome: usuario.nome || "",
         email: usuario.email || "",
         telefone: usuario.telefone || "",
         nascimento: converteDataUsa(usuario.nascimento) || "",
-        avatar: usuario.avatar || null,
+        avatar: usuario.avatar || "",
         senha: usuario.senha || "",
         tp_cadastro: usuario.tp_cadastro || "",
         editouConfig: false,
@@ -116,6 +116,54 @@ const HomeLogado = () => {
       showToast("Erro ao salvar avatar", "error");
     }
   };
+
+  const salvarEdicao = () => {
+
+    if (usuario.senha != formData.senha || usuario.tp_cadastro != formData.tp_cadastro) {
+      formData.editouConfig = true;
+    }
+    console.log("Enviando esses dados:", formData);
+
+    axios
+        .put(`http://localhost:3301/api/usuario/atualizar/${usuario?.idusuario}`, formData)
+        .then(() => {
+          showToast("Dados atualizados com sucesso", "success");
+          setEditando(false);
+          buscarUsuario(usuario?.idusuario); // Atualiza os dados do usuário
+        })
+        .catch((error) => {
+          console.error("Erro ao atualizar dados:", error);
+          showToast("Erro ao atualizar dados", "error");
+        });
+    if(deletouAvatar.current){
+      SalvaAvatar();
+    }
+    setEditando(false);
+    setConfigurando(false);
+  };
+
+  const deletarAvatar = () => {
+    deletouAvatar.current = true;
+    setPreview('null');
+    setArquivo('');
+  }
+
+  const cancelarEdicao = () => {
+    setEditando(false);
+    setFormData({
+      nome: usuario?.nome || "",
+      email: usuario?.email || "",
+      telefone: usuario?.telefone || "",
+      nascimento: converteDataUsa(usuario?.nascimento) || "",
+      avatar: usuario?.avatar || "",
+    });
+    if(deletouAvatar){
+      const url = `http://localhost:3301/${usuario?.avatar}`;
+      setPreview(url);
+    }
+  };
+
+  const cancelarEdicaoConfig = () => {    setConfigurando(false);  };
 
   return (
     <>
@@ -180,34 +228,88 @@ const HomeLogado = () => {
               {/* Ícone/avatar + dados */}
 
               <div className="dados">
-                <div className="linha-nome">
-                  <h2>{usuario?.nome || "Nome do Tatuador"}</h2>
-                  <GoPencil />
-                </div>
-                <p>{usuario?.email || "email@email.com"}</p>
-                <p>Telefone: {usuario?.telefone || "Não informado"}</p>
-                <p>Data de nascimento: {usuario?.nascimento || "00/00/0000"}</p>
-                <div className="linha-informacoes">
-                  <div className="linha-historicos">
-                    <h3>Históricos</h3>
-                    <GoHistory />
-                  </div>
-                  <HistoricoList papel="tatuador" scope="todos" />
-                  <div className="linha-privacidade">
-                    <h3>Privacidade e Segurança</h3>
-                    <GoGear />
-                  </div>
-                  <p>Alterar senha</p>
-                  <p>Mudar para perfil profissional</p>
-                  <p>Alterar preferências da conta</p>
-                  <p>Ocultar pessoas</p>
-                  <BotaoDeletarConta
-                    idusuario={usuario?.idusuario}
-                    idTatuador={usuario?.idTatuador}
-                    showToast={showToast}
-                  />
-                </div>
-              </div>
+  {editando ? (
+    <>
+      <div className="linha-nome">
+        <input
+          type="text"
+          name="nome"
+          value={formData.nome}
+          onChange={handleChange}
+          placeholder="Nome"
+        />
+        <GoPencil onClick={cancelarEdicao} title="Cancelar edição" />
+      </div>
+      <input
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        placeholder="Email"
+      />
+      <input
+        type="text"
+        name="telefone"
+        value={formData.telefone}
+        onChange={handleChange}
+        placeholder="Telefone"
+      />
+      <input
+        type="date"
+        name="nascimento"
+        value={formData.nascimento}
+        onChange={handleChange}
+      />
+
+      <div className="botoes-edicao">
+        <button onClick={salvarEdicao} className="botao-salvar">
+          Salvar
+        </button>
+        <button onClick={cancelarEdicao} className="botao-cancelar">
+          Cancelar
+        </button>
+      </div>
+    </>
+  ) : (
+    <>
+      <div className="linha-nome">
+        <h2>{usuario?.nome || "Nome do Tatuador"}</h2>
+        <GoPencil
+          onClick={toggleEdicao}
+          className="icone-editar"
+          title="Editar dados pessoais"
+        />
+      </div>
+      <p>{usuario?.email || "email@email.com"}</p>
+      <p>Telefone: {usuario?.telefone || "Não informado"}</p>
+      <p>
+        Data de nascimento: {usuario?.nascimento || "00/00/0000"}
+      </p>
+    </>
+  )}
+
+  <div className="linha-informacoes">
+    <div className="linha-historicos">
+      <h3>Históricos</h3>
+      <GoHistory />
+    </div>
+    <HistoricoList papel="tatuador" scope="todos" />
+    <div className="linha-privacidade">
+      <h3>Privacidade e Segurança</h3>
+      <GoGear />
+    </div>
+    <p>Alterar senha</p>
+    <p>Mudar para perfil profissional</p>
+    <p>Alterar preferências da conta</p>
+    <p>Ocultar pessoas</p>
+    <BotaoDeletarConta
+      idusuario={usuario?.idusuario}
+      idTatuador={usuario?.idTatuador}
+      showToast={showToast}
+    />
+  </div>
+</div>
+
             </article>
 
             <article className="perfil-box agendamentos">

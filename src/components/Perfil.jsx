@@ -57,9 +57,6 @@ const Perfil = () => {
   const toggleEdicao = () => setEditando(!editando);
   const toggleConfiguracao = () => setConfigurando(!configurando);
 
-
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -108,7 +105,6 @@ const Perfil = () => {
   };
 
   const salvarEdicao = () => {
-    console.log("Entrou aqyu na Edição")
 
     if (usuario.senha != formData.senha || usuario.tp_cadastro != formData.tp_cadastro) {
       formData.editouConfig = true;
@@ -125,10 +121,7 @@ const Perfil = () => {
           console.error("Erro ao atualizar dados:", error);
           showToast("Erro ao atualizar dados", "error");
         });
-    console.log(deletouAvatar.current,"AAAAAAAAAAAAAAAAAAAA");
     if(deletouAvatar.current){
-      console.log("entrou aqui")
-      console.log(deletouAvatar.current,"BBBBBBBBBBBBBBBB");
       SalvaAvatar();
     }
     setEditando(false);
@@ -213,8 +206,6 @@ const Perfil = () => {
 
 
                   ) : null}
-
-
 
                   <GoPencil className="avatar-pencil" />
                   <input
