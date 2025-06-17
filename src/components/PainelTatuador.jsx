@@ -6,14 +6,15 @@ import { useAuth } from "../context/AuthContext";
 import HistoricoList from "../components/HistoricoList/HistoricoList";
 import PortfolioCarousel from "../components/Carousel/PortfolioCarousel";
 import PortfolioEditor from "../components/PortfolioEditor/PortfolioEditor.jsx";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import Toast from "./Toast/Toast.jsx";
 import React, { useEffect, useRef, useState } from "react";
-import { converteDataUsa } from "../Utils/converteData.js";
+import {converteDataBR, converteDataUsa} from "../Utils/converteData.js";
 import BotaoDeletarConta from "../components/BotaoDeletarConta/BotaoDeletarConta.jsx";
+import axios from "axios";
 
 const HomeLogado = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [toast, setToast] = useState(null);
   const { usuario } = useAuth();
   const [editando, setEditando] = useState(false);
@@ -69,6 +70,7 @@ const HomeLogado = () => {
   const showToast = (message, type = "error") => setToast({ message, type });
   const toggleEdicao = () => setEditando(!editando);
   const toggleConfiguracao = () => setConfigurando(!configurando);
+  const cancelarEdicaoConfig = () => {    setConfigurando(false);  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -109,12 +111,55 @@ const HomeLogado = () => {
 
       const data = await response.json();
       console.log(data);
-      await buscarUsuario(usuario?.idusuario); // Atualiza o contexto
+      // await buscarUsuario(usuario?.idusuario); // Atualiza o contexto
       showToast("Avatar salvo com sucesso!", "success");
     } catch (error) {
       console.error("Erro ao enviar avatar:", error);
       showToast("Erro ao salvar avatar", "error");
     }
+  };
+
+  const cancelarEdicao = () => {
+    setEditando(false);
+    setFormData({
+      nome: usuario?.nome || "",
+      email: usuario?.email || "",
+      telefone: usuario?.telefone || "",
+      nascimento: converteDataUsa(usuario?.nascimento) || "",
+      avatar: usuario?.avatar || "",
+    });
+    // if(deletouAvatar){
+    //   const url = `http://localhost:3301/${usuario?.avatar}`;
+    //   setPreview(url);
+    // }
+  };
+
+  const salvarEdicao = () => {
+    console.log("Entrou aqyu na Edição")
+
+    if (usuario.senha != formData.senha || usuario.tp_cadastro != formData.tp_cadastro) {
+      formData.editouConfig = true;
+    }
+
+    axios
+        .put(`http://localhost:3301/api/usuario/atualizar/${usuario?.idusuario}`, formData)
+        .then(() => {
+          showToast("Dados atualizados com sucesso", "success");
+          setEditando(false);
+          // buscarUsuario(usuario?.idusuario); // Atualiza os dados do usuário
+        })
+        .catch((error) => {
+          console.error("Erro ao atualizar dados:", error);
+          showToast("Erro ao atualizar dados", "error");
+        });
+    // console.log(deletouAvatar.current,"AAAAAAAAAAAAAAAAAAAA");
+    // if(deletouAvatar.current){
+    //   console.log("entrou aqui")
+    //   // console.log(deletouAvatar.current,"BBBBBBBBBBBBBBBB");
+    //   SalvaAvatar();
+    // }
+    setEditando(false);
+    setConfigurando(false);
   };
 
   return (
@@ -181,12 +226,67 @@ const HomeLogado = () => {
 
               <div className="dados">
                 <div className="linha-nome">
-                  <h2>{usuario?.nome || "Nome do Tatuador"}</h2>
-                  <GoPencil />
+                  {editando ? (
+                      <div className="input-groupos"
+                           style={{ width: "60%" }}
+                      >
+                        <input
+                            type="text"
+                            name="nome"
+                            value={formData.nome}
+                            onChange={handleChange}
+                        />
+                      </div>
+                  ) : (
+                      <h2>{usuario?.nome || "Nome do Usuário"}</h2>
+                  )}
+                  <GoPencil
+                      onClick={toggleEdicao}
+                  />
                 </div>
-                <p>{usuario?.email || "email@email.com"}</p>
-                <p>Telefone: {usuario?.telefone || "Não informado"}</p>
-                <p>Data de nascimento: {usuario?.nascimento || "00/00/0000"}</p>
+                {editando ? (
+                    <>
+                      <div className="input-groupos"
+                           style={{ width: "60%" }}>
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                        />
+                        <input
+                            type="text"
+                            name="telefone"
+                            value={formData.telefone}
+                            onChange={handleChange}
+                        />
+                        <input
+                            type="date"
+                            name="nascimento"
+                            value={formData.nascimento || ""}
+                            onChange={handleChange}
+                        />
+                        <div className="botoes-edicao">
+                          <button className="botao-salvar" onClick={salvarEdicao}>
+                            Salvar
+                          </button>
+                          <button className="botao-cancelar"
+                                  onClick={cancelarEdicao}
+                          >
+                            Cancelar
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                ) : (
+                    <>
+                      <p>{usuario?.email || "email@email.com"}</p>
+                      <p>Telefone: {usuario?.telefone || "Não informado"}</p>
+                      <p>
+                        Data de nascimento: {converteDataBR(formData?.nascimento) || "00/00/0000"}
+                      </p>
+                    </>
+                )}
                 <div className="linha-informacoes">
                   <div className="linha-historicos">
                     <h3>Históricos</h3>
@@ -195,17 +295,54 @@ const HomeLogado = () => {
                   <HistoricoList papel="tatuador" scope="todos" />
                   <div className="linha-privacidade">
                     <h3>Privacidade e Segurança</h3>
-                    <GoGear />
+                    {!configurando && (<GoGear onClick={toggleConfiguracao}/>)}
                   </div>
-                  <p>Alterar senha</p>
-                  <p>Mudar para perfil profissional</p>
-                  <p>Alterar preferências da conta</p>
-                  <p>Ocultar pessoas</p>
-                  <BotaoDeletarConta
-                    idusuario={usuario?.idusuario}
-                    idTatuador={usuario?.idTatuador}
-                    showToast={showToast}
-                  />
+                  {configurando ? (
+                      <>
+                        <div className="input-groupos-config">
+                          <input
+                              type="text"
+                              name="senha"
+                              placeholder="Senha"
+                              value={formData.senha}
+                              onChange={handleChange}
+                          />
+                          <select
+                              type="text"
+                              name="tp_cadastro"
+                              value={formData.tp_cadastro}
+                              onChange={handleChange}
+                          >
+                            {/*<option value="">Selecione o tipo</option>*/}
+                            <option value="rabiscadoo">rabiscadoo</option>
+                            <option value="tatuador">tatuador</option>
+                          </select>
+                        </div>
+
+                        <div className="botoes-edicao">
+                          <button className="botao-salvar" onClick={salvarEdicao}>
+                            Salvar
+                          </button>
+                          <button className="botao-cancelar" onClick={cancelarEdicaoConfig}>
+                            Cancelar
+                          </button>
+                        </div>
+
+                      </>
+                  ) : (
+                      <>
+                        <p>Alterar senha</p>
+                        <p>Mudar para perfil profissional</p>
+                        <p>Alterar preferências da conta</p>
+                        <p>Ocultar pessoas</p>
+                        <BotaoDeletarConta
+                            idusuario={usuario?.idusuario}
+                            idTatuador={usuario?.idTatuador}
+                            showToast={showToast}
+                        />
+                      </>
+                  )
+                  }
                 </div>
               </div>
             </article>
@@ -215,7 +352,9 @@ const HomeLogado = () => {
                 <h3>Próximos Agendamentos</h3>
               </div>
               <div>
-                <HistoricoList papel="tatuador" scope="proximos" />
+                <HistoricoList papel="tatuador" scope="proximos"
+                               style={{ maxHeight: "140px" }}
+                />
               </div>
               <div className="portfolio">
                 <div className="linha-portfolio">
