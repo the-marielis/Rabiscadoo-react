@@ -313,7 +313,6 @@ const HomeLogado = () => {
     />
   </div>
 </div>
-
             </article>
 
             <article className="perfil-box agendamentos">
