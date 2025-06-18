@@ -164,8 +164,6 @@ const HomeLogado = () => {
     }
   };
 
-  const cancelarEdicaoConfig = () => {    setConfigurando(false);  };
-
   return (
     <>
       {toast && (
