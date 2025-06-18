@@ -69,7 +69,7 @@ const HomeLogado = () => {
   const showToast = (message, type = "error") => setToast({ message, type });
   const toggleEdicao = () => setEditando(!editando);
   const toggleConfiguracao = () => setConfigurando(!configurando);
-  const cancelarEdicaoConfig = () => {    setConfigurando(false);  };
+  // const cancelarEdicaoConfig = () => {    setConfigurando(false);  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -80,6 +80,12 @@ const HomeLogado = () => {
   };
 
   const handleIconClick = () => {
+    console.log("formData.avatar");
+    console.log(formData.avatar);
+    console.log(formData.imagem);
+    console.log("U",usuario.imagem);
+    console.log(usuario.imagem);
+
     if (inputFileRef.current) {
       inputFileRef.current.click(); // <== Simula clique no input file
     }
@@ -197,11 +203,10 @@ const HomeLogado = () => {
                 {preview || formData.imagem ? (
                   <img
                     src={
-                      preview ||
-                      (formData.imagem
-                        ? // ? `http://localhost:3301/${formData.imagem}`
-                          `http://localhost:5173/images/fulana.png`
-                        : "/images/default-avatar.png")
+                        preview ||
+                        (formData.avatar && formData.avatar?.includes("images") ?
+                             `${formData.avatar}`
+                            : `http://localhost:3301/${formData.avatar}`)
                     }
                     alt=""
                     className="avatar-img"
