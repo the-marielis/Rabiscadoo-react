@@ -409,6 +409,7 @@ body, html, #root {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: 2rem;
 }
 
 .linha-portfolio h3 {

@@ -303,7 +303,7 @@ const HomeLogado = () => {
       <GoGear />
     </div>
     <p>Alterar senha</p>
-    <p>Mudar para perfil profissional</p>
+    <p>Mudar para perfil pessoal</p>
     <p>Alterar preferências da conta</p>
     <p>Ocultar pessoas</p>
     <BotaoDeletarConta

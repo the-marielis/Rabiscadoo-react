@@ -123,7 +123,7 @@ const PortfolioEditor = ({ idusuario }) => {
             onChange={handleArquivoChange}
         />
         <button type="button" onClick={validaInputImagem}>preview</button>
-        <button type="button" onClick={adicionaImagem}>miau</button>
+        <button type="button" onClick={adicionaImagem}>adicionar</button>
 
       </form         >
 
