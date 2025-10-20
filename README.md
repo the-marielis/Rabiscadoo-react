@@ -50,6 +50,7 @@ git clone https://github.com/the-marielis/Rabiscadoo-react.git
 cd Rabiscadoo-react
 
 ### 2- Instalar as dependências
+```bash
 npm install
 
 ### 3- Rodar o frontend
