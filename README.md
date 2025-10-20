@@ -34,11 +34,11 @@ O Rabiscadoo foi criado para praticar conceitos de **desenvolvimento web full st
 ---
 
 ## 📂 Estrutura do Projeto
-src
-- /components     → Componentes reutilizáveis
-- /pages          → Páginas e rotas principais
-- /services       → Conexão com API / Backend
-- /server         → Backend Node.js + Rotas + Banco
+src  
+/components     → Componentes reutilizáveis  
+/pages          → Páginas e rotas principais  
+/services       → Conexão com API / Backend  
+/server         → Backend Node.js + Rotas + Banco
 
 ---
 
@@ -64,5 +64,5 @@ node server.js
 ---
 
 ## 👩🏻‍💻 Autora
-Desenvolvido por Marieli
+Desenvolvido por Marieli  
 Projeto de TCC com objetivo de evolução futura como produto real
