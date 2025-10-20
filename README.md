@@ -35,10 +35,10 @@ O Rabiscadoo foi criado para praticar conceitos de **desenvolvimento web full st
 
 ## 📂 Estrutura do Projeto
 src
-/components     → Componentes reutilizáveis
-/pages          → Páginas e rotas principais
-/services       → Conexão com API / Backend
-/server         → Backend Node.js + Rotas + Banco
+- /components     → Componentes reutilizáveis
+- /pages          → Páginas e rotas principais
+- /services       → Conexão com API / Backend
+- /server         → Backend Node.js + Rotas + Banco
 
 ---
 
@@ -50,15 +50,12 @@ git clone https://github.com/the-marielis/Rabiscadoo-react.git
 cd Rabiscadoo-react
 
 ### 2- Instalar as dependências
-```bash
 npm install
 
 ### 3- Rodar o frontend
-```bash
 npm run dev
 
 ### 4- Rodar o backend
-```bash
 node server.js
 
 ---
